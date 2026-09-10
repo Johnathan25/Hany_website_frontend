@@ -13,7 +13,9 @@ import Home from "./pages/Home";
 import About from "./pages/About"; // <-- استيراد صفحة من نحن
 import Properties from './pages/Properties';
 import Services from './pages/Services';
-
+import BookingService from './pages/BookingService';
+import Complaints from './pages/Complaints';
+import PaymentResult from "./pages/payment";
 // =====================
 // Auth (Lazy optional)
 // =====================
@@ -21,7 +23,6 @@ const Login = lazy(() => import("./pages/auth/login"));
 const Signup = lazy(() => import("./pages/auth/signup"));
 const ForgetPassword = lazy(() => import("./pages/auth/forgetPassword"));
 const ResetPassword = lazy(() => import("./pages/auth/resetPassword"));
-const PhoneLogin = lazy(() => import("./pages/auth/loginByPhone"));
 
 
 function AppRoutes() {
@@ -33,11 +34,10 @@ function AppRoutes() {
       <Routes>
         
           {/* ================= AUTH ================= */}
-            <Route path="/تسجيل_الدخول" element={<Login />} />
-            <Route path="/انشاء_حساب" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
             <Route path="/forget-Password" element={<ForgetPassword />} />
             <Route path="/reset-Password" element={<ResetPassword />} />
-            <Route path="/النسجيل_برقم_الهاتف" element={<PhoneLogin />} />
 
 
         {/* ================= CLIENT ROUTES ================= */}
@@ -46,6 +46,12 @@ function AppRoutes() {
           <Route path="/about" element={<About />} /> {/* مسار صفحة من نحن */}
           <Route path="/properties" element={<Properties />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/booking-service" element={<BookingService />} />
+          <Route path="/complaints" element={<Complaints />} />
+          <Route path="/payment" element={<PaymentResult />} />
+
+
+
 </Route>
         {/* ================= ADMIN ROUTES ================= */}
         <Route

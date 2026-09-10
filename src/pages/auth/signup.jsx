@@ -6,7 +6,7 @@ import signup from "/building.jpeg"
 import Swal from "sweetalert2";
 function Signup() {
   const Navigate = useNavigate();
-
+  const logo = "/logo.jpeg";
   const [Form, SetForm] = useState({
     userName: "",
     email: "",
@@ -109,7 +109,7 @@ function Signup() {
       });
       setLoading(false);
 
-      Navigate("/تسجيل_الدخول");
+      Navigate("/login");
 
     } catch (err) {
         setLoading(false);
@@ -125,20 +125,23 @@ function Signup() {
       }, []);
 
   return (
-    <div className="min-h-screen flex bg-white font-cairo" dir="rtl">
+    <div className="min-h-screen flex bg-white " dir="rtl">
       
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 md:p-16 bg-[#f8fafc]">
         
         <div className="w-full max-w-[650px]">
           <div className="mb-12 text-right">
             <div className="flex items-center gap-4 mb-6 justify-start">
+                
+                <div className="w-14 h-14  rounded-2xl flex items-center justify-center ">
                 <Link to="/">
-                              <div className="w-14 h-14 bg-[#075985] rounded-2xl flex items-center justify-center shadow-lg">
-                <i className="fa-solid fa-anchor text-white text-2xl"></i>
-              </div>
+                  <div className="w-14 h-14  rounded-2xl flex items-center justify-center overflow-hidden">
+                    <img src={logo} alt="Logo" className="w-full-1 h-full-1 object-cover" />
+                  </div>
                 </Link>
+              </div>
 
-              <h2 className="text-3xl font-black text-[#0f172a]">أبو الدهب للأغذية</h2>
+              <h2 className="text-3xl font-black text-[#0f172a]">Large Step</h2>
             </div>
             <h1 className="text-4xl font-extrabold text-[#0f172a] mb-4">إنشاء حساب جديد</h1>
             <p className="text-xl text-gray-500">انضم إلينا اليوم للحصول على أفضل المنتجات الغذائية مباشرة إلى منزلك.</p>
@@ -190,7 +193,7 @@ function Signup() {
             </div>
 
             <hr className="border-gray-200 my-10" />
-            <h3 className="text-2xl font-black text-[#075985] mb-6 text-right">بيانات العنوان لتوصيل الطلبات</h3>
+            <h3 className="text-2xl font-black text-blue-600 mb-6 text-right">بيانات العنوان </h3>
 
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-6">
               <div className="flex flex-col text-right group">
@@ -230,14 +233,14 @@ function Signup() {
              disabled={loading}
               type="button"
               onClick={SignupProcess}
-              className="w-full py-5 mt-6 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-[#075985] to-[#0284c7] hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl transition-all active:scale-[0.98]"
+              className="w-full py-5 mt-6 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl transition-all active:scale-[0.98]"
             >
              {loading ? "جارٍ الإرسال..." : "انشاء الحساب"}
             </button>
 
             <div className="pt-6 text-right pr-2">
               <p className="text-lg text-gray-500">
-                لديك حساب بالفعل؟ <span onClick={() => Navigate("/تسجيل_الدخول")} className="text-[#0284c7] font-bold cursor-pointer hover:underline">سجل دخولك الآن</span>
+                لديك حساب بالفعل؟ <span onClick={() => Navigate("/login")} className="text-[#0284c7] font-bold cursor-pointer hover:underline">سجل دخولك الآن</span>
               </p>
             </div>
           </form>
@@ -257,8 +260,8 @@ function Signup() {
          <img 
                     loading="lazy" src={signup} alt="Food" className="absolute inset-0 w-full h-full object-cover scale-105" />
         <div className="absolute bottom-24 right-16 z-20 text-white text-right">
-           <h2 className="text-6xl font-black mb-6 leading-tight">انضم لعائلة <br/> أبو الدهب</h2>
-           <p className="text-2xl opacity-90 max-w-lg font-light">ابدأ رحلتك معنا الآن واحصل على أجود المنتجات الغذائية مباشرة إلى منزلك.</p>
+           <h2 className="text-6xl font-black mb-6 leading-tight">Join our company<br/> large Step</h2>
+           <p className="text-2xl opacity-90 max-w-lg font-light">Start your journy with us</p>
         </div>
       </div>
     </div>

@@ -442,120 +442,121 @@ export default function ChatBot() {
   };
 
   return (
-    <>
-      {open && (
-        /* ── 2. تعديل كلاسات الحاوية الرئيسية لتتغير ديناميكياً مع الـ Fullscreen ── */
-        <div 
-          className={`fixed bg-white  shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-slate-200 flex flex-col overflow-hidden transition-all duration-300
-            ${isFullscreen 
-              ? "inset-0 w-full h-full rounded-none bottom-0 left-0" // كلاسات ملء الشاشة الكاملة
-              : "bottom-24 left-5 w-[340px] sm:w-[380px] h-[500px]  md:h-[580px] rounded-[24px]" // الكلاسات الأصلية
-            }`} 
-          style={{ zIndex: 9999 }} 
-          dir="rtl"
-        >
-          {/* ── Header ── */}
-          <div className="bg-[#0f172a] px-4 py-3.5 flex items-center justify-between border-b border-white/5 flex-shrink-0">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-[14px] bg-sky-500/10 border border-sky-500/20 flex items-center justify-center relative flex-shrink-0">
-                <Package size={18} className="text-sky-400" />
-              </div>
-              <div>
-                <h2 className="text-white font-black text-[13px] tracking-wide flex items-center gap-1">مساعد أبو الدهب</h2>
-                <p className="text-slate-400 text-[10px] mt-0.5">انا هنا لمساعدتك</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5">
-              {/* ── 3. إضافة زر التكبير / التصغير داخل الهيدر ── */}
-              <button 
-                onClick={() => setIsFullscreen(!isFullscreen)} 
-                title={isFullscreen ? "تصغير الشاشة" : "شاشة كاملة"} 
-                className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-              >
-                {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-              </button>
+    // <>
+    //   {open && (
+    //     /* ── 2. تعديل كلاسات الحاوية الرئيسية لتتغير ديناميكياً مع الـ Fullscreen ── */
+    //     <div 
+    //       className={`fixed bg-white  shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-slate-200 flex flex-col overflow-hidden transition-all duration-300
+    //         ${isFullscreen 
+    //           ? "inset-0 w-full h-full rounded-none bottom-0 left-0" // كلاسات ملء الشاشة الكاملة
+    //           : "bottom-24 left-5 w-[340px] sm:w-[380px] h-[500px]  md:h-[580px] rounded-[24px]" // الكلاسات الأصلية
+    //         }`} 
+    //       style={{ zIndex: 9999 }} 
+    //       dir="rtl"
+    //     >
+    //       {/* ── Header ── */}
+    //       <div className="bg-[#0f172a] px-4 py-3.5 flex items-center justify-between border-b border-white/5 flex-shrink-0">
+    //         <div className="flex items-center gap-2.5">
+    //           <div className="w-10 h-10 rounded-[14px] bg-sky-500/10 border border-sky-500/20 flex items-center justify-center relative flex-shrink-0">
+    //             <Package size={18} className="text-sky-400" />
+    //           </div>
+    //           <div>
+    //             <h2 className="text-white font-black text-[13px] tracking-wide flex items-center gap-1">مساعد أبو الدهب</h2>
+    //             <p className="text-slate-400 text-[10px] mt-0.5">انا هنا لمساعدتك</p>
+    //           </div>
+    //         </div>
+    //         <div className="flex items-center gap-1.5">
+    //           {/* ── 3. إضافة زر التكبير / التصغير داخل الهيدر ── */}
+    //           <button 
+    //             onClick={() => setIsFullscreen(!isFullscreen)} 
+    //             title={isFullscreen ? "تصغير الشاشة" : "شاشة كاملة"} 
+    //             className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+    //           >
+    //             {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+    //           </button>
 
-              <button onClick={clearChat} title="حذف المحادثه" className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-red-500/10 text-slate-400 hover:text-red-400 flex items-center justify-center transition-all cursor-pointer">
-                <Trash2 size={14} />
-              </button>
-              <button title="غلق المحادثة" onClick={() => setOpen(false)} className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer">
-                <X size={14} />
-              </button>
-            </div>
-          </div>
+    //           <button onClick={clearChat} title="حذف المحادثه" className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-red-500/10 text-slate-400 hover:text-red-400 flex items-center justify-center transition-all cursor-pointer">
+    //             <Trash2 size={14} />
+    //           </button>
+    //           <button title="غلق المحادثة" onClick={() => setOpen(false)} className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer">
+    //             <X size={14} />
+    //           </button>
+    //         </div>
+    //       </div>
 
-          {/* ── Mode Tabs ── */}
-          <div className="flex gap-1 p-2 bg-slate-100 border-b border-slate-200 flex-shrink-0">
-            <button onClick={() => handleModeChange("general")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "general" ? "bg-white text-sky-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              <Info size={12} /> استفسار عام
-            </button>
-            <button onClick={() => handleModeChange("products")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "products" ? "bg-sky-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              <Package size={12} /> البحث عن المنتجات
-            </button>
-            <button onClick={() => handleModeChange("myOrder")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "myOrder" ? "bg-sky-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              <Truck size={12} /> عرض طلباتي
-            </button>
-          </div>
+    //       {/* ── Mode Tabs ── */}
+    //       <div className="flex gap-1 p-2 bg-slate-100 border-b border-slate-200 flex-shrink-0">
+    //         <button onClick={() => handleModeChange("general")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "general" ? "bg-white text-sky-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+    //           <Info size={12} /> استفسار عام
+    //         </button>
+    //         <button onClick={() => handleModeChange("products")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "products" ? "bg-sky-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+    //           <Package size={12} /> البحث عن المنتجات
+    //         </button>
+    //         <button onClick={() => handleModeChange("myOrder")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "myOrder" ? "bg-sky-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+    //           <Truck size={12} /> عرض طلباتي
+    //         </button>
+    //       </div>
 
-          {/* ── Messages ── */}
-          <div className="flex-1 overflow-y-auto p-3 flex flex-col  gap-3 bg-gradient-to-b from-slate-50/60 to-white">
-            {messages.map((msg, i) => (
-              <MessageBubble key={i} msg={msg} />
-            ))}
+    //       {/* ── Messages ── */}
+    //       <div className="flex-1 overflow-y-auto p-3 flex flex-col  gap-3 bg-gradient-to-b from-slate-50/60 to-white">
+    //         {messages.map((msg, i) => (
+    //           <MessageBubble key={i} msg={msg} />
+    //         ))}
 
-            {loading && (
-              <div className="flex items-end gap-1.5">
-                <div className="w-7 h-7 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
-                  <Bot size={14} className="text-sky-600" />
-                </div>
-                <div className="bg-white border border-slate-200 rounded-[18px] rounded-tl-[4px] px-4 py-3 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:300ms]" />
-                </div>
-              </div>
-            )}
+    //         {loading && (
+    //           <div className="flex items-end gap-1.5">
+    //             <div className="w-7 h-7 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
+    //               <Bot size={14} className="text-sky-600" />
+    //             </div>
+    //             <div className="bg-white border border-slate-200 rounded-[18px] rounded-tl-[4px] px-4 py-3 flex items-center gap-1.5">
+    //               <span className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:0ms]" />
+    //               <span className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:150ms]" />
+    //               <span className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:300ms]" />
+    //             </div>
+    //           </div>
+    //         )}
 
-            {activeMode === "general" && !loading && (
-              <div className="pt-1">
-                <p className="text-[10px] text-slate-400 font-bold flex items-center gap-1.5 mb-2 px-1 uppercase tracking-wider">
-                  <HelpCircle size={11} className="text-sky-500" /> أسئلة شائعة
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {QUICK_SUGGESTIONS.map((s, i) => (
-                    <button key={i} onClick={() => handleSendMessage(s)} className="bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-600 hover:text-sky-700 text-[11px] font-bold py-1.5 px-3 rounded-2xl transition-all cursor-pointer active:scale-95">
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+    //         {activeMode === "general" && !loading && (
+    //           <div className="pt-1">
+    //             <p className="text-[10px] text-slate-400 font-bold flex items-center gap-1.5 mb-2 px-1 uppercase tracking-wider">
+    //               <HelpCircle size={11} className="text-sky-500" /> أسئلة شائعة
+    //             </p>
+    //             <div className="flex flex-wrap gap-1.5">
+    //               {QUICK_SUGGESTIONS.map((s, i) => (
+    //                 <button key={i} onClick={() => handleSendMessage(s)} className="bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-600 hover:text-sky-700 text-[11px] font-bold py-1.5 px-3 rounded-2xl transition-all cursor-pointer active:scale-95">
+    //                   {s}
+    //                 </button>
+    //               ))}
+    //             </div>
+    //           </div>
+    //         )}
 
-            <div ref={messagesEndRef} />
-          </div>
+    //         <div ref={messagesEndRef} />
+    //       </div>
 
-          {/* ── Input ── */}
-          <div className="p-3 border-t border-slate-100 bg-white/90 flex gap-2 items-center flex-shrink-0">
-            <input
-              type="text"
-              value={message}
-              disabled={loading}
-              placeholder={activeMode === "general" ? "اسأل عن مواعيد التوصيل، طرق الدفع..." : activeMode === "products" ? "اكتب اسم المنتج (مثال: بانيه، اطياب)" : "يمكنك كتابة استفسار هنا..."}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-              className="flex-1 border border-slate-200 rounded-2xl px-4 py-3 text-[12px] font-semibold outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-500/10 bg-slate-50 text-slate-800 transition-all disabled:opacity-60"
-            />
-            <button onClick={() => handleSendMessage()} disabled={loading || !message.trim()} className="w-10 h-10 bg-sky-500 hover:bg-sky-600 rounded-2xl text-white flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 flex-shrink-0">
-              <Send size={15} className="rotate-180" />
-            </button>
-          </div>
-        </div>
-      )}
+    //       {/* ── Input ── */}
+    //       <div className="p-3 border-t border-slate-100 bg-white/90 flex gap-2 items-center flex-shrink-0">
+    //         <input
+    //           type="text"
+    //           value={message}
+    //           disabled={loading}
+    //           placeholder={activeMode === "general" ? "اسأل عن مواعيد التوصيل، طرق الدفع..." : activeMode === "products" ? "اكتب اسم المنتج (مثال: بانيه، اطياب)" : "يمكنك كتابة استفسار هنا..."}
+    //           onChange={(e) => setMessage(e.target.value)}
+    //           onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+    //           className="flex-1 border border-slate-200 rounded-2xl px-4 py-3 text-[12px] font-semibold outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-500/10 bg-slate-50 text-slate-800 transition-all disabled:opacity-60"
+    //         />
+    //         <button onClick={() => handleSendMessage()} disabled={loading || !message.trim()} className="w-10 h-10 bg-sky-500 hover:bg-sky-600 rounded-2xl text-white flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 flex-shrink-0">
+    //           <Send size={15} className="rotate-180" />
+    //         </button>
+    //       </div>
+    //     </div>
+    //   )}
 
-      {/* ── FAB ── */}
-      <button onClick={() => setOpen(!open)} className="fixed bottom-8 cursor-pointer left-6 w-14 h-14 rounded-[18px] bg-[#0f172a] text-sky-400 shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:scale-105 transition-all flex items-center justify-center border border-slate-800" style={{ zIndex: 9999 }}>
-        {open ? <X size={22} className="text-white" /> : <div className="relative"><MessageCircle size={24} /><span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky-500 rounded-full border-2 border-[#0f172a] animate-pulse" /></div>}
-      </button>
-    </>
+    //   {/* ── FAB ── */}
+    //   <button onClick={() => setOpen(!open)} className="fixed bottom-8 cursor-pointer left-6 w-14 h-14 rounded-[18px] bg-[#0f172a] text-sky-400 shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:scale-105 transition-all flex items-center justify-center border border-slate-800" style={{ zIndex: 9999 }}>
+    //     {open ? <X size={22} className="text-white" /> : <div className="relative"><MessageCircle size={24} /><span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky-500 rounded-full border-2 border-[#0f172a] animate-pulse" /></div>}
+    //   </button>
+    // </>
+    <div></div>
   );
 }

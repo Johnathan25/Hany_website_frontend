@@ -51,7 +51,7 @@ export default function ForgetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex bg-white font-cairo" dir="rtl">
+    <div className="min-h-screen flex bg-white " dir="rtl">
       
       {/* Right Side: Form Content */}
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 md:p-16 bg-[#f8fafc]">
@@ -60,8 +60,8 @@ export default function ForgetPassword() {
           
           {/* Back Button */}
           <Link 
-            to="/تسجيل_الدخول" 
-            className="flex items-center gap-2 text-[#0284c7] hover:text-[#075985] mb-10 font-bold transition-colors w-fit"
+            to="/login" 
+            className="flex items-center gap-2 text-blue-600 hover:text-[#075985] mb-10 font-bold transition-colors w-fit"
           >
             <HiOutlineArrowRight className="w-5 h-5" />
             العودة لتسجيل الدخول
@@ -102,7 +102,7 @@ export default function ForgetPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-5 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-[#075985] to-[#0284c7] hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl shadow-blue-100 transition-all active:scale-[0.98] disabled:opacity-50"
+                className="w-full py-5 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl shadow-blue-100 transition-all active:scale-[0.98] disabled:opacity-50"
               >
                 {loading ? "جارٍ الإرسال..." : "إرسال رابط إعادة التعيين"}
               </button>
@@ -119,7 +119,7 @@ export default function ForgetPassword() {
           {/* Registration Helper Link */}
           <div className="mt-10 text-center">
             <p className="text-lg text-gray-500">
-              ليس لديك حساب؟ <Link to="/انشاء_حساب" className="text-[#0284c7] font-bold hover:underline">سجل الآن</Link>
+              ليس لديك حساب؟ <Link to="/register" className="text-blue-600 font-bold hover:underline">سجل الآن</Link>
             </p>
           </div>
         </div>

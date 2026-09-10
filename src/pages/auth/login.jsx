@@ -9,11 +9,13 @@ import Swal from "sweetalert2";
 function Login() {
   const Navigate = useNavigate();
   const RememberValue = JSON.parse(localStorage.getItem("remember"));
-   
+
+  const logo = "/logo.jpeg";
+
   // State for form data
-  const [Form, SetForm] = useState({ 
-    email: RememberValue?.email || "", 
-    password: RememberValue?.password || "" 
+  const [Form, SetForm] = useState({
+    email: RememberValue?.email || "",
+    password: RememberValue?.password || ""
   });
 
   // State for remember me checkbox
@@ -27,7 +29,7 @@ function Login() {
     SetForm({ ...Form, [e.target.name]: e.target.value });
   };
 
-    const showTerms = () => {
+  const showTerms = () => {
     Swal.fire({
       title: "شروط الخدمة",
       html: `
@@ -42,8 +44,8 @@ function Login() {
       confirmButtonColor: "#0284c7",
     });
   };
-  
-    const showPolicy = () => {
+
+  const showPolicy = () => {
     Swal.fire({
       title: "سياسة الاستخدام",
       html: `
@@ -60,14 +62,14 @@ function Login() {
     });
   };
 
-         useEffect (() => {
-        document.title ="تسجيل الدخول - نظام أبو الدهب";
-      }, []);
-  
+  useEffect(() => {
+    document.title = "تسجيل الدخول - نظام أبو الدهب";
+  }, []);
+
 
   // Main login logic with English comments
   const LoginProcess = async () => {
-      setLoading(true);  
+    setLoading(true);
     const isFormIncomplete = Object.values(Form).some(value => value.trim() === "");
     if (isFormIncomplete) {
       setLoading(false);
@@ -78,25 +80,25 @@ function Login() {
     }
 
 
-    
+
     try {
       const Res = await api.post("/users/login", {
         email: Form.email,
         password: Form.password
       });
 
-   
+
       const Data = Res.data;
       if (Data.accessToken) {
         localStorage.setItem("token", Data.accessToken);
-                const res = await api.get("/user/cart");
-             
-              const items = res.data?.items || [];
-            
-              localStorage.setItem("cart", JSON.stringify(items));
-              localStorage.setItem("userName", JSON.stringify(Data.userName));
+        const res = await api.get("/user/cart");
 
-              
+        const items = res.data?.items || [];
+
+        localStorage.setItem("cart", JSON.stringify(items));
+        localStorage.setItem("userName", JSON.stringify(Data.userName));
+
+
 
         setLoading(false);
         if (Remember) localStorage.setItem("remember", JSON.stringify(Form));
@@ -105,12 +107,12 @@ function Login() {
 
         const decoded = jwtDecode(Data.accessToken);
         const role = decoded.role;
-if (role === "admin" || role === "superadmin") {
-    document.title = "لوحه التحكم نظام ابو الدهب";
-    Navigate("/admin_dashboard");
-} else {
-    Navigate("/");
-}
+        if (role === "admin" || role === "superadmin") {
+          document.title = "لوحه التحكم نظام ابو الدهب";
+          Navigate("/admin_dashboard");
+        } else {
+          Navigate("/");
+        }
       }
     } catch (err) {
       setLoading(false);
@@ -120,23 +122,22 @@ if (role === "admin" || role === "superadmin") {
 
   return (
     <div className="min-h-screen flex bg-white " dir="rtl">
-      
+
       {/* Right Side: Form Content */}
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 md:p-16 bg-[#f8fafc]">
-        
+
         <div className="w-full max-w-[550px]">
           {/* Header Section - Text aligned right */}
           <div className="mb-12 text-right">
             <div className="flex items-center gap-4 mb-6 justify-start">
-              <div className="w-14 h-14 bg-[#075985] rounded-2xl flex items-center justify-center shadow-lg">
-
-                                <Link to="/">
-                                              <div className="w-14 h-14 bg-[#075985] rounded-2xl flex items-center justify-center shadow-lg">
-                                <i className="fa-solid fa-anchor text-white text-2xl"></i>
-                              </div>
-                                </Link>
+              <div className="w-14 h-14  rounded-2xl flex items-center justify-center ">
+                <Link to="/">
+                  <div className="w-14 h-14  rounded-2xl flex items-center justify-center overflow-hidden">
+                    <img src={logo} alt="Logo" className="w-full-1 h-full-1 object-cover" />
+                  </div>
+                </Link>
               </div>
-              <h2 className="text-3xl font-black text-[#0f172a]">أبو الدهب للأغذية</h2>
+              <h2 className="text-3xl font-black text-[#0f172a]">Large Step</h2>
             </div>
             <h1 className="text-4xl font-extrabold text-[#0f172a] mb-4">تسجيل الدخول</h1>
             <p className="text-xl text-gray-500">مرحباً بك مجدداً! يرجى إدخال بياناتك للمتابعة.</p>
@@ -144,14 +145,14 @@ if (role === "admin" || role === "superadmin") {
 
           {/* Form Content */}
           <div className="space-y-8">
-            
+
             {/* Email Field with Background Animation */}
             <div className="flex flex-col text-right group">
               <label className="mb-3 text-lg font-bold text-[#0f172a] pr-1">البريد الإلكتروني للعمل</label>
               <div className="relative overflow-hidden rounded-2xl border-2 border-gray-200 transition-all duration-300 group-focus-within:border-[#0284c7]">
                 {/* Background Slider - Moves from right to left */}
                 <div className="absolute inset-0 bg-[#e0f2fe] translate-x-full transition-transform duration-500 ease-out group-focus-within:translate-x-0"></div>
-                
+
                 <input
                   type="email"
                   name="email"
@@ -167,9 +168,9 @@ if (role === "admin" || role === "superadmin") {
             <div className="flex flex-col text-right group">
               <div className="flex justify-between items-center mb-3 pr-1">
                 <label className="text-lg font-bold text-[#0f172a]">كلمة المرور</label>
-                <button 
+                <button
                   onClick={() => Navigate("/forget-Password")}
-                  className="text-sm font-bold text-[#0284c7] hover:underline"
+                  className="text-sm font-bold text-blue-500 hover:underline"
                 >
                   نسيت كلمة المرور؟
                 </button>
@@ -177,7 +178,7 @@ if (role === "admin" || role === "superadmin") {
               <div className="relative overflow-hidden rounded-2xl border-2 border-gray-200 transition-all duration-300 group-focus-within:border-[#0284c7]">
                 {/* Background Slider */}
                 <div className="absolute inset-0 bg-[#e0f2fe] translate-x-full transition-transform duration-500 ease-out group-focus-within:translate-x-0"></div>
-                
+
                 <input
                   type="password"
                   name="password"
@@ -191,13 +192,13 @@ if (role === "admin" || role === "superadmin") {
 
             {/* Remember Me Checkbox */}
             <div className="flex items-center gap-3 pr-2 justify-start">
-               <input
-                  type="checkbox"
-                  onChange={(e) => setRemember(e.target.checked)}
-                  id="remember"
-                  className="h-6 w-6 rounded border-gray-300 text-[#0284c7] focus:ring-[#0284c7] cursor-pointer"
-                />
-                <label htmlFor="remember" className="text-lg text-gray-600 select-none cursor-pointer">تذكر هذا الجهاز</label>
+              <input
+                type="checkbox"
+                onChange={(e) => setRemember(e.target.checked)}
+                id="remember"
+                className="h-6 w-6 rounded border-gray-300 text-[#0284c7] focus:ring-[#0284c7] cursor-pointer"
+              />
+              <label htmlFor="remember" className="text-lg text-gray-600 select-none cursor-pointer">تذكر هذا الجهاز</label>
             </div>
 
             {/* Login Button */}
@@ -205,31 +206,28 @@ if (role === "admin" || role === "superadmin") {
               disabled={loading}
               type="button"
               onClick={LoginProcess}
-              className="w-full py-5 mt-4 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-[#075985] to-[#0284c7] hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl shadow-blue-100 transition-all flex items-center justify-center gap-4 active:scale-[0.98]"
+              className="w-full py-5 mt-4 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl shadow-blue-100 transition-all flex items-center justify-center gap-4 active:scale-[0.98]"
             >
-               {loading ? "جارٍ الإرسال..." : "تسجيل الدخول"}
-            
+              {loading ? "جارٍ الإرسال..." : "تسجيل الدخول"}
+
               <i className="fas fa-arrow-left text-lg"></i>
             </button>
 
             {/* Registration Link */}
             <div className="pt-6 text-right pr-2 flex flex-col gap-3 items-center justify-center md:flex-row md:justify-between">
-              <p className="text-lg text-gray-500">
-                  التسجيل برقم الهاتف <span onClick={() => Navigate("/النسجيل_برقم_الهاتف")} className="text-[#0284c7] font-bold cursor-pointer hover:underline">اضغط هنا</span>
-              </p>
 
-                <p className="text-lg text-gray-500">
-                ليس لديك حساب؟ <span onClick={() => Navigate("/انشاء_حساب")} className="text-[#0284c7]  font-bold cursor-pointer hover:underline">سجل الآن</span>
+              <p className="text-lg text-gray-500">
+                ليس لديك حساب؟ <span onClick={() => Navigate("/register")} className="text-blue-700  font-bold cursor-pointer hover:underline">سجل الآن</span>
               </p>
             </div>
           </div>
         </div>
-       
 
-                  {/* Footer Links */}
+
+        {/* Footer Links */}
         <div className="mt-16 flex gap-10 text-[13px] font-bold text-gray-400 uppercase tracking-widest justify-start w-full max-w-[550px]">
-            <span onClick={showPolicy} className="cursor-pointer hover:text-[#0284c7]">سياسة الخصوصية</span>
-            <span onClick={showTerms} className="cursor-pointer hover:text-[#0284c7]">شروط الخدمة</span>
+          <span onClick={showPolicy} className="cursor-pointer hover:text-[#0284c7]">سياسة الخصوصية</span>
+          <span onClick={showTerms} className="cursor-pointer hover:text-[#0284c7]">شروط الخدمة</span>
         </div>
       </div>
 
@@ -238,20 +236,20 @@ if (role === "admin" || role === "superadmin") {
         {/* latout  */}
         <div className="absolute inset-0  bg-gradient-to-tr from-[#0f172a]/60 via-transparent to-transparent z-10"></div>
 
-         <img 
-                    loading="lazy" 
-         src={login}
-          alt="Frozen Food Assortment" 
+        <img
+          loading="lazy"
+          src={login}
+          alt="Frozen Food Assortment"
           className="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-[10s]"
         />{/* latout  */}
         <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a]/20 via-[#0f172a]/40 to-transparent z-10"></div>
         <div className="absolute bottom-24 right-16 z-20 text-white text-right">
-           <h2 className="text-6xl font-black mb-6 leading-tight">طعم الأصالة، <br/> في كل وجبة</h2>
-           <p className="text-2xl opacity-90 max-w-lg font-light">أفضل أنواع اللحوم والمجمدات المختارة بعناية لتصلك طازجة أينما كنت.</p>
+          <h4 className="text-4xl font-black mb-6 leading-tight">A Confident Step, <br /> Towards Secure Real Estate</h4>
+          <p className="text-2xl opacity-90 max-w-lg font-light">'Integrated contracting solutions, certified structural inspections, and trusted supplies safeguarding your property assets.'</p>
         </div>
       </div>
 
-    
+
 
     </div>
   );
