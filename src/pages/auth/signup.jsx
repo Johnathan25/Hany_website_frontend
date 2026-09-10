@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { showAlert } from "../../services/alert";
-import signup from "/forgetpass.png"
+import signup from "/building.jpeg"
 import Swal from "sweetalert2";
 function Signup() {
   const Navigate = useNavigate();

@@ -4,7 +4,7 @@ import { HiOutlineMail, HiOutlineArrowRight } from "react-icons/hi"; // تم ت�
 import api from "../../services/api";
 import { showAlert } from "../../services/alert";
 
-import forgetpass from "/login.png"
+import forgetpass from "/building.jpeg"
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);

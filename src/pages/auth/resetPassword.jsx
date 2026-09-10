@@ -9,7 +9,7 @@ import {
 } from "react-icons/hi";
 import api from "../../services/api";
 import { showAlert } from "../../services/alert";
-import forgetpass from "/login.png"
+import forgetpass from "/building.jpeg"
 export default function ResetPassword() {
   const navigate = useNavigate();
 
