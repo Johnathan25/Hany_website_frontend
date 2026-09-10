@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
-const logo = "../../public/logo.jpeg";
-const bgImage = "../../public/building.jpeg";
+const logo = "/logo.jpeg";
+const bgImage = "/building.jpeg";
 
 
 export default function Home() {
