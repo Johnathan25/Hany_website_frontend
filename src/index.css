@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* الخلفية */
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+/* الجزء المتحرك */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #0284c7, #0ea5e9);
+  border-radius: 10px;
+  border: 2px solid #f1f5f9;
+}
+
+/* عند مرور الماوس */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #0369a1, #0284c7);
+}

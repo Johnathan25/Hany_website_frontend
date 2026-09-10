@@ -1,0 +1,23 @@
+/* تحسين شكل السكرول بار العام */
+::-webkit-scrollbar {
+  width: 8px; /* عرض السكرول الرأسي */
+  height: 8px; /* ارتفاع السكرول الأفقي */
+}
+
+/* الخلفية (المسار) */
+::-webkit-scrollbar-track {
+  background: #f1f5f9; /* نفس لون الخلفية bg-slate-100 */
+  border-radius: 10px;
+}
+
+/* المقبض (الجزء المتحرك) */
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* لون هادئ slate-300 */
+  border-radius: 10px;
+  border: 2px solid #f1f5f9; /* مسافة وهمية حول المقبض */
+}
+
+/* عند التمرير بالماوس فوق المقبض */
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* slate-400 */
+}
