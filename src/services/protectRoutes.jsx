@@ -37,7 +37,7 @@ function ProtectedRoute({ children }) {
   }, []);
 
   if (isValid === null) return <div>Checking authentication...</div>;
-  if (!isValid) return <Navigate to="/تسجيل_الدخول" replace />;
+  if (!isValid) return <Navigate to="/login" replace />;
 
   return children;
 }
