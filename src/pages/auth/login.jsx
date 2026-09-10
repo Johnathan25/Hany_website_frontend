@@ -63,7 +63,7 @@ function Login() {
   };
 
   useEffect(() => {
-    document.title = "تسجيل الدخول - نظام أبو الدهب";
+    document.title = "تسجيل الدخول - نظام هاني  ";
   }, []);
 
 
@@ -91,11 +91,9 @@ function Login() {
       const Data = Res.data;
       if (Data.accessToken) {
         localStorage.setItem("token", Data.accessToken);
-        const res = await api.get("/user/cart");
+ 
 
-        const items = res.data?.items || [];
 
-        localStorage.setItem("cart", JSON.stringify(items));
         localStorage.setItem("userName", JSON.stringify(Data.userName));
 
 
@@ -108,7 +106,7 @@ function Login() {
         const decoded = jwtDecode(Data.accessToken);
         const role = decoded.role;
         if (role === "admin" || role === "superadmin") {
-          document.title = "لوحه التحكم نظام ابو الدهب";
+          document.title = "لوحه التحكم نظام  هاني ";
           Navigate("/admin_dashboard");
         } else {
           Navigate("/");
