@@ -26,7 +26,7 @@ export default function PaymentResult() {
 
 
 
-        setPayment(response.data);
+       setPayment(response.data.data);
       } catch (err) {
         console.error(err);
         setError("تعذر الاتصال بالسيرفر");
