@@ -7,7 +7,7 @@ import { useLanguage } from "../context/LanguageContext";
 import api from "../services/api";
 import { socket } from "../services/socket";
 import { getCurrentUser } from "../services/getCurrentUser";
-import soundFile from "../../public/sound.mp3";
+
 import logo from "../../public/logo.jpeg"; // تأكد من صحة مسار اللوجو لديك
 
 export default function ClientLayout() {
@@ -110,10 +110,6 @@ export default function ClientLayout() {
         localStorage.setItem("notifications", JSON.stringify(updated));
         setNotifyCount(updated.length);
 
-        if (audioUnlocked) {
-          const audio = new Audio(soundFile);
-          audio.play().catch(() => {});
-        }
 
         return updated;
       });
