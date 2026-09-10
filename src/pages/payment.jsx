@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { Check, X, Clock, AlertTriangle } from "lucide-react";
 
 export default function PaymentResult() {
   const [payment, setPayment] = useState(null);
@@ -24,9 +25,7 @@ export default function PaymentResult() {
           `/serviceRequests/payment-status/${orderNumber}`
         );
 
-
-
-       setPayment(response.data.data);
+        setPayment(response.data.data);
       } catch (err) {
         console.error(err);
         setError("تعذر الاتصال بالسيرفر");
@@ -41,9 +40,10 @@ export default function PaymentResult() {
   // Loading
   if (loading) {
     return (
-      <div className="payment-result">
-        <div className="payment-loading">
-          جاري التحقق من عملية الدفع...
+      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-slate-200 border-t-teal-500 rounded-full animate-spin" />
+          <p className="text-slate-500 text-sm">جاري التحقق من عملية الدفع...</p>
         </div>
       </div>
     );
@@ -52,13 +52,13 @@ export default function PaymentResult() {
   // Error
   if (error) {
     return (
-      <div className="payment-result">
-        <div className="payment-error">
-          <div className="payment-icon">✕</div>
-
-          <h2>حدث خطأ</h2>
-
-          <p>{error}</p>
+      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="w-full max-w-md rounded-2xl border border-slate-200 p-8 text-center">
+          <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center">
+            <AlertTriangle className="w-8 h-8 text-amber-500" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900">حدث خطأ</h2>
+          <p className="mt-2 text-slate-500 text-sm">{error}</p>
         </div>
       </div>
     );
@@ -67,113 +67,133 @@ export default function PaymentResult() {
   const isPaid = payment?.status === "paid";
   const isFailed = payment?.status === "failed";
   const isProcessing =
-    payment?.status === "processing" ||
-    payment?.status === "pending";
+    payment?.status === "processing" || payment?.status === "pending";
+
+  const statusLabels = {
+    paid: "تم الدفع",
+    failed: "فشلت العملية",
+    processing: "قيد المعالجة",
+    pending: "قيد الانتظار",
+  };
 
   return (
-    <div className="payment-result">
+    <div dir="rtl" className="min-h-screen bg-white px-4 py-16 flex items-center justify-center">
+      <div className="w-full max-w-md">
 
-      {/* SUCCESS */}
-      {isPaid && (
-        <div className="payment-success">
-          <div className="payment-icon success-icon">
-            ✓
-          </div>
+        {/* حالة العملية */}
+        <div className="rounded-2xl border border-slate-200 p-8 text-center">
 
-          <h1>تم الدفع بنجاح</h1>
-
-          <p>تم استلام عملية الدفع بنجاح.</p>
-        </div>
-      )}
-
-      {/* FAILED */}
-      {isFailed && (
-        <div className="payment-failed">
-          <div className="payment-icon failed-icon">
-            ✕
-          </div>
-
-          <h1>فشلت عملية الدفع</h1>
-
-          <p>
-            لم تتم عملية الدفع، يرجى المحاولة مرة أخرى.
-          </p>
-        </div>
-      )}
-
-      {/* PROCESSING */}
-      {isProcessing && (
-        <div className="payment-processing">
-          <div className="payment-icon">
-            ⏳
-          </div>
-
-          <h1>جاري التحقق من الدفع</h1>
-
-          <p>
-            يرجى الانتظار لحظات حتى يتم تأكيد العملية.
-          </p>
-        </div>
-      )}
-
-      {/* PAYMENT INFORMATION */}
-      {payment && (
-        <div className="payment-info">
-
-          <h2>معلومات الدفع</h2>
-
-          <div className="info-row">
-            <span>رقم الطلب</span>
-            <strong>
-              {payment.orderNumber}
-            </strong>
-          </div>
-
-          <div className="info-row">
-            <span>المبلغ</span>
-            <strong>
-              {payment.amount} {payment.currency}
-            </strong>
-          </div>
-
-          <div className="info-row">
-            <span>نوع الدفع</span>
-            <strong>
-              {payment.paymentType === "full"
-                ? "دفع كامل"
-                : "عربون"}
-            </strong>
-          </div>
-
-          <div className="info-row">
-            <span>حالة الدفع</span>
-            <strong>
-              {payment.status}
-            </strong>
-          </div>
-
-          {payment.transactionId && (
-            <div className="info-row">
-              <span>رقم العملية</span>
-              <strong>
-                {payment.transactionId}
-              </strong>
-            </div>
+          {isPaid && (
+            <>
+              <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-teal-500 flex items-center justify-center">
+                <Check className="w-9 h-9 text-white" strokeWidth={3} />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900">تم الدفع بنجاح</h1>
+              <p className="mt-2 text-slate-500 text-sm">
+                تم استلام عملية الدفع بنجاح.
+              </p>
+            </>
           )}
 
-          {payment.paidAt && (
-            <div className="info-row">
-              <span>تاريخ الدفع</span>
-              <strong>
-                {new Date(payment.paidAt).toLocaleString(
-                  "ar-EG"
-                )}
-              </strong>
-            </div>
+          {isFailed && (
+            <>
+              <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-red-500 flex items-center justify-center">
+                <X className="w-9 h-9 text-white" strokeWidth={3} />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900">فشلت عملية الدفع</h1>
+              <p className="mt-2 text-slate-500 text-sm">
+                لم تتم عملية الدفع، يرجى المحاولة مرة أخرى.
+              </p>
+            </>
           )}
 
+          {isProcessing && (
+            <>
+              <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+                <Clock className="w-8 h-8 text-slate-500" />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900">جاري التحقق من الدفع</h1>
+              <p className="mt-2 text-slate-500 text-sm">
+                يرجى الانتظار لحظات حتى يتم تأكيد العملية.
+              </p>
+            </>
+          )}
+
+          {!isPaid && !isFailed && !isProcessing && payment && (
+            <>
+              <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+                <AlertTriangle className="w-8 h-8 text-slate-500" />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900">حالة غير معروفة</h1>
+              <p className="mt-2 text-slate-500 text-sm">{payment.status}</p>
+            </>
+          )}
         </div>
-      )}
+
+        {/* تفاصيل الدفع */}
+        {payment && (
+          <div className="mt-6 rounded-2xl border border-slate-200 p-6 sm:p-7">
+            <h2 className="text-base font-bold text-slate-900 mb-4">معلومات الدفع</h2>
+
+            <div className="divide-y divide-slate-100">
+              <div className="flex items-center justify-between py-3 text-sm">
+                <span className="text-slate-500">رقم الطلب</span>
+                <strong className="text-slate-900 font-semibold">{payment.orderNumber}</strong>
+              </div>
+
+              <div className="flex items-center justify-between py-3 text-sm">
+                <span className="text-slate-500">المبلغ</span>
+                <strong className="text-slate-900 font-semibold">
+                  {payment.amount} {payment.currency}
+                </strong>
+              </div>
+
+              <div className="flex items-center justify-between py-3 text-sm">
+                <span className="text-slate-500">نوع الدفع</span>
+                <strong className="text-slate-900 font-semibold">
+                  {payment.paymentType === "full" ? "دفع كامل" : "عربون"}
+                </strong>
+              </div>
+
+              <div className="flex items-center justify-between py-3 text-sm">
+                <span className="text-slate-500">حالة الدفع</span>
+                <strong
+                  className={
+                    "font-semibold " +
+                    (isPaid
+                      ? "text-teal-600"
+                      : isFailed
+                      ? "text-red-600"
+                      : "text-slate-700")
+                  }
+                >
+                  {statusLabels[payment.status] || payment.status}
+                </strong>
+              </div>
+
+              {payment.transactionId && (
+                <div className="flex items-center justify-between py-3 text-sm">
+                  <span className="text-slate-500">رقم العملية</span>
+                  <strong className="text-slate-900 font-semibold">
+                    {payment.transactionId}
+                  </strong>
+                </div>
+              )}
+
+              {payment.paidAt && (
+                <div className="flex items-center justify-between py-3 text-sm">
+                  <span className="text-slate-500">تاريخ الدفع</span>
+                  <strong className="text-slate-900 font-semibold">
+                    {new Date(payment.paidAt).toLocaleString("ar-EG")}
+                  </strong>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
+
