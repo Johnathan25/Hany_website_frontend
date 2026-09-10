@@ -48,7 +48,10 @@ function AppRoutes() {
           <Route path="/services" element={<Services />} />
           <Route path="/booking-service" element={<BookingService />} />
           <Route path="/complaints" element={<Complaints />} />
-          <Route path="/payment" element={<PaymentResult />} />
+          <Route path="/payment" element={
+                <ProtectedRoute>
+                  <PaymentResult />
+                </ProtectedRoute>} />
 
 
 
