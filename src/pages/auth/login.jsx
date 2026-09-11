@@ -36,8 +36,7 @@ function Login() {
         <div style="text-align: right; line-height: 1.8;">
           <p>يجب استخدام الموقع بشكل قانوني وعدم إساءة استخدام الخدمات.</p>
           <p>جميع الأسعار قابلة للتغيير دون إشعار مسبق.</p>
-          <p>المتجر غير مسؤول عن أي استخدام خاطئ للمنتجات.</p>
-        </div>
+<p>الشركة غير مسؤولة عن أي استخدام خاطئ .</p>        </div>
       `,
       icon: "warning",
       confirmButtonText: "تم",
@@ -50,10 +49,10 @@ function Login() {
       title: "سياسة الاستخدام",
       html: `
         <div style="text-align: right; line-height: 1.8;">
-          <p>مرحبًا بك في متجر أبو الدهب للمنتجات الغذائية.</p>
-          <p>باستخدامك للموقع، فإنك توافق على الالتزام بجميع الشروط والأحكام.</p>
-          <p>نحرص على تقديم أفضل جودة وخدمة لعملائنا.</p>
-        </div>
+  <p>مرحبًا بك في منصة Large Step لخدمات الصيانة والتشطيبات.</p>
+  <p>باستخدامك للموقع أو طلب خدمة معاينة، فإنك توافق على الالتزام بجميع الشروط والسياسات المتبعة.</p>
+  <p>نلتزم بتقديم أعلى معايير الجودة الفنية والمتابعة المستمرة لضمان دقة التنفيذ.</p>
+</div>
       `,
       icon: "info",
       confirmButtonText: "موافق",
@@ -91,7 +90,7 @@ function Login() {
       const Data = Res.data;
       if (Data.accessToken) {
         localStorage.setItem("token", Data.accessToken);
- 
+
 
 
         localStorage.setItem("userName", JSON.stringify(Data.userName));

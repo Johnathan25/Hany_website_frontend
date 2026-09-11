@@ -26,22 +26,57 @@ import {
     ChevronLeft,
 } from 'lucide-react';
 
-// تحديد أيقونة ولون مخصص بناءً على اسم الخدمة
+// تحديد أيقونة ونمط لوني لكل خدمة
 const getServiceVisuals = (name = '') => {
     const n = name.toLowerCase();
     if (n.includes('نجار') || n.includes('carpent')) {
-        return { icon: Hammer, bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200' };
+        return { 
+            icon: Hammer, 
+            badge: 'أعمال نجارة', 
+            badgeEn: 'Carpentry',
+            bg: 'bg-amber-50', 
+            text: 'text-amber-600', 
+            border: 'border-amber-200' 
+        };
     }
     if (n.includes('سباك') || n.includes('plumb')) {
-        return { icon: Droplets, bg: 'bg-cyan-50', text: 'text-cyan-600', border: 'border-cyan-200' };
+        return { 
+            icon: Droplets, 
+            badge: 'أعمال سباكة', 
+            badgeEn: 'Plumbing',
+            bg: 'bg-cyan-50', 
+            text: 'text-cyan-600', 
+            border: 'border-cyan-200' 
+        };
     }
     if (n.includes('كهرب') || n.includes('electr')) {
-        return { icon: Zap, bg: 'bg-yellow-50', text: 'text-yellow-600', border: 'border-yellow-200' };
+        return { 
+            icon: Zap, 
+            badge: 'أعمال كهرباء', 
+            badgeEn: 'Electrical',
+            bg: 'bg-yellow-50', 
+            text: 'text-yellow-600', 
+            border: 'border-yellow-200' 
+        };
     }
     if (n.includes('نقاش') || n.includes('دهان') || n.includes('paint')) {
-        return { icon: Paintbrush, bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-200' };
+        return { 
+            icon: Paintbrush, 
+            badge: 'دهانات وتشطيب', 
+            badgeEn: 'Painting',
+            bg: 'bg-purple-50', 
+            text: 'text-purple-600', 
+            border: 'border-purple-200' 
+        };
     }
-    return { icon: Wrench, bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200' };
+    return { 
+        icon: Wrench, 
+        badge: 'خدمات وصيانة', 
+        badgeEn: 'Maintenance',
+        bg: 'bg-blue-50', 
+        text: 'text-blue-600', 
+        border: 'border-blue-200' 
+    };
 };
 
 export default function AdminServices() {
@@ -51,7 +86,7 @@ export default function AdminServices() {
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState({
         currentPage: 1,
-        limit: 9,
+        limit: 10,
         totalItems: 0,
         totalPages: 1,
         hasNextPage: false,
@@ -79,7 +114,7 @@ export default function AdminServices() {
         try {
             setLoading(true);
             setError('');
-            const res = await getAllServiceItems(page, 9, search);
+            const res = await getAllServiceItems(page, 10, search);
             setItems(res.data || []);
             if (res.pagination) {
                 setPagination(res.pagination);
@@ -95,10 +130,13 @@ export default function AdminServices() {
         }
     };
 
-    // البحث اللحظي عند إدخال أي حرف مع Debounce لحماية الأداء
+    // Real-time search with debounce
     useEffect(() => {
-      fetchItems(1, searchQuery.trim());
-  
+        const timer = setTimeout(() => {
+            fetchItems(1, searchQuery.trim());
+        }, 350);
+
+        return () => clearTimeout(timer);
     }, [searchQuery]);
 
     // 2. Open Form Modal (Add / Edit)
@@ -192,7 +230,7 @@ export default function AdminServices() {
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1">
                         {isAr
-                            ? 'إدارة التخصصات والخدمات المتاحة للحجز (نجارة، سباكة، كهرباء، أعمال تشطيبات).'
+                            ? 'إدارة التخصصات والخدمات المتاحة للحجز وتعديل بياناتها في جدول موحد.'
                             : 'Configure available service categories and items offered to customers.'}
                     </p>
                 </div>
@@ -231,9 +269,9 @@ export default function AdminServices() {
                 </div>
             )}
 
-            {/* Real-time Search Bar */}
+            {/* Instant Search Bar */}
             <div className="relative">
-                <Search className="w-4 h-4 absolute top-1/2 -translate-y-1/2 right-3 text-slate-400 pointer-events-none" />
+                <Search className="w-4 h-4 absolute top-1/2 -translate-y-1/2 right-3.5 text-slate-400 pointer-events-none" />
                 <input
                     type="text"
                     value={searchQuery}
@@ -257,93 +295,118 @@ export default function AdminServices() {
                 )}
             </div>
 
-            {/* Grid of Cards */}
-            {loading ? (
-                <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-                    <p className="text-sm font-medium">{isAr ? 'جاري التحميل...' : 'Loading services...'}</p>
-                </div>
-            ) : items.length === 0 ? (
-                <div className="py-20 text-center bg-white rounded-2xl border border-slate-200 shadow-xs text-slate-400 text-sm">
-                    {isAr ? 'لا توجد خدمات مسجلة مطابقة للبحث.' : 'No service items found.'}
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {items.map((item) => {
-                        const visual = getServiceVisuals(item.name);
-                        const Icon = visual.icon;
-
-                        return (
-                            <div
-                                key={item._id}
-                                className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
-                            >
-                                <div>
-                                    <div className="flex items-start justify-between gap-3 mb-3">
-                                        <div className={`p-3 rounded-xl border ${visual.bg} ${visual.text} ${visual.border}`}>
-                                            <Icon className="w-6 h-6" />
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <button
-                                                onClick={() => handleOpenFormModal(item)}
-                                                className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-                                                title={isAr ? 'تعديل' : 'Edit'}
-                                            >
-                                                <Edit2 className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleOpenDeleteModal(item)}
-                                                className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
-                                                title={isAr ? 'حذف' : 'Delete'}
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <h3 className="text-lg font-bold text-slate-900 mb-1.5">{item.name}</h3>
-
-                                    <p className="text-xs sm:text-sm text-slate-500 line-clamp-3 leading-relaxed">
-                                        {item.description || (isAr ? 'لا يوجد وصف مضاف لهذه الخدمة.' : 'No description provided.')}
-                                    </p>
-                                </div>
-
-                                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                                    <span>ID: #{item._id.slice(-6)}</span>
-                                    <span>{item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-EG') : ''}</span>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
-
-            {/* Pagination Footer */}
-            {pagination.totalPages > 1 && (
-                <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-                    <span className="text-xs text-slate-500">
-                        {isAr
-                            ? `صفحة ${pagination.currentPage} من ${pagination.totalPages}`
-                            : `Page ${pagination.currentPage} of ${pagination.totalPages}`}
-                    </span>
-                    <div className="flex items-center gap-1">
-                        <button
-                            disabled={!pagination.hasPrevPage}
-                            onClick={() => fetchItems(pagination.currentPage - 1, searchQuery)}
-                            className="p-1.5 border rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                        >
-                            <ChevronRight className="w-4 h-4" />
-                        </button>
-                        <button
-                            disabled={!pagination.hasNextPage}
-                            onClick={() => fetchItems(pagination.currentPage + 1, searchQuery)}
-                            className="p-1.5 border rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                        </button>
+            {/* Services Table View */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+                {loading ? (
+                    <div className="py-20 flex flex-col items-center justify-center text-slate-400 gap-3">
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                        <p className="text-sm font-medium">{isAr ? 'جاري التحميل...' : 'Loading services...'}</p>
                     </div>
-                </div>
-            )}
+                ) : items.length === 0 ? (
+                    <div className="py-16 text-center text-slate-400 text-sm">
+                        {isAr ? 'لا توجد خدمات مسجلة مطابقة للبحث.' : 'No service items found.'}
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-start text-xs sm:text-sm">
+                            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px] tracking-wider">
+                                <tr>
+                                    <th className="py-3.5 px-4 text-start">{isAr ? 'اسم الخدمة' : 'Service Name'}</th>
+                                    <th className="py-3.5 px-4 text-start">{isAr ? 'الوصف والتفاصيل' : 'Description'}</th>
+                                    <th className="py-3.5 px-4 text-start">{isAr ? 'تاريخ الإنشاء' : 'Date Created'}</th>
+                                    <th className="py-3.5 px-4 text-center">{isAr ? 'إجراءات' : 'Actions'}</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {items.map((item) => {
+                                    const visual = getServiceVisuals(item.name);
+                                    const Icon = visual.icon;
+
+                                    return (
+                                        <tr key={item._id} className="hover:bg-slate-50/70 transition-colors">
+                                            {/* Service Icon & Name */}
+                                            <td className="py-3.5 px-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`p-2 rounded-xl border ${visual.bg} ${visual.text} ${visual.border} shrink-0`}>
+                                                        <Icon className="w-4 h-4" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-bold text-slate-900 text-sm">{item.name}</p>
+                                                        <span className="text-[11px] text-slate-400 font-mono">
+                                                            #{item._id.slice(-6).toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                          
+
+                                            {/* Description */}
+                                            <td className="py-3.5 px-4 max-w-xs">
+                                                <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                                    {item.description || (isAr ? 'لا يوجد وصف مضاف لهذه الخدمة.' : 'No description provided.')}
+                                                </p>
+                                            </td>
+
+                                            {/* Created Date */}
+                                            <td className="py-3.5 px-4 whitespace-nowrap font-mono text-xs text-slate-500">
+                                                {item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-EG') : 'N/A'}
+                                            </td>
+
+                                            {/* Action Buttons */}
+                                            <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <button
+                                                        onClick={() => handleOpenFormModal(item)}
+                                                        className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                                                        title={isAr ? 'تعديل' : 'Edit'}
+                                                    >
+                                                        <Edit2 className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleOpenDeleteModal(item)}
+                                                        className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                                        title={isAr ? 'حذف' : 'Delete'}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                {/* Pagination Footer */}
+                {pagination.totalPages > 1 && (
+                    <div className="p-4 border-t border-slate-100 flex items-center justify-between">
+                        <span className="text-xs text-slate-500">
+                            {isAr
+                                ? `صفحة ${pagination.currentPage} من ${pagination.totalPages}`
+                                : `Page ${pagination.currentPage} of ${pagination.totalPages}`}
+                        </span>
+                        <div className="flex items-center gap-1">
+                            <button
+                                disabled={!pagination.hasPrevPage}
+                                onClick={() => fetchItems(pagination.currentPage - 1, searchQuery)}
+                                className="p-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                            <button
+                                disabled={!pagination.hasNextPage}
+                                onClick={() => fetchItems(pagination.currentPage + 1, searchQuery)}
+                                className="p-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                <ChevronLeft className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {/* FORM MODAL (Add / Edit) */}
             {formModalOpen && (

@@ -34,7 +34,7 @@ export default function BookService() {
   const [formData, setFormData] = useState({
     userName: "",
     location: "",
-    phoneNumber: "",
+    phone: "",
     serviceType: "",
     serviceItem: "",
     description: "",
@@ -284,7 +284,7 @@ export default function BookService() {
       return;
     }
 
-    if (!formData.phoneNumber.trim()) {
+    if (!formData.phone.trim()) {
       setError(
         isAr ? "برجاء إدخال رقم الهاتف" : "Please enter your phone number"
       );
@@ -326,6 +326,9 @@ export default function BookService() {
         serviceItem: formData.serviceItem,
         requestType: formData.serviceType,
         description: formData.description,
+        userName:formData.userName,
+        phone:formData.phone,
+        address:formData.address,
       });
 
       console.log("Create Service Request:", response.data);
@@ -446,8 +449,8 @@ export default function BookService() {
                   <input
                     type="tel"
                     dir="ltr"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
                     placeholder="+20 100 000 0000"
                     className="w-full ps-10 pe-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -499,6 +502,7 @@ export default function BookService() {
                   <Briefcase className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
 
                   <select
+                    disabled={true}
                     name="serviceType"
                     value={formData.serviceType}
                     onChange={handleChange}

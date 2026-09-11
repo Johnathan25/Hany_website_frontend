@@ -124,19 +124,38 @@ export default function Footer() {
                             <p className="text-slate-400 font-medium">
                                 {isAr ? 'تم التطوير بواسطة:' : 'Developed by:'}
                             </p>
-                            <div className="space-y-1.5 font-mono text-[11px]">
-                                <a
-                                    href="mailto:kiroloesreda@gmail.com"
-                                    className="block text-sky-400 hover:text-sky-300 hover:underline transition-colors truncate"
-                                >
-                                    +201270857659
-                                </a>
-                                <a
-                                    href="mailto:Johnathanibraheem7@gmail.com"
-                                    className="block text-sky-400 hover:text-sky-300 hover:underline transition-colors truncate"
-                                >
-                                    +201094124323
-                                </a>
+                            <div className="space-y-3 font-mono text-[11px]">
+                                {/* Contact 1 */}
+                                <div className="space-y-0.5">
+                                    <a
+                                        href="tel:+201270857659"
+                                        className="block text-sky-400 hover:text-sky-300 hover:underline transition-colors truncate"
+                                    >
+                                        +201270857659
+                                    </a>
+                                    <a
+                                        href="mailto:kiroloesreda@gmail.com"
+                                        className="block text-slate-400 hover:text-sky-300 hover:underline transition-colors truncate"
+                                    >
+                                        kiroloesreda@gmail.com
+                                    </a>
+                                </div>
+
+                                {/* Contact 2 */}
+                                <div className="space-y-0.5">
+                                    <a
+                                        href="tel:+201094124323"
+                                        className="block text-sky-400 hover:text-sky-300 hover:underline transition-colors truncate"
+                                    >
+                                        +201094124323
+                                    </a>
+                                    <a
+                                        href="mailto:johnathanibraheem7@gmail.com"
+                                        className="block text-slate-400 hover:text-sky-300 hover:underline transition-colors truncate"
+                                    >
+                                        johnathanibraheem7@gmail.com
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

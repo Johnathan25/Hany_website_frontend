@@ -1,8 +1,8 @@
 // import NotFound from "./pages/404Page";
 import ScrollToTop from "./services/scrollToTop";
-import logo from "/logo.jpeg"; // تأكد من مسار الصورة الصحيح عندك
+import logo from "../public/building.jpeg"; // تأكد من مسار الصورة الصحيح عندك
 import { FaAngleUp } from "react-icons/fa";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import AppRoutes from "./AppRoutes";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -57,7 +57,7 @@ function App() {
               <div className="relative w-24 h-24 rounded-full p-1 bg-gradient-to-b from-[#0284c7]/30 to-transparent flex items-center justify-center shadow-[0_0_30px_rgba(2,132,199,0.3)] border border-[#0284c7]/20">
                 <img
                   src={logo}
-                  alt="Abu El-Dahab Logo"
+                  alt="Large Step Logo"
                   className="w-full h-full object-contain rounded-full"
                 />
               </div>
