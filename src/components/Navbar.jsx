@@ -39,14 +39,14 @@ export default function Navbar() {
 
             <button
               onClick={() => navigate('/login')}
-              className="px-4 py-2 rounded-full text-slate-700 hover:text-blue-600 hover:bg-blue-50 font-bold text-sm tracking-wide transition-all"
+              className="px-4 py-2 rounded-full text-slate-700 hover:text-blue-600 hover:bg-blue-50 font-bold text-sm tracking-wide transition-all cursor-pointer"
             >
               {isAr ? 'تسجيل الدخول' : 'Log In'}
             </button>
 
             <button
               onClick={() => navigate('/register')}
-              className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:shadow-blue-500/20 whitespace-nowrap transform hover:-translate-y-0.5"
+              className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:shadow-blue-500/20 whitespace-nowrap transform hover:-translate-y-0.5 cursor-pointer"
             >
               {isAr ? 'إنشاء حساب' : 'Register'}
             </button>
@@ -55,19 +55,27 @@ export default function Navbar() {
         </div>
 
         {/* 2. Div المنتصف: روابط التنقل (تظهر في الشاشات المتوسطة والكبيرة فقط) */}
-        <div className="hidden md:flex items-center justify-center flex-1">
+        <div className="hidden md:flex items-center justify-center flex-1 cursor-pointer" >
           <nav className="flex items-center gap-6 lg:gap-8 text-base font-bold text-slate-700">
             <button
               onClick={() => scrollToSection('home')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group"
+              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'الرئيسية' : 'Home'}
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button>
 
+
+<button
+              onClick={() => scrollToSection('services')}
+              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
+            >
+              {isAr ? 'خدماتنا' : 'Services'}
+              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
+            </button>
             <button
               onClick={() => scrollToSection('about')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group"
+              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'من نحن' : 'About Us'}
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
@@ -81,17 +89,11 @@ export default function Navbar() {
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button> */}
 
-            <button
-              onClick={() => scrollToSection('services')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group"
-            >
-              {isAr ? 'خدماتنا' : 'Services'}
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-            </button>
+            
 
             <button
               onClick={() => scrollToSection('complaints')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group"
+              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />

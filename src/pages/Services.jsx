@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import {
@@ -7,6 +7,11 @@ import {
     Clock,
     Phone
 } from 'lucide-react';
+
+// 1. Make sure these are imported at the top:
+import { AlertCircle, LogIn } from 'lucide-react';
+
+
 
 export default function Services() {
     const { isAr } = useLanguage();
@@ -31,7 +36,7 @@ export default function Services() {
                 : 'On-site engineer visit covering finishing, wiring, and plumbing, with a full photo report.'
         },
         {
-            id: 'emergency-maintenance',
+            id: 'maintenance',
             image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80',
             title: isAr ? 'صيانة مستعجلة' : 'Priority Maintenance',
             desc: isAr
@@ -44,16 +49,40 @@ export default function Services() {
         navigate('/booking-service');
     };
 
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    
+    // Check login status
+    const isLoggedIn = Boolean(
+        localStorage.getItem('token') || localStorage.getItem('user')
+    );
+
+    const handleBookingClick = () => {
+        if (!isLoggedIn) {
+            setShowAuthModal(true);
+        } else {
+            navigate('/book-service'); // Or your booking route
+        }
+    };
+
+    const handleConfirmLogin = () => {
+        setShowAuthModal(false);
+        navigate('/login');
+    };
+
+    const handleCancel = () => {
+        setShowAuthModal(false);
+        navigate('/');
+    }
     return (
         <div className="min-h-screen bg-white font-sans" dir={isAr ? 'rtl' : 'ltr'}>
             <div className=" mx-auto px-5 sm:px-8 py-16 sm:py-20">
 
                 {/* عنوان الصفحة */}
-                <div className="max-w-xl mb-14">
+                <div className="max-w-xl mx-auto mb-14 text-center">
                     <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
                         {isAr ? 'خدماتنا' : 'What we do'}
                     </h1>
-                    <p className="mt-3 text-slate-500 text-base leading-relaxed">
+                    <p className="mt-3 text-slate-800 text-base leading-relaxed">
                         {isAr
                             ? 'من قرار الشراء إلى الصيانة، فريقنا الهندسي والقانوني معاك في كل خطوة.'
                             : 'From the buying decision to the maintenance call, our team is with you at every step.'}
@@ -83,12 +112,16 @@ export default function Services() {
                                     {srv.title}
                                 </h2>
                                 <div className="w-10 h-0.5 bg-teal-500 my-3" />
-                                <p className="text-sm text-slate-500 leading-relaxed">
+                                <p className="text-m text-slate-500 leading-relaxed">
                                     {srv.desc}
                                 </p>
                                 <div className="mt-5  justify-center cursor-pointer flex items-center gap-1.5 text-sm font-medium text-slate-900">
                                     <div className="flex justify-center my-4">
-                                        <button className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out">
+                                        <button
+                                            type="button"
+                                            onClick={handleBookingClick}
+                                            className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer"
+                                        >
                                             {isAr ? 'احجز الان' : 'Learn more'}
                                         </button>
                                     </div>
@@ -100,6 +133,46 @@ export default function Services() {
 
 
             </div>
+            {/* Auth Warning Modal */}
+            {showAuthModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
+
+                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-600 ring-6 ring-amber-50/60">
+                            <AlertCircle className="h-7 w-7" />
+                        </div>
+
+                        <h3 className="text-lg font-bold text-slate-900 mb-2">
+                            {isAr ? 'تسجيل الدخول مطلوب' : 'Login Required'}
+                        </h3>
+                        <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                            {isAr
+                                ? 'يجب تسجيل الدخول أولاً لتتمكن من حجز الخدمة ومتابعة طلبك.'
+                                : 'You should login first to book a service and proceed with your order.'}
+                        </p>
+
+                        <div className="flex flex-col gap-2.5">
+                            <button
+                                type="button"
+                                onClick={handleConfirmLogin}
+                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all"
+                            >
+                                <LogIn className="w-4 h-4" />
+                                <span>{isAr ? 'تسجيل الدخول' : 'Accept & Login'}</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={handleCancel}
+                                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors"
+                            >
+                                {isAr ? 'إلغاء والعودة للرئيسية' : 'Refuse (Go to Home)'}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,87 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import SuccessModal from '../components/SuccessModal';
+import api from '../services/api';
 import { 
-  MessageSquare, 
   Send, 
-  Search, 
-  Paperclip, 
-  Clock, 
   ShieldAlert, 
-  HelpCircle, 
-  BarChart3,
-  Phone,
-  Mail,
-  User,
-  Hash
+  Phone, 
+  User, 
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
 
 export default function Complaints() {
   const { isAr } = useLanguage();
-  const [activeTab, setActiveTab] = useState('new'); // 'new' | 'track'
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketId, setTicketId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // بيانات النموذج
+  // نموذج إرسال الشكوى متطابق مع أسماء الحقول في الـ Controller
   const [formData, setFormData] = useState({
-    nationalId: '',
-    fullName: '',
+    name: '',
+    phone: '',
+    type: '',
     title: '',
-    details: '',
-    category: '',
-    file: null
+    details: ''
   });
 
-  // بيانات تتبع الشكوى
-  const [trackInput, setTrackInput] = useState('');
-  const [trackedRecord, setTrackedRecord] = useState(null);
-
   const categories = [
-    { id: 'inspection_delay', ar: 'تأخر مواعيد المعاينة الهندسية', en: 'Site Inspection Delay' },
-    { id: 'supplies_quality', ar: 'ملاحظات على خامات التوريد والإنشاء', en: 'Materials & Supply Quality' },
-    { id: 'contract_inquiry', ar: 'استفسارات بنود التعاقد والدفعات', en: 'Contract & Payment Inquiries' },
-    { id: 'service_suggestion', ar: 'اقتراح لتطوير خدمات المنظومة', en: 'Improvement Suggestion' }
+    { id: 'معاينة هندسية', ar: 'تأخر مواعيد المعاينة الهندسية', en: 'Site Inspection Delay' },
+    { id: 'جودة وتوريدات', ar: 'ملاحظات على خامات التوريد والإنشاء', en: 'Materials & Supply Quality' },
+    { id: 'استفسار مالي وتعاقد', ar: 'استفسارات بنود التعاقد والدفعات', en: 'Contract & Payment Inquiries' },
+    { id: 'اقتراح تطوير', ar: 'اقتراح لتطوير خدمات المنظومة', en: 'Improvement Suggestion' }
   ];
+
+  // استخدام api.get لجلب البيانات من الـ Backend
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        const response = await api.get('/complaints/all');
+        console.log('Fetched Complaints:', response.data);
+      } catch (err) {
+        console.error('Fetch Complaints Error:', err);
+      }
+    };
+
+    fetchComplaints();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError('');
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, file: e.target.files[0] }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.phone || !formData.type || !formData.title || !formData.details) {
+      setError(isAr ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill all required fields');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+
+      // إرسال البيانات للـ Backend عبر api.post
+      const response = await api.post('/complaints', formData);
+
+      // استخراج المعرف القادم من الـ Database أو استخدام كود افتراضي
+      const createdId = response.data?.data?._id || Math.floor(100000 + Math.random() * 900000).toString();
+      setTicketId(createdId);
+      setShowSuccess(true);
+
+      // تفريغ النموذج
+      setFormData({
+        name: '',
+        phone: '',
+        type: '',
+        title: '',
+        details: ''
+      });
+    } catch (err) {
+      console.error('Submit Complaint Error:', err);
+      setError(
+        err.response?.data?.message || 
+        (isAr ? 'حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة لاحقاً' : 'Failed to submit complaint. Please try again.')
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // توليد رقم تتبع عشوائي للطلب
-    const generatedId = Math.floor(100000 + Math.random() * 900000).toString();
-    setTicketId(generatedId);
-    setShowSuccess(true);
-    setFormData({ nationalId: '', fullName: '', title: '', details: '', category: '', file: null });
-  };
-
-  const handleTrackSubmit = (e) => {
-    e.preventDefault();
-    if (!trackInput.trim()) return;
-
-    setTrackedRecord({
-      id: trackInput,
-      status: isAr ? 'قيد الفحص والمتابعة الميدانية' : 'Under Field Review',
-      date: '2026-09-11',
-      title: isAr ? 'مراجعة تقرير معاينة التجمع الخامس' : '5th Settlement Inspection Review'
-    });
-  };
-
   return (
-    <section id="complaints" className="w-full py-20 px-4 sm:px-6 lg:px-8 font-sans scroll-mt-20 select-none">
-      <div className="max-w-2xl mx-auto space-y-16">
+    <section id="complaints" className="w-full py-20 px-4 sm:px-6 lg:px-8 font-sans scroll-mt-20 select-none ">
+      <div className="max-w-2xl mx-auto space-y-12">
 
         {/* 1. Header Section */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          
+        <div className="text-center space-y-4">
+         
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight font-serif">
             {isAr ? 'الشكاوى والاقتراحات' : 'Complaints & Feedback'}
@@ -89,226 +107,156 @@ export default function Complaints() {
 
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-light">
             {isAr
-              ? 'نحرص في Large Step على تقديم تجربة استثنائية. ملاحظاتك الميدانية والفنية محل اهتمام مباشر من الإدارة العليا وفريق الجودة.'
-              : 'At Large Step, we uphold strict standards. Your field notices and suggestions receive immediate priority from our leadership team.'}
+              ? 'نحرص في Large Step على تقديم تجربة استثنائية. ملاحظاتك الميدانية والفنية محل اهتمام مباشر من الإدارة وفريق الجودة.'
+              : 'At Large Step, we uphold strict standards. Your feedback receives immediate attention from our team.'}
           </p>
-
-          {/* تبديل المسار: جديد / تتبع */}
-          <div className="flex items-center justify-center gap-3 pt-4">
-            <button
-              type="button"
-              onClick={() => setActiveTab('new')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-xs ${
-                activeTab === 'new'
-                  ? 'bg-blue-600 text-white shadow-blue-500/25'
-                  : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              <Send className="w-4 h-4" />
-              <span>{isAr ? 'تقديم شكوى أو اقتراح' : 'Submit Feedback'}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('track')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-xs ${
-                activeTab === 'track'
-                  ? 'bg-blue-600 text-white shadow-blue-500/25'
-                  : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              <Search className="w-4 h-4" />
-              <span>{isAr ? 'متابعة شكوى سابقة' : 'Track Status'}</span>
-            </button>
-          </div>
         </div>
 
-        {/* 2. Content Layout (Form vs Sidebar) */}
-     
-          
-          {/* Main Form Container */}
-          <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200/80 shadow-xs p-7 sm:p-10">
-            {activeTab === 'new' ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  {/* رقم الهاتف / الهوية */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                      {isAr ? 'رقم الهاتف أو الهوية' : 'Phone / ID'} <span className="text-rose-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400">
-                        <Hash className="w-4 h-4" />
-                      </div>
-                      <input
-                        type="text"
-                        name="nationalId"
-                        value={formData.nationalId}
-                        onChange={handleInputChange}
-                        required
-                        placeholder={isAr ? '010xxxxxxxx' : 'Phone or ID'}
-                        className="w-full ps-10 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-                      />
-                    </div>
+        {/* 2. Form Container */}
+        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-7 sm:p-10">
+          {error && (
+            <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center gap-3 text-rose-700 text-sm">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {/* اسم العميل */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                  {isAr ? 'الاسم بالكامل' : 'Full Name'} <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400">
+                    <User className="w-4 h-4" />
                   </div>
-
-                  {/* اسم العميل */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                      {isAr ? 'الاسم بالكامل' : 'Full Name'} <span className="text-rose-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400">
-                        <User className="w-4 h-4" />
-                      </div>
-                      <input
-                        type="text"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        required
-                        placeholder={isAr ? 'اسم العميل' : 'Full name'}
-                        className="w-full ps-10 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* تصنيف الشكوى */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                    {isAr ? 'نوع المعاملة أو الشكوى' : 'Category'} <span className="text-rose-500">*</span>
-                  </label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all cursor-pointer text-slate-700"
-                  >
-                    <option value="" disabled>
-                      {isAr ? '-- اختر التصنيف المناسب --' : '-- Select Category --'}
-                    </option>
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {isAr ? cat.ar : cat.en}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* العنوان المختصر */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                    {isAr ? 'عنوان موجز للملاحظة' : 'Subject'} <span className="text-rose-500">*</span>
-                  </label>
                   <input
                     type="text"
-                    name="title"
-                    value={formData.title}
+                    name="name"
+                    value={formData.name}
                     onChange={handleInputChange}
                     required
-                    placeholder={isAr ? 'مثال: تأخر استلام تقرير فحص الموقع' : 'Brief subject'}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+                    placeholder={isAr ? 'أحمد علي محمود' : 'Full name'}
+                    className="w-full ps-10 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                   />
                 </div>
-
-                {/* التفاصيل */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                    {isAr ? 'تفاصيل الملاحظة أو الشكوى' : 'Details'} <span className="text-rose-500">*</span>
-                  </label>
-                  <textarea
-                    name="details"
-                    rows="4"
-                    value={formData.details}
-                    onChange={handleInputChange}
-                    required
-                    placeholder={isAr ? 'اشرح بالتفصيل ما حدث ليتسنى لفريقنا التدخل فوراً...' : 'Write all details clearly...'}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all resize-y"
-                  />
-                </div>
-
-               
-
-                {/* زر الإرسال */}
-                <button
-                  type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-blue-500/25 transition-all"
-                >
-                  {isAr ? 'إرسال الشكوى رسمياً' : 'Submit Ticket'}
-                </button>
-              </form>
-            ) : (
-              /* وضع تتبع الشكوى */
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-1">
-                    {isAr ? 'الاستعلام عن حالة الطلب' : 'Check Request Status'}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    {isAr ? 'أدخل رقم المعاملة المسجل لمتابعة الإجراءات المتخذة.' : 'Enter your ticket reference ID.'}
-                  </p>
-                </div>
-
-                <form onSubmit={handleTrackSubmit} className="flex gap-3">
-                  <input
-                    type="text"
-                    value={trackInput}
-                    onChange={(e) => setTrackInput(e.target.value)}
-                    placeholder={isAr ? 'مثال: 543210' : 'e.g. 543210'}
-                    className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition-colors shrink-0"
-                  >
-                    {isAr ? 'استعلام' : 'Track'}
-                  </button>
-                </form>
-
-                {trackedRecord && (
-                  <div className="p-5 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-3 mt-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-blue-900">
-                        #{trackedRecord.id}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                        <Clock className="w-3.5 h-3.5" />
-                        {trackedRecord.status}
-                      </span>
-                    </div>
-                    <div className="text-sm font-bold text-slate-900">
-                      {trackedRecord.title}
-                    </div>
-                    <div className="text-xs text-slate-500 font-mono">
-                      {isAr ? 'تاريخ التقديم:' : 'Date:'} {trackedRecord.date}
-                    </div>
-                  </div>
-                )}
               </div>
-            )}
-          </div>
 
-         
+              {/* رقم الهاتف */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                  {isAr ? 'رقم الهاتف' : 'Phone Number'} <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="tel"
+                    dir="ltr"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="010xxxxxxxx"
+                    className="w-full ps-10 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+                  />
+                </div>
+              </div>
+            </div>
 
+            {/* نوع المعاملة / الشكوى */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                {isAr ? 'نوع المعاملة أو الشكوى' : 'Complaint Type'} <span className="text-rose-500">*</span>
+              </label>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all cursor-pointer text-slate-700"
+              >
+                <option value="" disabled>
+                  {isAr ? '-- اختر تصنيف الشكوى --' : '-- Select Type --'}
+                </option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {isAr ? cat.ar : cat.en}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* العنوان */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                {isAr ? 'عنوان الشكوى' : 'Subject'} <span className="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                required
+                placeholder={isAr ? 'مثال: تأخر استلام الطلب رقم #98765' : 'Brief title'}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+              />
+            </div>
+
+            {/* التفاصيل */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                {isAr ? 'تفاصيل الشكوى' : 'Details'} <span className="text-rose-500">*</span>
+              </label>
+              <textarea
+                name="details"
+                rows="4"
+                value={formData.details}
+                onChange={handleInputChange}
+                required
+                placeholder={isAr ? 'اكتب تفاصيل الشكوى بدقة هنا...' : 'Write detailed complaint here...'}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all resize-y"
+              />
+            </div>
+
+            {/* زر الإرسال */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>{isAr ? 'جاري الإرسال...' : 'Submitting...'}</span>
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  <span>{isAr ? 'تأكيد وإرسال' : 'Submit Complaint'}</span>
+                </>
+              )}
+            </button>
+          </form>
         </div>
 
-      
+      </div>
 
       {/* نافذة التأكيد المنبثقة */}
       <SuccessModal
         isOpen={showSuccess}
         onClose={() => setShowSuccess(false)}
-        title={isAr ? 'تم تسجيل الشكوى بنجاح' : 'Feedback Received'}
+        title={isAr ? 'تم إرسال الشكوى بنجاح' : 'Complaint Submitted'}
         message={
           isAr 
-            ? `تم استلام طلبكم برقم تتبع #${ticketId}. سيتواصل معكم فريق الفحص والجودة الفنية خلال 24 ساعة.` 
-            : `Your ticket #${ticketId} has been filed. Our quality team will contact you within 24 hours.`
+            ? `تم تسجيل شكواك برقم مرجعي #${ticketId}، وتم إرسال إشعار للإدارة الفنية لمتابعتها فوراً.` 
+            : `Your complaint #${ticketId} has been registered and sent to management.`
         }
-        actionText={isAr ? 'تم' : 'Done'}
+        actionText={isAr ? 'حسناً' : 'Done'}
         onAction={() => setShowSuccess(false)}
       />
     </section>

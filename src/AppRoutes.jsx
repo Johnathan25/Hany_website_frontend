@@ -16,6 +16,7 @@ import Services from './pages/Services';
 import BookingService from './pages/BookingService';
 import Complaints from './pages/Complaints';
 import PaymentResult from "./pages/payment";
+import NotFound from './pages/NotFound';
 // =====================
 // Auth (Lazy optional)
 // =====================
@@ -52,6 +53,7 @@ function AppRoutes() {
                 <ProtectedRoute>
                   <PaymentResult />
                 </ProtectedRoute>} />
+                <Route path="*" element={<NotFound />} />
 
 
 

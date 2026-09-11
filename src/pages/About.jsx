@@ -65,7 +65,7 @@ export default function About() {
 
                     </div>
                 </div>
-                <div className="relative w-full h-80 lg:h-auto min-h-[350px] p-[20px]">
+                <div className="relative w-full h-80 lg:h-auto min-h-[350px] p-[100px]">
                     <div className="relative w-full h-full rounded-2xl overflow-hidden">
                         <img
                             src={Image}

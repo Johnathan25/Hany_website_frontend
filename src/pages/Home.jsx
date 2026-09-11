@@ -13,7 +13,7 @@ const bgImage = "/building.jpeg";
 export default function Home() {
     const { isAr, toggleLang } = useLanguage();
     const navigate = useNavigate();
-    
+
 
 
     return (
@@ -48,13 +48,21 @@ export default function Home() {
                             Exceptional Living in Prestigious Locations
                         </p>
 
-                    
+
                     </div>
                 </main>
 
-    
+
             </section>
 
+
+
+            {/* ========================================================
+          4. Services Section (خدماتنا)
+         ======================================================== */}
+            <section id="services" className="scroll-mt-20">
+                <Services />
+            </section>
             {/* ========================================================
           2. About Us Section (من نحن)
          ======================================================== */}
@@ -69,13 +77,8 @@ export default function Home() {
                 <Properties />
             </section> */}
 
-            {/* ========================================================
-          4. Services Section (خدماتنا)
-         ======================================================== */}
-            <section id="services" className="scroll-mt-20">
-                <Services />
-            </section>
-               <section id="complaints" className="scroll-mt-20">
+
+            <section id="complaints" className="scroll-mt-20">
                 <Complaints />
             </section>
 

@@ -129,13 +129,13 @@ export default function Footer() {
                                     href="mailto:kiroloesreda@gmail.com"
                                     className="block text-sky-400 hover:text-sky-300 hover:underline transition-colors truncate"
                                 >
-                                    kiroloesreda@gmail.com
+                                    +201270857659
                                 </a>
                                 <a
                                     href="mailto:Johnathanibraheem7@gmail.com"
                                     className="block text-sky-400 hover:text-sky-300 hover:underline transition-colors truncate"
                                 >
-                                    Johnathanibraheem7@gmail.com
+                                    +201094124323
                                 </a>
                             </div>
                         </div>
