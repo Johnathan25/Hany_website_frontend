@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { showAlert } from "../../services/alert";
 import { jwtDecode } from "jwt-decode";
-import login from "/building.jpeg";
+import login from "/login.png";
 import Swal from "sweetalert2";
 
 function PhoneLogin() {

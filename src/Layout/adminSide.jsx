@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-//import Sidebar from "../pages/admin/main/sidebar";
-//import Footer from "../pages/admin/main/footer";
+import Sidebar from "../pages/admin/main/sidebar";
+import Footer from "../pages/admin/main/footer";
 import { getCurrentUser } from "../services/getCurrentUser";
-//import BackupButton from "../pages/admin/backup/backup";
+import BackupButton from "../pages/admin/backup/backup";
 import { useEffect, useState } from "react";
 import { socket } from "../services/socket";
-
+import soundFile from "../../public/sound.mp3";
 import { MyContext } from "../context/cartContext";
 import StoreNavigationMenu from "../services/GoWebsite";
 
@@ -53,7 +53,10 @@ export default function AdminLayout() {
         localStorage.setItem("notifications", JSON.stringify(updated));
         setNotifyCount(updated.length);
 
-      
+        if (audioUnlocked) {
+          const audio = new Audio(soundFile);
+          audio.play().catch(() => {});
+        }
 
         return updated;
       });
@@ -75,7 +78,7 @@ export default function AdminLayout() {
     >
       <div dir="rtl" className="">
         <div className="flex min-h-screen ">
-          {/* <Sidebar role={user?.role} className="bg-[#0f172a]" /> */}
+          <Sidebar role={user?.role} className="bg-[#0f172a]" />
 
           <div className="w-full">
             <Outlet />
@@ -86,8 +89,8 @@ export default function AdminLayout() {
 
         <StoreNavigationMenu />
 
-        {/* <BackupButton /> */}
-        {/* <Footer  className="w-full"/> */}
+        <BackupButton />
+        <Footer  className="w-full"/>
       </div>
     </MyContext.Provider>
   );

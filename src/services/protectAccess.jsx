@@ -16,7 +16,7 @@ function isAccess(roles) {
 
 function ProtectedAccess({ children ,role}) {
   const tokenValid = isAccess(role);
-  if (!tokenValid) return <Navigate to="/login" />;
+  if (!tokenValid) return <Navigate to="/تسجيل_الدخول" />;
   return children;
 }
 

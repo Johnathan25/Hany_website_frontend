@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Footer from "../pages/customer/main/footer";
+import Navbar from "../pages/customer/main/navBar";
 import WhatsAppButton from "../services/whatsApp";
-import ChatBot from "../services/chatBot";
 import { MyContext } from "../context/cartContext";
-import { useLanguage } from "../context/LanguageContext";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import { socket } from "../services/socket";
 import { getCurrentUser } from "../services/getCurrentUser";
-import Navbar from "../components/Navbar";
-import logo from "../../public/logo.jpeg"; // تأكد من صحة مسار اللوجو لديك
-import Footer from "../pages/footer";
+import soundFile from "../../public/sound.mp3";
+import ChatBot from "../services/chatBot";
+import FloatingMenu from "../pages/customer/main/button";
 
 export default function ClientLayout() {
-  const { isAr, toggleLang } = useLanguage();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // فحص المسار الحالي لتحديد الزر النشط في الهيدر
-  const isActive = (path) => location.pathname === path;
-
   const [token] = useState(localStorage.getItem("token"));
   const [about, setAbout] = useState();
 
@@ -36,7 +29,7 @@ export default function ClientLayout() {
   const user = getCurrentUser();
 
   // ========================
-  // 1. Unlock Audio
+  // 1. Unlock Audio (important)
   // ========================
   useEffect(() => {
     const unlockAudio = () => {
@@ -45,6 +38,7 @@ export default function ClientLayout() {
     };
 
     window.addEventListener("click", unlockAudio);
+
     return () => {
       window.removeEventListener("click", unlockAudio);
     };
@@ -57,88 +51,91 @@ export default function ClientLayout() {
     if (user) {
       socket.emit("join", user.userId);
     }
+
     return () => {
       socket.off("join");
     };
   }, [user]);
+useEffect(() => {
+  const fetchAndMerge = async () => {
+    try {
+      const res = await api.get("/notification");
+      const dbData = res.data;
+
+      const localData = JSON.parse(
+        localStorage.getItem("notifications") || "[]"
+      );
+
+      const combined = [...dbData, ...localData];
+
+      const unique = Array.from(
+        new Map(combined.map((item) => [item._id, item])).values()
+      );
+
+      unique.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      setNotifications(unique);
+      localStorage.setItem("notifications", JSON.stringify(unique));
+      setNotifyCount(unique.length);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchAndMerge();
+}, []);
+
 
   // ========================
-  // 3. Fetch notifications
-  // ========================
-  useEffect(() => {
-    const fetchAndMerge = async () => {
-      try {
-        const res = await api.get("/notification");
-        const dbData = res.data;
-
-        const localData = JSON.parse(
-          localStorage.getItem("notifications") || "[]"
-        );
-
-        const combined = [...dbData, ...localData];
-        const unique = Array.from(
-          new Map(combined.map((item) => [item._id, item])).values()
-        );
-
-        unique.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-
-        setNotifications(unique);
-        localStorage.setItem("notifications", JSON.stringify(unique));
-        setNotifyCount(unique.length);
-      } catch (err) {
-        console.log("Notification fetch warning:", err);
-      }
-    };
-
-    fetchAndMerge();
-  }, []);
-
-  // ========================
-  // 4. Handle live socket notifications
+  // 3. Handle notifications (ONLY HERE)
   // ========================
   useEffect(() => {
     const handleNotification = (data) => {
-      if (data.title === "تم حظرك من قبل الادمن") {
-        localStorage.removeItem("cart");
-        localStorage.removeItem("token");
-        localStorage.removeItem("userName");
-      }
-      console.log(data);
+     if(data.title=="تم حظرك من قبل الادمن"){
+      localStorage.removeItem("cart");
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
+
+     }
+     console.log(data)
       setNotifications((prev) => {
         const updated = [data, ...prev];
+
         localStorage.setItem("notifications", JSON.stringify(updated));
         setNotifyCount(updated.length);
 
+        // play sound safely
+        if (audioUnlocked) {
+          const audio = new Audio(soundFile);
+          audio.play().catch(() => {});
+        }
 
         return updated;
       });
     };
 
     socket.on("notification", handleNotification);
+
     return () => {
       socket.off("notification", handleNotification);
     };
   }, [audioUnlocked]);
 
   // ========================
-  // 5. Fetch about data
+  // 4. Fetch about
   // ========================
   const fetchAbout = async () => {
-    try {
-      const res = await api.get("/about");
-      setAbout(res.data.data);
-    } catch (err) {
-      console.log("About fetch warning:", err);
-    }
+    const res = await api.get("/about");
+    setAbout(res.data.data);
   };
 
   useEffect(() => {
     fetchAbout();
   }, [token]);
 
- return (
+  return (
     <MyContext.Provider
       value={{
         counts,
@@ -150,19 +147,18 @@ export default function ClientLayout() {
         setNotifyCount,
       }}
     >
-      <div
-        dir={isAr ? "rtl" : "ltr"}
-        className="min-h-screen flex flex-col bg-slate-50 font-sans select-none"
-      >
-        {/* Navbar الموحد لجميع الصفحات */}
+      <div dir="rtl" className="dashboard">
         <Navbar />
 
-        {/* جسم الصفحات المتغيرة */}
-        <main className="flex-1 w-full">
+        <div className="flex-1">
           <Outlet />
-        </main>
+        </div>
+        <ChatBot/>
+        <FloatingMenu/>
 
-      <Footer/>
+
+        <Footer />
+        <WhatsAppButton />
       </div>
     </MyContext.Provider>
   );
