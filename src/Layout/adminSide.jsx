@@ -196,7 +196,7 @@ export default function AdminLayout() {
           </main>
         </div>
 
-        <StoreNavigationMenu />
+        
       </div>
     </MyContext.Provider>
   );
