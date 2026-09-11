@@ -10,7 +10,7 @@ import ScrollToTop from "./services/scrollToTop";
 
 // Pages
 import Home from "./pages/user/Home";
-import About from "./pages/User/About"; // <-- استيراد صفحة من نحن
+import About from "./pages/user/About"; 
 import Properties from './pages/user/Properties';
 import Services from './pages/user/Services';
 import BookingService from './pages/user/BookingService';
