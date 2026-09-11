@@ -9,7 +9,7 @@ import {
 } from "react-icons/hi";
 import api from "../../services/api";
 import { showAlert } from "../../services/alert";
-import forgetpass from "/login.png"
+import forgetpass from "/building.jpeg"
 export default function ResetPassword() {
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ export default function ResetPassword() {
       });
 
       setTimeout(() => {
-        navigate("/تسجيل_الدخول");
+        navigate("/login");
       }, 2000);
 
     } catch (err) {
@@ -54,7 +54,7 @@ export default function ResetPassword() {
       }, []);
 
   return (
-    <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#f8fafc] font-cairo">
+    <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#f8fafc] ">
       <div className="bg-white  rounded-3xl overflow-hidden flex w-full  min-h-screen">
         
        {/* left side */}
@@ -62,7 +62,7 @@ export default function ResetPassword() {
           
           {/* زر الرجوع */}
           <Link 
-            to="/تسجيل_الدخول" 
+            to="/login" 
             className="flex items-center gap-2 text-gray-400 hover:text-[#0284c7] mb-8 transition-colors group w-fit"
           >
             <HiOutlineArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -145,7 +145,7 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-5 bg-gradient-to-l from-[#075985] to-[#0284c7] text-white rounded-2xl font-bold text-xl shadow-lg shadow-blue-100 hover:shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full py-5 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-2xl font-bold text-xl shadow-lg shadow-blue-100 hover:shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? "جارٍ التحديث..." : "تحديث كلمة المرور"}
               </button>
@@ -155,7 +155,7 @@ export default function ResetPassword() {
           <div className="mt-8 text-center border-t border-gray-50 pt-6">
             <p className="text-gray-500">
               لم يصلك الكود؟{" "}
-              <Link to="/forget-password" name="resend" className="text-[#0284c7] font-bold hover:underline">
+              <Link to="/forget-password" name="resend" className="text-blue-600 font-bold hover:underline">
                 إعادة الإرسال
               </Link>
             </p>
@@ -173,7 +173,7 @@ export default function ResetPassword() {
           />
           <div className="absolute bottom-16 right-12 z-20 text-white">
             <h2 className="text-4xl font-black mb-4">أمان حسابك أولويتنا</h2>
-            <p className="text-xl opacity-90 max-w-sm leading-relaxed">نحن نستخدم أحدث تقنيات التشفير لضمان حماية بياناتك ومنتجاتك الغذائية المفضلة.</p>
+            <p className="text-xl opacity-90 max-w-sm leading-relaxed">نحن نستخدم أحدث تقنيات التشفير لضمان حماية بياناتك .</p>
           </div>
         </div>
 

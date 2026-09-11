@@ -5,22 +5,25 @@ import api from "./api";
 
 async function isTokenValid() {
   const token = localStorage.getItem("token");
-  if (!token) return false;
+  if (!token) {
+    console.warn("ProtectedRoute: No token found in localStorage");
+    return false;
+  }
 
   try {
     const decoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
 
-    if (decoded.exp <= currentTime) {
-      // const res = await api.post("/users/refresh-token");
+    if (decoded.exp && decoded.exp <= currentTime) {
+      console.warn("ProtectedRoute: Token has expired at", new Date(decoded.exp * 1000));
       localStorage.removeItem("token");
       localStorage.removeItem("userName");
       return false;
-
     }
 
     return true;
-  } catch {
+  } catch (err) {
+    console.error("ProtectedRoute: jwtDecode error (invalid token structure)", err);
     return false;
   }
 }
@@ -37,7 +40,7 @@ function ProtectedRoute({ children }) {
   }, []);
 
   if (isValid === null) return <div>Checking authentication...</div>;
-  if (!isValid) return <Navigate to="/تسجيل_الدخول" replace />;
+  if (!isValid) return <Navigate to="/login" replace />;
 
   return children;
 }

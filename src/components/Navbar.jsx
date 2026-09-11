@@ -9,13 +9,21 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const scrollToSection = (id) => {
-    setIsMobileMenuOpen(false);
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ const handleNavClick = (sectionId) => {
+    if (location.pathname === '/') {
+      // 1. If already on Home, just scroll directly:
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // 2. If on /booking-service or any other page:
+      // Navigate to Home ("/") and tell it which section we want:
+      navigate('/', { state: { scrollTo: sectionId } });
     }
   };
+
+  
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-blue-100/80 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] transition-all">
@@ -58,7 +66,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center justify-center flex-1 cursor-pointer" >
           <nav className="flex items-center gap-6 lg:gap-8 text-base font-bold text-slate-700">
             <button
-              onClick={() => scrollToSection('home')}
+              onClick={() => handleNavClick('home')}
               className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'الرئيسية' : 'Home'}
@@ -66,15 +74,15 @@ export default function Navbar() {
             </button>
 
 
-<button
-              onClick={() => scrollToSection('services')}
+            <button
+              onClick={() => handleNavClick('services')}
               className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'خدماتنا' : 'Services'}
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button>
             <button
-              onClick={() => scrollToSection('about')}
+              onClick={() => handleNavClick('about')}
               className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'من نحن' : 'About Us'}
@@ -82,30 +90,30 @@ export default function Navbar() {
             </button>
 
             {/* <button
-              onClick={() => scrollToSection('properties')}
+              onClick={() => handleNavClick('properties')}
               className="relative py-1.5 hover:text-blue-600 transition-colors group"
             >
               {isAr ? 'العقارات' : 'Properties'}
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button> */}
 
-            
+
 
             <button
-              onClick={() => scrollToSection('complaints')}
+              onClick={() => handleNavClick('complaints')}
               className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button>
-            
+
           </nav>
         </div>
 
         {/* 3. Div الأيسر: الشعار اسم اللوجو والصورة */}
         <div className="flex items-center justify-end shrink-0">
           <div
-            onClick={() => scrollToSection('home')}
+            onClick={() => handleNavClick('home')}
             className="flex items-center gap-3.5 cursor-pointer group"
           >
             <span className="text-lg sm:text-xl font-extrabold tracking-wider text-slate-800 uppercase font-serif group-hover:text-blue-600 transition-colors">
@@ -130,35 +138,35 @@ export default function Navbar() {
           {/* روابط التنقل الموبايل */}
           <nav className="flex flex-col gap-4 font-bold text-slate-700 text-right">
             <button
-              onClick={() => scrollToSection('home')}
+              onClick={() => handleNavClick('home')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'الرئيسية' : 'Home'}
             </button>
 
             <button
-              onClick={() => scrollToSection('about')}
+              onClick={() => handleNavClick('about')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'من نحن' : 'About Us'}
             </button>
 
             <button
-              onClick={() => scrollToSection('properties')}
+              onClick={() => handleNavClick('properties')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'العقارات' : 'Properties'}
             </button>
 
             <button
-              onClick={() => scrollToSection('services')}
+              onClick={() => handleNavClick('services')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'خدماتنا' : 'Services'}
             </button>
 
             <button
-              onClick={() => scrollToSection('about')}
+              onClick={() => handleNavClick('about')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'تواصل معنا' : 'Contact'}

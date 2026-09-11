@@ -1,14 +1,12 @@
 import axios from "axios";
 import { getCurrentUser } from "./getCurrentUser";
 
+
 const servers = [
-  "https://e-commerce-eight-pi-39.vercel.app/v1",
-  "https://e-commerce-neon-psi.vercel.app/v1",
-  "https://e-commerce-production-24be.up.railway.app/v1",
-  // "https://e-commerce-production-24be.up.railway.app/v3",
-  // "https://e-commerce-production-24be.up.railway.app/v4",
-  // "https://e-commerce-production-24be.up.railway.app/v5",
+  "https://hany-rho.vercel.app/v1",
+  
 ];
+
 
 
 const user = getCurrentUser();
