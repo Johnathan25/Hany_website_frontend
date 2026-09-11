@@ -7,7 +7,7 @@ import AppRoutes from "./AppRoutes";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Home from "./pages/user/Home";
+import Home from "./pages/User/Home";
 
 import { LanguageProvider } from './context/LanguageContext';
 function App() {

@@ -1,57 +1,33 @@
 import api from './api';
 
-// ==========================================
-// Items APIs
-// ==========================================
-export const getAllItems = async () => {
-  const res = await api.get('/serviceMangement/items');
-  return res.data;
-};
-
-export const getItemById = async (id) => {
-  const res = await api.get(`/serviceMangement/items/${id}`);
-  return res.data;
-};
-
-export const createItem = async (itemData) => {
-  const res = await api.post('/serviceMangement/items', itemData);
-  return res.data;
-};
-
-export const createManyItems = async (itemsArray) => {
-  const res = await api.post('/serviceMangement/items/bulk', { items: itemsArray });
-  return res.data;
-};
-
-export const updateItem = async (id, updatedData) => {
-  const res = await api.put(`/serviceMangement/items/${id}`, updatedData);
-  return res.data;
-};
-
-export const deleteItem = async (id) => {
-  const res = await api.delete(`/serviceMangement/items/${id}`);
-  return res.data;
-};
-
-// ==========================================
-// Pricing APIs
-// ==========================================
+// جلب جميع سجلات الأسعار
 export const getAllPricing = async () => {
   const res = await api.get('/serviceMangement/pricing');
   return res.data;
 };
 
-export const getPricingByName = async (name) => {
-  const res = await api.get(`/serviceMangement/getPricingByName/${encodeURIComponent(name)}`);
+// جلب سعر خدمة محددة بالاسم (inspection | consultation | maintenance)
+export const getPricingByName = async (serviceName) => {
+  const res = await api.get(`/serviceMangement/getPricingByName/${serviceName}`);
   return res.data;
 };
 
+// إنشاء سجل تسعير جديد
 export const createPricing = async (pricingData) => {
-  const res = await api.post('/serviceMangement/pricing', pricingData);
+  const res = await api.post('/serviceMangement/pricing', {
+    inspectionPrice: Number(pricingData.inspectionPrice),
+    consultationPrice: Number(pricingData.consultationPrice),
+    maintenanceDeposit: Number(pricingData.maintenanceDeposit),
+  });
   return res.data;
 };
 
-export const updatePricing = async (id, updatedPricing) => {
-  const res = await api.put(`/serviceMangement/pricing/${id}`, updatedPricing);
+// تعديل سجل تسعير حالي
+export const updatePricing = async (id, pricingData) => {
+  const res = await api.put(`/serviceMangement/pricing/${id}`, {
+    inspectionPrice: Number(pricingData.inspectionPrice),
+    consultationPrice: Number(pricingData.consultationPrice),
+    maintenanceDeposit: Number(pricingData.maintenanceDeposit),
+  });
   return res.data;
 };

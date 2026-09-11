@@ -1,83 +1,123 @@
 import axios from "axios";
-import { getCurrentUser } from "./getCurrentUser";
 
 
-const servers = [
+const SERVERS = [
   "https://hany-rho.vercel.app/v1",
   
 ];
-
-
-
-const user = getCurrentUser();
-
-const role = user?.role;
-
-const isAdmin =
-  role === "superadmin" ||
-  role === "admin";
-
-let currentServer = isAdmin
-  ? 0
-  : Math.floor(Math.random() * servers.length);
-let retryCount = 0;
-const MAX_RETRY = 3;
+let currentServer = 0;
 
 export const api = axios.create({
-  baseURL: servers[currentServer],
+  baseURL: SERVERS[currentServer],
   withCredentials: true,
-
+  
 });
-
 
 /* ================= REQUEST INTERCEPTOR ================= */
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+api.interceptors.request.use(
+  (config) => {
+    config.baseURL = SERVERS[currentServer];
 
-  config.baseURL = servers[currentServer];
+    const token = localStorage.getItem("token");
 
-  return config;
-});
+    const financialToken = localStorage.getItem("financialToken");
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token} ${financialToken}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 /* ================= RESPONSE INTERCEPTOR ================= */
 
 api.interceptors.response.use(
-  (response) => {
-    retryCount = 0; // reset عند النجاح
-    return response;
-  },
-
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    const shouldSwitch =
-      !error.response ||
-      error.code === "ECONNABORTED" ||
-      error.response?.status >= 500;
+    // ==========================
+    // Server Failover
+    // ==========================
+    if (
+      !originalRequest._serverRetry &&
+      (
+        !error.response ||
+        error.code === "ECONNABORTED" ||
+        error.response?.status >= 500
+      )
+    ) {
+      originalRequest._serverRetry = true;
 
-    if (shouldSwitch) {
-      retryCount++;
+      currentServer = (currentServer + 1) % SERVERS.length;
 
-      if (retryCount <= MAX_RETRY) {
-        // لف على السيرفرات بشكل دائري
-        currentServer = (currentServer + 1) % servers.length;
+      api.defaults.baseURL = SERVERS[currentServer];
+      originalRequest.baseURL = SERVERS[currentServer];
 
-        console.log(
-          `Retry ${retryCount} → switching to: ${servers[currentServer]}`
-        );
+      return api(originalRequest);
+    }
 
-        originalRequest.baseURL = servers[currentServer];
+    // ==========================
+    // Refresh Token
+    // ==========================
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        // نجرب على السيرفر الحالي
+        let refreshRes;
+
+        try {
+          refreshRes = await axios.post(
+            `${SERVERS[currentServer]}/users/refresh-token`,
+            {},
+            {
+              withCredentials: true,
+            }
+          );
+        } catch (refreshError) {
+          // لو السيرفر وقع أثناء الـ Refresh
+          if (
+            !refreshError.response ||
+            refreshError.code === "ECONNABORTED" ||
+            refreshError.response?.status >= 500
+          ) {
+            currentServer = (currentServer + 1) % SERVERS.length;
+
+            api.defaults.baseURL = SERVERS[currentServer];
+
+            refreshRes = await axios.post(
+              `${SERVERS[currentServer]}/users/refresh-token`,
+              {},
+              {
+                withCredentials: true,
+              }
+            );
+          } else {
+            throw refreshError;
+          }
+        }
+
+        const newToken = refreshRes.data.accessToken;
+
+        localStorage.setItem("token", newToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        originalRequest.baseURL = SERVERS[currentServer];
 
         return api(originalRequest);
-      }
 
-      // لو خلصنا 3 محاولات
-      retryCount = 0;
-      return Promise.reject(error);
+      } catch (err) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        return Promise.reject(err);
+      }
     }
 
     return Promise.reject(error);

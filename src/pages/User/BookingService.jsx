@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom"; // 1. استيراد hook الـ Query Params
 import { useLanguage } from "../../context/LanguageContext";
 
 import {
@@ -19,6 +20,10 @@ import api from "../../services/api";
 
 export default function BookService() {
   const { isAr } = useLanguage();
+  const [searchParams] = useSearchParams();
+
+  // جلب الخدمة من الـ URL query e.g. /book?service=inspection
+  const queryService = searchParams.get("service");
 
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
@@ -34,6 +39,21 @@ export default function BookService() {
     serviceItem: "",
     description: "",
   });
+
+  // =====================================================
+  // SYNC QUERY PARAM WITH FORM STATE & SET INITIAL VALUE
+  // =====================================================
+
+  useEffect(() => {
+    const validServices = ["inspection", "consultation", "maintenance"];
+    
+    if (queryService && validServices.includes(queryService)) {
+      setFormData((prev) => ({
+        ...prev,
+        serviceType: queryService,
+      }));
+    }
+  }, [queryService]);
 
   // =====================================================
   // ITEMS
@@ -87,6 +107,23 @@ export default function BookService() {
       titleEn: "Emergency Maintenance & Urgent Repairs",
     },
   ];
+
+  // =====================================================
+  // DYNAMIC HEADER HELPER
+  // =====================================================
+
+  const getHeaderTitle = () => {
+    switch (formData.serviceType) {
+      case "inspection":
+        return isAr ? "طلب معاينة هندسية" : "Request an Engineering Inspection";
+      case "consultation":
+        return isAr ? "طلب استشارة عقارية وقانونية" : "Request a Consultation";
+      case "maintenance":
+        return isAr ? "طلب خدمة صيانة مستعجلة" : "Request Urgent Maintenance";
+      default:
+        return isAr ? "طلب خدمة أو معاينة هندسية" : "Request a Service / Inspection";
+    }
+  };
 
   // =====================================================
   // HANDLE INPUT
@@ -339,12 +376,10 @@ export default function BookService() {
       <div className="min-h-[calc(100vh-5rem)] bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="w-full max-w-xl">
 
-          {/* HEADER */}
+          {/* DYNAMIC HEADER */}
           <div className="text-center mb-8 space-y-2">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              {isAr
-                ? "طلب معاينة أو خدمة هندسية"
-                : "Request a Service / Inspection"}
+              {getHeaderTitle()}
             </h1>
 
             <p className="text-sm text-slate-500">

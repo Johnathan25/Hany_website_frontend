@@ -9,7 +9,7 @@ import { socket } from "../services/socket";
 import { getCurrentUser } from "../services/getCurrentUser";
 import Navbar from "../components/Navbar";
 import logo from "../../public/logo.jpeg"; // تأكد من صحة مسار اللوجو لديك
-import Footer from "../pages/user/footer";
+import Footer from "../pages/User/footer";
 
 export default function ClientLayout() {
   const { isAr, toggleLang } = useLanguage();

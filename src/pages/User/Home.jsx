@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useLanguage } from '../../context/LanguageContext';
-import About from "./pages/user/About";
+import About from "./About";
 import Properties from './Properties';
 import Services from './Services';
 import Complaints from './Complaints';

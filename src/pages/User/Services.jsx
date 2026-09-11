@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import {
-    ArrowRight,
-    ArrowLeft,
-    Clock,
-    Phone
-} from 'lucide-react';
-
-// 1. Make sure these are imported at the top:
 import { AlertCircle, LogIn } from 'lucide-react';
-
-
 
 export default function Services() {
     const { isAr } = useLanguage();
     const navigate = useNavigate();
-    const Arrow = isAr ? ArrowLeft : ArrowRight;
 
     const services = [
         {
@@ -45,22 +34,22 @@ export default function Services() {
         }
     ];
 
-    const handleSelectService = () => {
-        navigate('/booking-service');
-    };
-
     const [showAuthModal, setShowAuthModal] = useState(false);
-    
-    // Check login status
-    const isLoggedIn = Boolean(
-        localStorage.getItem('token') || localStorage.getItem('user')
-    );
+    const [selectedServiceId, setSelectedServiceId] = useState(null);
 
-    const handleBookingClick = () => {
-        if (!isLoggedIn) {
-            setShowAuthModal(true);
+    // التحقق من حالة تسجيل الدخول
+    const isLoggedIn = Boolean(localStorage.getItem('token') || localStorage.getItem('user'));
+
+    const handleServiceAction = (serviceId, e) => {
+        if (e) e.stopPropagation(); // منع انتشار الحدث
+        
+        if (isLoggedIn) {
+            // إذا كان مسجل دخول يذهب لصفحة الحجز مباشرة
+            navigate(`/booking-service?service=${serviceId}`);
         } else {
-            navigate('/book-service'); // Or your booking route
+            // إذا لم يكن مسجل دخول يظهر الـ Modal
+            setSelectedServiceId(serviceId);
+            setShowAuthModal(true);
         }
     };
 
@@ -71,11 +60,11 @@ export default function Services() {
 
     const handleCancel = () => {
         setShowAuthModal(false);
-        navigate('/');
-    }
+    };
+
     return (
         <div className="min-h-screen bg-white font-sans" dir={isAr ? 'rtl' : 'ltr'}>
-            <div className=" mx-auto px-5 sm:px-8 py-16 sm:py-20">
+            <div className="mx-auto px-5 sm:px-8 py-16 sm:py-20">
 
                 {/* عنوان الصفحة */}
                 <div className="max-w-xl mx-auto mb-14 text-center">
@@ -89,51 +78,52 @@ export default function Services() {
                     </p>
                 </div>
 
-                {/* الكروت */}
+                {/* كروت الخدمات */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {services.map((srv) => (
-                        <button
+                        <div
                             key={srv.id}
-                            onClick={handleSelectService}
-                            className="group text-start rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-slate-300 hover:-lg transition-all duration-200"
+                            className="group text-start rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-slate-300 transition-all duration-200 flex flex-col justify-between"
                         >
-                            {/* الصورة */}
-                            <div className="h-86 overflow-hidden bg-slate-100">
-                                <img
-                                    src={srv.image}
-                                    alt={srv.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                            </div>
+                            <div>
+                                {/* الصورة */}
+                                <div className="h-64 overflow-hidden bg-slate-100">
+                                    <img
+                                        src={srv.image}
+                                        alt={srv.title}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
 
-                            {/* المحتوى */}
-                            <div className="p-6">
-                                <h2 className="text-lg font-semibold text-slate-900">
-                                    {srv.title}
-                                </h2>
-                                <div className="w-10 h-0.5 bg-teal-500 my-3" />
-                                <p className="text-m text-slate-500 leading-relaxed">
-                                    {srv.desc}
-                                </p>
-                                <div className="mt-5  justify-center cursor-pointer flex items-center gap-1.5 text-sm font-medium text-slate-900">
-                                    <div className="flex justify-center my-4">
-                                        <button
-                                            type="button"
-                                            onClick={handleBookingClick}
-                                            className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer"
-                                        >
-                                            {isAr ? 'احجز الان' : 'Learn more'}
-                                        </button>
-                                    </div>
+                                {/* المحتوى */}
+                                <div className="p-6">
+                                    <h2 className="text-lg font-semibold text-slate-900">
+                                        {srv.title}
+                                    </h2>
+                                    <div className="w-10 h-0.5 bg-teal-500 my-3" />
+                                    <p className="text-sm text-slate-500 leading-relaxed">
+                                        {srv.desc}
+                                    </p>
                                 </div>
                             </div>
-                        </button>
+
+                            {/* زر الحجز */}
+                            <div className="px-6 pb-6 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={(e) => handleServiceAction(srv.id, e)}
+                                    className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer"
+                                >
+                                    {isAr ? 'احجز الآن' : 'Book Now'}
+                                </button>
+                            </div>
+                        </div>
                     ))}
                 </div>
 
-
             </div>
-            {/* Auth Warning Modal */}
+
+            {/* نافذة التنبيه لطلب تسجيل الدخول */}
             {showAuthModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
                     <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
@@ -148,25 +138,25 @@ export default function Services() {
                         <p className="text-sm text-slate-600 leading-relaxed mb-6">
                             {isAr
                                 ? 'يجب تسجيل الدخول أولاً لتتمكن من حجز الخدمة ومتابعة طلبك.'
-                                : 'You should login first to book a service and proceed with your order.'}
+                                : 'You need to login first to book a service and proceed with your request.'}
                         </p>
 
                         <div className="flex flex-col gap-2.5">
                             <button
                                 type="button"
                                 onClick={handleConfirmLogin}
-                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all"
+                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer"
                             >
                                 <LogIn className="w-4 h-4" />
-                                <span>{isAr ? 'تسجيل الدخول' : 'Accept & Login'}</span>
+                                <span>{isAr ? 'تسجيل الدخول' : 'Login Now'}</span>
                             </button>
 
                             <button
                                 type="button"
                                 onClick={handleCancel}
-                                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors"
+                                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
                             >
-                                {isAr ? 'إلغاء والعودة للرئيسية' : 'Refuse (Go to Home)'}
+                                {isAr ? 'إلغاء' : 'Cancel'}
                             </button>
                         </div>
 

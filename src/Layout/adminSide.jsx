@@ -13,6 +13,7 @@ import {
   LogOut,
   ExternalLink,
   ShieldCheck,
+  Layers,
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -89,14 +90,9 @@ export default function AdminLayout() {
       icon: LayoutDashboard,
     },
     {
-      to: "/admin_dashboard/complaints",
-      label: "إدارة الشكاوى",
-      icon: MessageSquareWarning,
-    },
-    {
-      to: "/admin_dashboard/users",
-      label: "المستخدمين والصلاحيات",
-      icon: Users,
+      to: "/admin_dashboard/services",
+      label: "الخدمات" ,
+      icon: Layers,
     },
     {
       to: "/admin_dashboard/items-pricing",
@@ -108,6 +104,18 @@ export default function AdminLayout() {
       label: "حجوزات المعاينة",
       icon: CalendarCheck,
     },
+    {
+      to: "/admin_dashboard/users",
+      label: "المستخدمين والصلاحيات",
+      icon: Users,
+    },
+     {
+      to: "/admin_dashboard/complaints",
+      label: "إدارة الشكاوى",
+      icon: MessageSquareWarning,
+    },
+    
+    
   ];
 
   return (
@@ -150,10 +158,9 @@ export default function AdminLayout() {
                     to={item.to}
                     end={item.end}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                        isActive
-                          ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 font-bold"
-                          : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                      `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${isActive
+                        ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 font-bold"
+                        : "text-slate-400 hover:bg-slate-800 hover:text-white"
                       }`
                     }
                   >
@@ -196,7 +203,7 @@ export default function AdminLayout() {
           </main>
         </div>
 
-        
+
       </div>
     </MyContext.Provider>
   );

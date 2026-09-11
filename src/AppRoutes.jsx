@@ -9,19 +9,20 @@ import ProtectedAccess from "./services/protectAccess";
 import ScrollToTop from "./services/scrollToTop";
 
 // Pages
-import Home from "./pages/user/Home";
-import About from "./pages/user/About"; 
-import Properties from './pages/user/Properties';
-import Services from './pages/user/Services';
-import BookingService from './pages/user/BookingService';
-import Complaints from './pages/user/Complaints';
-import PaymentResult from "./pages/user/payment";
-import NotFound from './pages/user/NotFound';
+import Home from "./pages/User/Home";
+import About from "./pages/User/About"; 
+import Properties from './pages/User/Properties';
+import Services from './pages/User/Services';
+import BookingService from './pages/User/BookingService';
+import Complaints from './pages/User/Complaints';
+import PaymentResult from "./pages/User/payment";
+import NotFound from './pages/User/NotFound';
 import AdminDashboard from "./pages/admin/home";
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminItemsPricing from './pages/admin/AdminItemsPricing';
- import AdminComplaints from "./pages/admin/AdminComplaints";
-//import AdminBookings from './pages/admin/AdminBookings';
+import AdminComplaints from "./pages/admin/AdminComplaints";
+import AdminBookings from './pages/admin/AdminBookings';
+import AdminServices from './pages/admin/AdminServices';
 // =====================
 // Auth (Lazy optional)
 // =====================
@@ -52,7 +53,11 @@ function AppRoutes() {
           <Route path="/about" element={<About />} /> {/* مسار صفحة من نحن */}
           <Route path="/properties" element={<Properties />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/booking-service" element={<BookingService />} />
+          <Route path="/booking-service" element={
+            
+              <ProtectedRoute>
+            <BookingService />
+            </ProtectedRoute>} />
           <Route path="/complaints" element={<Complaints />} />
           <Route path="/payment" element={
             <ProtectedRoute>
@@ -68,7 +73,7 @@ function AppRoutes() {
           path="/admin_dashboard"
           element={
             <ProtectedRoute>
-              <ProtectedAccess role={["superadmin", "admin"]}>
+              <ProtectedAccess role={["superadmin", "admin","manager"]}>
                 <AdminLayout />
                 
               </ProtectedAccess>
@@ -81,9 +86,11 @@ function AppRoutes() {
         {/* Child page: "/admin_dashboard/complaints" */}
         <Route path="complaints" element={<AdminComplaints />} />
 
-        {/* Child page: "/admin_dashboard/bookings" */}
-        {/* <Route path="bookings" element={<AdminBookings />} /> */}
+          <Route path="services" element={<AdminServices />} />
 
+        {/* Child page: "/admin_dashboard/bookings" */}
+        <Route path="bookings" element={<AdminBookings />} />
+          <Route path="users" element={<AdminUsers />} />
         {/* Child page: "/admin_dashboard/users" (e.g., superadmin only) */}
         <Route
           path="users"

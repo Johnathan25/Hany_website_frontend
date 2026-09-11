@@ -105,7 +105,7 @@ function Login() {
 
         const decoded = jwtDecode(Data.accessToken);
         const role = decoded.role;
-        if (role === "admin" || role === "superadmin") {
+        if (role === "manager" || role === "superadmin") {
           document.title = "لوحه التحكم نظام  هاني ";
           Navigate("/admin_dashboard");
         } else {
