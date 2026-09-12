@@ -32,12 +32,14 @@ function App() {
 
 
       {/* Scroll To Top Button */}
-      <div
-        onClick={upToTop}
-        className="fixed bottom-8 right-8 z-50 bg-[#0284c7] text-white p-4 rounded-[20px] -2xl hover:-translate-y-2 active:scale-90 transition-all cursor-pointer"
-      >
-        <FaAngleUp className="text-2xl" />
-      </div>
+      {/* <button
+  type="button"
+  onClick={upToTop}
+  aria-label="Scroll to top"
+  className="fixed bottom-8 right-8 z-50 bg-[#0284c7] text-white p-4 rounded-[20px] shadow-2xl hover:-translate-y-2 active:scale-90 transition-all cursor-pointer"
+>
+  <FaAngleUp className="text-2xl" />
+</button> */}
 
       {/* Suspense Wrapper */}
       <Suspense
@@ -51,7 +53,7 @@ function App() {
             {/* 1. قسم اللوجو (Logo Section) فوق الكارت */}
             <div className="relative z-10 flex flex-col items-center mb-6">
               {/* كلمة logo الصغيرة الافتراضية بشكل ناعم */}
-              <span className="text-slate-500 text-xs tracking-widest uppercase mb-2">ابو الدهب للمنتجات الغذائيه</span>
+              <span className="text-slate-500 text-xs tracking-widest uppercase mb-2">LARGE STEP FOR CONSTRUCTION</span>
 
               {/* حاوية الصورة مع تأثير التوهج الدائري الأزرق */}
               <div className="relative w-24 h-24 rounded-full p-1 bg-gradient-to-b from-[#0284c7]/30 to-transparent flex items-center justify-center shadow-[0_0_30px_rgba(2,132,199,0.3)] border border-[#0284c7]/20">
@@ -66,11 +68,7 @@ function App() {
             {/* 2. كارت جلاسمورفيزم (Glassmorphism Card) */}
             <div className="relative z-10 flex flex-col items-center w-full max-w-md p-8 rounded-3xl bg-white/[0.02] backdrop-blur-md border border-white/[0.05] shadow-2xl mx-4">
 
-              {/* جملة سبورت صغيرة أعلى الكارت على اليمين */}
-              <div className="absolute top-4 right-6 flex items-center gap-1.5 opacity-60" dir="rtl">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#0284c7] animate-ping"></span>
-                <span className="text-[10px] text-slate-400 font-light">مدعوم من أبو الذهب للمنتجات الغذائية</span>
-              </div>
+            
 
               {/* عنصر الحركة الدائري (Loader) */}
               <div className="relative w-24 h-24 flex items-center justify-center mt-4 mb-6">
@@ -88,7 +86,7 @@ function App() {
               </h3>
 
               <p className="text-slate-400 text-sm font-light text-center" dir="rtl">
-                لحظات ويتم تحميل جودة المنتجات الغذائية
+                لحظات ويتم تحميل جودة المنتجات 
               </p>
 
               {/* خط تحميل سفلي ناعم بـ Gradient */}

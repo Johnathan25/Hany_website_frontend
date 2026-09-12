@@ -121,7 +121,7 @@ function Signup() {
   };
 
          useEffect (() => {
-        document.title = "تسجيل حساب جديد - نظام أبو الدهب";
+        document.title = "تسجيل حساب جديد";
       }, []);
 
   return (
@@ -144,7 +144,7 @@ function Signup() {
               <h2 className="text-3xl font-black text-[#0f172a]">Large Step</h2>
             </div>
             <h1 className="text-4xl font-extrabold text-[#0f172a] mb-4">إنشاء حساب جديد</h1>
-            <p className="text-xl text-gray-500">انضم إلينا اليوم للحصول على أفضل المنتجات الغذائية مباشرة إلى منزلك.</p>
+            <p className="text-xl text-gray-500">انضم إلينا اليوم .</p>
           </div>
 
           <form className="space-y-8">

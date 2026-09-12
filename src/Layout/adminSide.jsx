@@ -15,6 +15,7 @@ import {
   Layers,
   Menu,
   X,
+  Award,
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -110,6 +111,11 @@ export default function AdminLayout() {
       icon: CalendarCheck,
     },
     {
+      to: "/admin_dashboard/InventionsManager",
+      label: "براءة اختراع",
+      icon: Award,
+    },
+    {
       to: "/admin_dashboard/users",
       label: "المستخدمين والصلاحيات",
       icon: Users,
@@ -119,6 +125,7 @@ export default function AdminLayout() {
       label: "إدارة الشكاوى",
       icon: MessageSquareWarning,
     },
+
   ];
 
   return (
@@ -133,7 +140,7 @@ export default function AdminLayout() {
       }}
     >
       <div dir="rtl" className="min-h-screen bg-slate-100 flex flex-col lg:flex-row text-slate-800 font-sans">
-        
+
         {/* ========================================= */}
         {/* MOBILE TOP HEADER (زر القائمة للشاشات الصغيرة) */}
         {/* ========================================= */}
@@ -169,20 +176,26 @@ export default function AdminLayout() {
         {/* SIDEBAR (درج متحرك على الموبايل وثابت على الديسكتوب) */}
         {/* ========================================= */}
         <aside
-          className={`fixed lg:sticky top-0 bottom-0 right-0 h-screen w-64 bg-slate-900 text-slate-200 flex flex-col justify-between shrink-0 shadow-2xl lg:shadow-xl border-l border-slate-800 z-50 transition-transform duration-300 ease-in-out ${
-            sidebarOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
-          }`}
+          className={`fixed lg:sticky top-0 bottom-0 right-0 h-screen w-64 bg-slate-900 text-slate-200 flex flex-col justify-between shrink-0 shadow-2xl lg:shadow-xl border-l border-slate-800 z-50 transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
+            }`}
         >
           <div>
             {/* Brand Header */}
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-600/30">
-                  LS
-                </div>
+                <img
+                  src="/logo.jpeg"
+                  alt="Logo"
+                  onClick={() => navigate("/")}
+                  className="w-10 h-10 rounded-xl object-contain shadow-md shadow-blue-600/30 cursor-pointer hover:opacity-90 transition-opacity"
+                />
                 <div>
-                  <h2 className="font-bold text-white text-base tracking-wider">LARGE STEP</h2>
-                  <p className="text-xs text-blue-400 font-medium flex items-center gap-1">
+<h2
+  onClick={() => navigate("/")}
+  className="font-bold text-white text-base tracking-wider cursor-pointer hover:opacity-90 transition-opacity"
+>
+  LARGE STEP
+</h2>                  <p className="text-xs text-blue-400 font-medium flex items-center gap-1">
                     <ShieldCheck className="w-3.5 h-3.5" /> لوحة الإدارة
                   </p>
                 </div>
@@ -208,10 +221,9 @@ export default function AdminLayout() {
                     to={item.to}
                     end={item.end}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                        isActive
-                          ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 font-bold"
-                          : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                      `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${isActive
+                        ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 font-bold"
+                        : "text-slate-400 hover:bg-slate-800 hover:text-white"
                       }`
                     }
                   >

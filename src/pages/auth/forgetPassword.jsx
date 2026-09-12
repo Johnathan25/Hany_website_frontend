@@ -12,7 +12,7 @@ export default function ForgetPassword() {
   const navigate = useNavigate();
 
          useEffect (() => {
-        document.title = "نسيت كلمة المرور - نظام أبو الدهب";
+        document.title = "نسيت كلمة المرور ";
       }, []);
   async function forgetPassword(e) {
     e.preventDefault();

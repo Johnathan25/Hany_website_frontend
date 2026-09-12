@@ -50,7 +50,7 @@ export default function ResetPassword() {
   }
 
          useEffect(() => {
-        document.title ="تغيير كلمة المرور - نظام أبو الدهب";
+        document.title ="تغيير كلمة المرور";
       }, []);
 
   return (
@@ -77,7 +77,7 @@ export default function ResetPassword() {
                 </div>
                 <h1 className="text-3xl font-black text-[#0f172a]">تغيير كلمة المرور</h1>
              </div>
-            <p className="text-gray-500 text-lg">أدخل البيانات المطلوبة لاستعادة الوصول إلى حسابك في أبو الدهب.</p>
+            <p className="text-gray-500 text-lg">أدخل البيانات المطلوبة لاستعادة الوصول إلى حسابك  .</p>
           </div>
 
           {!success && (

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Globe, Menu, X, LogOut, User } from 'lucide-react';
 import logo from '../../public/logo.jpeg';
+import { NavLink, Link } from "react-router-dom";
 
 export default function Navbar() {
   const { isAr, toggleLang } = useLanguage();
@@ -138,13 +139,23 @@ export default function Navbar() {
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button>
 
-            <button
-              onClick={() => handleNavClick('complaints')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
-            >
-              {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-            </button>
+           <button
+  onClick={() => handleNavClick('complaints')}
+  className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
+>
+  {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
+
+  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
+</button>
+
+<NavLink
+  to="/Invention"
+  className="relative py-1.5 text-slate-900 hover:text-blue-600 transition-colors group cursor-pointer"
+>
+  {isAr ? "براءات الاختراع" : "Inventions"}
+
+  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
+</NavLink>
           </nav>
         </div>
 
