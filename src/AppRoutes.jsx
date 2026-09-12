@@ -18,6 +18,7 @@ import PaymentResult from "./pages/User/payment";
 import NotFound from './pages/User/NotFound';
 import Inventions from "./pages/User/Inventions";
 import InventionRequest from "./pages/User/InventionRequest";
+import MyOrders from "./pages/User/MyOrders";
 import Portfolio from "./pages/User/Portfolio";
 import AdminDashboard from "./pages/admin/home";
 import AdminUsers from './pages/admin/AdminUsers';
@@ -27,6 +28,7 @@ import AdminBookings from './pages/admin/AdminBookings';
 import AdminServices from './pages/admin/AdminServices';
 import AdminInventionsManager from './pages/admin/InventionsManager';
 import InventionsSecurityManager from "./pages/admin/InventionsSecurityManager";
+import CreateInvoicePayment from "./pages/admin/CreateInvoicePayment";
 // =====================
 // Auth (Lazy optional)
 // =====================
@@ -62,7 +64,7 @@ function AppRoutes() {
           <Route path="/Invention" element={<Inventions />} /> {/* يدعم أيضاً حرف I كبير */}
           <Route path="/inventions/request" element={<InventionRequest />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          
+          <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/booking-service" element={
 
             <ProtectedRoute>
@@ -99,6 +101,7 @@ function AppRoutes() {
           <Route path="services" element={<AdminServices />} />
           <Route path="InventionsManager" element={<AdminInventionsManager />} />
           <Route path="inventions-security" element={<InventionsSecurityManager />} />
+          <Route path="create-invoice" element={<CreateInvoicePayment />} />
           {/* Child page: "/admin_dashboard/bookings" */}
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="users" element={<AdminUsers />} />

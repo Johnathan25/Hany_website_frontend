@@ -12,6 +12,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('');
+  const isLoggedIn = Boolean(localStorage.getItem("token") || localStorage.getItem("user"));
 
   // Sync authentication state on render and whenever route changes
   useEffect(() => {
@@ -139,32 +140,46 @@ export default function Navbar() {
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button>
 
-           <button
-  onClick={() => handleNavClick('complaints')}
-  className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
->
-  {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
+            <button
+              onClick={() => handleNavClick('complaints')}
+              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
+            >
+              {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
 
-  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-</button>
+              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
+            </button>
 
-<NavLink
-  to="/Invention"
-  className="relative py-1.5 text-slate-900 hover:text-blue-600 transition-colors group cursor-pointer"
->
-  {isAr ? "براءات الاختراع" : "Inventions"}
+            <NavLink
+              to="/Invention"
+              className="relative py-1.5 text-slate-900 hover:text-blue-600 transition-colors group cursor-pointer"
+            >
+              {isAr ? "براءات الاختراع" : "Inventions"}
 
-  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-</NavLink>
-{/* Added directly after Innovations */}
-  <NavLink
-    to="/portfolio"
-    className={({ isActive }) =>
-      isActive ? "text-blue-600 font-bold" : "text-slate-700 hover:text-blue-600 font-medium transition-colors"
-    }
-  >
-    {isAr ? "معرض الأعمال" : "Portfolio"}
-  </NavLink>
+              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
+            </NavLink>
+            {/* Added directly after Innovations */}
+            <NavLink
+              to="/portfolio"
+              className={({ isActive }) =>
+                isActive ? "text-blue-600 font-bold" : "text-slate-700 hover:text-blue-600 font-medium transition-colors"
+              }
+            >
+              {isAr ? "معرض الأعمال" : "Portfolio"}
+            </NavLink>
+
+            {/* Inside your Navbar links list, visible only if user is logged in */}
+            {isLoggedIn && (
+              <NavLink
+                to="/my-orders"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-600 font-bold"
+                    : "text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                }
+              >
+                {isAr ? "طلباتي وسجلاتي" : "My Requests"}
+              </NavLink>
+            )}
           </nav>
         </div>
 
