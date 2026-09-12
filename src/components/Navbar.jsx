@@ -156,6 +156,15 @@ export default function Navbar() {
 
   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
 </NavLink>
+{/* Added directly after Innovations */}
+  <NavLink
+    to="/portfolio"
+    className={({ isActive }) =>
+      isActive ? "text-blue-600 font-bold" : "text-slate-700 hover:text-blue-600 font-medium transition-colors"
+    }
+  >
+    {isAr ? "معرض الأعمال" : "Portfolio"}
+  </NavLink>
           </nav>
         </div>
 

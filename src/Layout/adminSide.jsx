@@ -115,6 +115,12 @@ export default function AdminLayout() {
       label: "براءة اختراع",
       icon: Award,
     },
+    // --- الرابط الجديد الخاص بالأمن ---
+   {
+  to: "/admin_dashboard/inventions-security",
+  label: "سجل براءات الاختراع (أمن)",
+  icon: ShieldCheck,
+},
     {
       to: "/admin_dashboard/users",
       label: "المستخدمين والصلاحيات",

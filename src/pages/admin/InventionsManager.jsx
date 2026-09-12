@@ -95,10 +95,10 @@ export default function AdminInventionsManager() {
       } catch (err) {
         setError(
           err.response?.data?.error ||
-            err.response?.data?.message ||
-            (isAr
-              ? "فشل تحميل بيانات براءات الاختراع"
-              : "Failed to load inventions catalog")
+          err.response?.data?.message ||
+          (isAr
+            ? "فشل تحميل بيانات براءات الاختراع"
+            : "Failed to load inventions catalog")
         );
       } finally {
         setLoading(false);
@@ -130,13 +130,13 @@ export default function AdminInventionsManager() {
       details: item.details || "",
       pricingOptions: Array.isArray(item.pricingOptions)
         ? item.pricingOptions.map((opt) => ({
-            name: opt.name || "",
-            type: opt.type || "license",
-            price: opt.price !== undefined ? opt.price : "",
-            depositAmount:
-              opt.depositAmount !== undefined ? opt.depositAmount : 0,
-            isActive: opt.isActive !== false,
-          }))
+          durationYears:opt.durationYears|| 0,
+          type: opt.type || "license",
+          price: opt.price !== undefined ? opt.price : "",
+          depositAmount:
+            opt.depositAmount !== undefined ? opt.depositAmount : 0,
+          isActive: opt.isActive !== false,
+        }))
         : [],
       isActive: item.isActive !== false,
     });
@@ -155,23 +155,43 @@ export default function AdminInventionsManager() {
   };
 
   // Add new tier with depositAmount initialized
-  const addPricingOption = () => {
-    setForm((prev) => ({
-      ...prev,
-      pricingOptions: [
-        ...prev.pricingOptions,
-        { name: "", type: "license", price: "", depositAmount: 0, isActive: true },
-      ],
-    }));
-  };
+const addPricingOption = () => {
+  setForm((prev) => ({
+    ...prev,
+    pricingOptions: [
+      ...prev.pricingOptions,
+      {
+        type: "license",        // or your default enum value
+        durationYears: 1,        // default to 1 or null
+        price: "",
+        depositAmount: "",
+        isActive: true,
+      },
+    ],
+  }));
+};
 
-  const updatePricingOption = (index, field, value) => {
-    setForm((prev) => {
-      const next = [...prev.pricingOptions];
-      next[index] = { ...next[index], [field]: value };
-      return { ...prev, pricingOptions: next };
-    });
-  };
+ const updatePricingOption = (index, field, value) => {
+  setForm((prev) => {
+    const updated = [...prev.pricingOptions];
+    
+    if (field === "type") {
+      updated[index] = {
+        ...updated[index],
+        type: value,
+        // Reset duration to null automatically when selecting full_purchase
+        durationYears: value === "full_purchase" ? null : updated[index].durationYears || 1,
+      };
+    } else {
+      updated[index] = {
+        ...updated[index],
+        [field]: value,
+      };
+    }
+
+    return { ...prev, pricingOptions: updated };
+  });
+};
 
   const removePricingOption = (index) => {
     setForm((prev) => ({
@@ -200,13 +220,14 @@ export default function AdminInventionsManager() {
       description: form.description.trim(),
       details: form.details.trim(),
       pricingOptions: form.pricingOptions.map((opt) => ({
-        name: opt.name.trim(),
+       
         type: opt.type,
         price: opt.price !== "" ? Number(opt.price) : 0,
         depositAmount:
           opt.depositAmount !== "" && opt.depositAmount !== undefined
             ? Number(opt.depositAmount)
             : 0,
+        durationYears:opt.durationYears,
         isActive: opt.isActive !== false,
       })),
     };
@@ -234,10 +255,10 @@ export default function AdminInventionsManager() {
     } catch (err) {
       setError(
         err.response?.data?.error ||
-          err.response?.data?.message ||
-          (isAr
-            ? "حدث خطأ أثناء حفظ التعديلات"
-            : "Error saving invention changes")
+        err.response?.data?.message ||
+        (isAr
+          ? "حدث خطأ أثناء حفظ التعديلات"
+          : "Error saving invention changes")
       );
     } finally {
       setSaving(false);
@@ -260,8 +281,8 @@ export default function AdminInventionsManager() {
     } catch (err) {
       setError(
         err.response?.data?.error ||
-          err.response?.data?.message ||
-          (isAr ? "فشل حذف براءة الاختراع" : "Failed to delete invention")
+        err.response?.data?.message ||
+        (isAr ? "فشل حذف براءة الاختراع" : "Failed to delete invention")
       );
     } finally {
       setDeleting(false);
@@ -410,7 +431,7 @@ export default function AdminInventionsManager() {
                               key={idx}
                               className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] bg-slate-50 border border-slate-200 text-slate-700"
                             >
-                              <span className="font-medium text-slate-900">{opt.name}:</span>
+                             
                               <span className="font-mono font-semibold text-slate-900">
                                 {opt.price} EGP
                               </span>
@@ -427,19 +448,18 @@ export default function AdminInventionsManager() {
 
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${
-                          item.isActive !== false
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${item.isActive !== false
                             ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                             : "bg-slate-100 text-slate-500 border-slate-200"
-                        }`}
+                          }`}
                       >
                         {item.isActive !== false
                           ? isAr
                             ? "مفعّل"
                             : "Active"
                           : isAr
-                          ? "معطّل"
-                          : "Inactive"}
+                            ? "معطّل"
+                            : "Inactive"}
                       </span>
                     </td>
 
@@ -509,8 +529,8 @@ export default function AdminInventionsManager() {
                     ? "تعديل بيانات براءة الاختراع"
                     : "Edit Invention"
                   : isAr
-                  ? "إضافة براءة اختراع جديدة"
-                  : "Add New Invention"}
+                    ? "إضافة براءة اختراع جديدة"
+                    : "Add New Invention"}
               </h3>
               <button
                 type="button"
@@ -597,80 +617,158 @@ export default function AdminInventionsManager() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {form.pricingOptions.map((opt, idx) => (
-                      <div
-                        key={idx}
-                        className="grid grid-cols-1 sm:grid-cols-12 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md items-center"
-                      >
-                        
-
-                        {/* Enum Select */}
-                        <div className="sm:col-span-3">
-                          <select
-                            value={opt.type}
-                            onChange={(e) =>
-                              updatePricingOption(idx, "type", e.target.value)
-                            }
-                            className="w-full px-2 py-1.5 bg-white border border-slate-300 rounded text-xs outline-none cursor-pointer"
-                          >
-                            {PRICING_TYPE_OPTIONS.map((option) => (
-                              <option key={option.value} value={option.value}>
-                                {isAr ? option.labelAr : option.labelEn}
-                              </option>
-                            ))}
-                          </select>
+                    {/* Column Headers */}
+                    {form.pricingOptions.length > 0 && (
+                      <div className="hidden sm:grid sm:grid-cols-12 gap-2 bg-sla px-2.5 text-[11px] font-semibold text-slate-500">
+                        <div className="col-span-3">
+                          {isAr ? "نوع الترخيص" : "Pricing Type"}
                         </div>
-
-                        {/* Price */}
-<div className="sm:col-span-3 relative">
-  <input
-    type="number"
-    min="0"
-    step="any"
-    required
-    placeholder={isAr ? "السعر الكلي" : "Full Price"}
-    value={opt.price}
-    onChange={(e) =>
-      updatePricingOption(idx, "price", e.target.value)
-    }
-    className="w-full pl-7 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none"
-  />
-  <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 pointer-events-none">
-    EGP
-  </span>
-</div>
-
-{/* Deposit */}
-<div className="sm:col-span-2 relative">
-  <input
-    type="number"
-    min="0"
-    step="any"
-    required
-    placeholder={isAr ? "العربون" : "Deposit"}
-    value={opt.depositAmount}
-    onChange={(e) =>
-      updatePricingOption(idx, "depositAmount", e.target.value)
-    }
-    className="w-full pl-7 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none"
-  />
-  <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 pointer-events-none">
-    EGP
-  </span>
-</div>
-
-                        {/* Delete button */}
-                        <div className="sm:col-span-1 text-center">
-                          <button
-                            type="button"
-                            onClick={() => removePricingOption(idx)}
-                            className="p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                        <div className="col-span-2">
+                          {isAr ? "المدة (بالسنوات)" : "Duration (Years)"}
+                        </div>
+                        <div className="col-span-3">
+                          {isAr ? "السعر الكلي" : "Full Price"}
+                        </div>
+                        <div className="col-span-3">
+                          {isAr ? "العربون" : "Deposit"}
+                        </div>
+                        <div className="col-span-1 text-center">
+                          {isAr ? "إجراء" : "Action"}
                         </div>
                       </div>
-                    ))}
+                    )}
+
+                    {/* Pricing Options Rows */}
+                    {form.pricingOptions.map((opt, idx) => {
+                      const isFullPurchase = opt.type === "full_purchase";
+
+                      return (
+                        <div
+                          key={idx}
+                          className="grid grid-cols-1 sm:grid-cols-12 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md items-center"
+                        >
+                          {/* Enum Select */}
+                          <div className="sm:col-span-3">
+                            <label className="block sm:hidden text-[11px] font-medium text-slate-500 mb-1">
+                              {isAr ? "نوع التسعير" : "Pricing Type"}
+                            </label>
+                            <select
+                              value={opt.type}
+                              onChange={(e) => {
+                                const newType = e.target.value;
+                                updatePricingOption(idx, "type", newType);
+                                if (newType === "full_purchase") {
+                                  updatePricingOption(idx, "durationYears", null);
+                                }
+                              }}
+                              className="w-full px-2 py-1.5 bg-white border border-slate-300 rounded text-xs outline-none cursor-pointer focus:border-slate-400"
+                            >
+                              {PRICING_TYPE_OPTIONS.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {isAr ? option.labelAr : option.labelEn}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* Duration (Years) */}
+                          <div className="sm:col-span-2">
+                            <label className="block sm:hidden text-[11px] font-medium text-slate-500 mb-1">
+                              {isAr ? "المدة (بالسنوات)" : "Duration (Years)"}
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              step="1"
+                              disabled={isFullPurchase}
+                              placeholder={
+                                isFullPurchase
+                                  ? (isAr ? "دائم" : "Perpetual")
+                                  : (isAr ? "المدة" : "Years")
+                              }
+                              value={isFullPurchase ? "" : (opt.durationYears ?? "")}
+                              onChange={(e) =>
+                                updatePricingOption(
+                                  idx,
+                                  "durationYears",
+                                  e.target.value === "" ? null : Number(e.target.value)
+                                )
+                              }
+                              className={`w-full px-2 py-1.5 bg-white border border-slate-300 disabled:bg-white disabled:border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400 ${isFullPurchase ? "text-slate-400 cursor-not-allowed" : "text-slate-800"
+                                }`}
+                            />
+                          </div>
+
+                          {/* Full Price */}
+                          <div className="sm:col-span-3">
+                            <label className="block sm:hidden text-[11px] font-medium text-slate-500 mb-1">
+                              {isAr ? "السعر الكلي" : "Full Price"}
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                min="0"
+                                step="any"
+                                required
+                                placeholder={isAr ? "السعر الكلي" : "Full Price"}
+                                value={opt.price ?? ""}
+                                onChange={(e) =>
+                                  updatePricingOption(
+                                    idx,
+                                    "price",
+                                    e.target.value === "" ? "" : Number(e.target.value)
+                                  )
+                                }
+                                className="w-full pl-8 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400"
+                              />
+                              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium">
+                                EGP
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Deposit */}
+                          <div className="sm:col-span-3">
+                            <label className="block sm:hidden text-[11px] font-medium text-slate-500 mb-1">
+                              {isAr ? "العربون" : "Deposit"}
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                min="0"
+                                step="any"
+                                required
+                                placeholder={isAr ? "العربون" : "Deposit"}
+                                value={opt.depositAmount ?? ""}
+                                onChange={(e) =>
+                                  updatePricingOption(
+                                    idx,
+                                    "depositAmount",
+                                    e.target.value === "" ? "" : Number(e.target.value)
+                                  )
+                                }
+                                className="w-full pl-8 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400"
+                              />
+                              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium">
+                                EGP
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Delete Button */}
+                          <div className="sm:col-span-1 flex justify-center items-center">
+                            <button
+                              type="button"
+                              onClick={() => removePricingOption(idx)}
+                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors cursor-pointer"
+                              title={isAr ? "حذف" : "Remove"}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>

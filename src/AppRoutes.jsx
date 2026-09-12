@@ -17,6 +17,8 @@ import Complaints from './pages/User/Complaints';
 import PaymentResult from "./pages/User/payment";
 import NotFound from './pages/User/NotFound';
 import Inventions from "./pages/User/Inventions";
+import InventionRequest from "./pages/User/InventionRequest";
+import Portfolio from "./pages/User/Portfolio";
 import AdminDashboard from "./pages/admin/home";
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminItemsPricing from './pages/admin/AdminItemsPricing';
@@ -24,6 +26,7 @@ import AdminComplaints from "./pages/admin/AdminComplaints";
 import AdminBookings from './pages/admin/AdminBookings';
 import AdminServices from './pages/admin/AdminServices';
 import AdminInventionsManager from './pages/admin/InventionsManager';
+import InventionsSecurityManager from "./pages/admin/InventionsSecurityManager";
 // =====================
 // Auth (Lazy optional)
 // =====================
@@ -57,6 +60,9 @@ function AppRoutes() {
           {/* المسار الجديد لبراءات الاختراع والحلول */}
           <Route path="/inventions" element={<Inventions />} />
           <Route path="/Invention" element={<Inventions />} /> {/* يدعم أيضاً حرف I كبير */}
+          <Route path="/inventions/request" element={<InventionRequest />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          
           <Route path="/booking-service" element={
 
             <ProtectedRoute>
@@ -92,6 +98,7 @@ function AppRoutes() {
 
           <Route path="services" element={<AdminServices />} />
           <Route path="InventionsManager" element={<AdminInventionsManager />} />
+          <Route path="inventions-security" element={<InventionsSecurityManager />} />
           {/* Child page: "/admin_dashboard/bookings" */}
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="users" element={<AdminUsers />} />

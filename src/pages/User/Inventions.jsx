@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext";
 import api from "../../services/api";
 import {
@@ -49,6 +49,7 @@ export default function Inventions() {
     hasNextPage: false,
     hasPreviousPage: false,
   });
+   const navigate= useNavigate()
 
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -105,9 +106,9 @@ export default function Inventions() {
       } catch (err) {
         setError(
           err.response?.data?.message ||
-            (isAr
-              ? "تعذر تحميل براءات الاختراع والحلول المسجلة حالياً"
-              : "Failed to load registered innovations")
+          (isAr
+            ? "تعذر تحميل براءات الاختراع والحلول المسجلة حالياً"
+            : "Failed to load registered innovations")
         );
       } finally {
         setLoading(false);
@@ -139,7 +140,7 @@ export default function Inventions() {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* رأس الصفحة */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          
+
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             {isAr ? "براءات الاختراع والحلول الهندسية" : "Patented Innovations & IP"}
           </h1>
@@ -339,7 +340,7 @@ export default function Inventions() {
                 className="w-full h-full object-cover opacity-85"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-              
+
               <button
                 type="button"
                 onClick={() => setSelectedInvention(null)}
@@ -360,57 +361,135 @@ export default function Inventions() {
 
             {/* تفاصيل المحتوى القابل للتمرير */}
             <div className="p-6 sm:p-8 space-y-6 overflow-y-auto">
-              <div className="space-y-2">
-                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  {isAr ? "الوصف التفصيلي وآلية العمل" : "Technical Overview"}
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
-                  {selectedInvention.description || selectedInvention.shortDescription}
-                </p>
-              </div>
+  <div className="space-y-2">
+    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+      {isAr ? "الوصف التفصيلي وآلية العمل" : "Technical Overview"}
+    </h4>
+    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+      {selectedInvention.description || selectedInvention.shortDescription}
+    </p>
+  </div>
 
-              {selectedInvention.details && (
-                <div className="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                  <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-blue-600" />
-                    <span>{isAr ? "المواصفات الفنية وشروط التنفيذ" : "Technical Specifications"}</span>
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
-                    {selectedInvention.details}
-                  </p>
+  {selectedInvention.details && (
+    <div className="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+      <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+        <FileText className="w-4 h-4 text-blue-600" />
+        <span>{isAr ? "المواصفات الفنية وشروط التنفيذ" : "Technical Specifications"}</span>
+      </h4>
+      <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
+        {selectedInvention.details}
+      </p>
+    </div>
+  )}
+
+  {selectedInvention.pricingOptions?.length > 0 && (
+    <div className="space-y-3">
+      <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+        <Coins className="w-4 h-4 text-blue-600" />
+        <span>{isAr ? "خيارات التراخيص والأسعار" : "Licensing Models"}</span>
+      </h4>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {selectedInvention.pricingOptions.map((opt, idx) => {
+          const formatYears = (years) => {
+            if (!years) return isAr ? "دائم / غير محدد" : "Perpetual";
+            if (!isAr) return `${years} ${years === 1 ? "Year" : "Years"}`;
+            if (years === 1) return "سنة واحدة";
+            if (years === 2) return "سنتان";
+            if (years >= 3 && years <= 10) return `${years} سنوات`;
+            return `${years} سنة`;
+          };
+
+          const handleSelectPlan = () => {
+            const queryParams = new URLSearchParams({
+              inventionId: selectedInvention._id,
+              pricingOptionId: opt._id || idx,
+            }).toString();
+
+            navigate(`/inventions/request?${queryParams}`);
+          };
+
+          return (
+            <div
+              key={opt._id || idx}
+              className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all space-y-3 shadow-xs flex flex-col justify-between"
+            >
+              <div className="space-y-3">
+                {/* Top row: Pricing Model Name & Duration Tag */}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-slate-900 truncate">
+                    {opt.name || formatPricingType(opt.type)}
+                  </span>
+
+                  {/* Duration Badge */}
+                  <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3 h-3 text-slate-500"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>
+                      {opt.type === "full_purchase"
+                        ? isAr
+                          ? "شراء كامل (دائم)"
+                          : "Perpetual"
+                        : formatYears(opt.durationYears)}
+                    </span>
+                  </span>
                 </div>
-              )}
 
-              {selectedInvention.pricingOptions?.length > 0 && (
-                <div className="space-y-3">
-                  <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <Coins className="w-4 h-4 text-blue-600" />
-                    <span>{isAr ? "خيارات التراخيص والأسعار" : "Licensing Models"}</span>
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {selectedInvention.pricingOptions.map((opt, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all space-y-1.5 shadow-xs"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-900">
-                            {opt.name || formatPricingType(opt.type)}
-                          </span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-medium">
-                            {formatPricingType(opt.type)}
-                          </span>
-                        </div>
-                        <div className="text-base font-black font-mono text-blue-600">
-                          {Number(opt.price || 0).toLocaleString()}{" "}
-                          <span className="text-xs font-normal text-slate-500">EGP</span>
-                        </div>
-                      </div>
-                    ))}
+                {/* Pricing row: Full Price & Deposit */}
+                <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2">
+                  {/* Full Price */}
+                  <div>
+                    <span className="block text-[10px] font-medium text-slate-400 mb-0.5">
+                      {isAr ? "السعر الكلي" : "Total Price"}
+                    </span>
+                    <div className="text-sm font-black font-mono text-blue-600">
+                      {Number(opt.price || 0).toLocaleString()}{" "}
+                      <span className="text-[10px] font-normal text-slate-500">EGP</span>
+                    </div>
+                  </div>
+
+                  {/* Deposit */}
+                  <div className="text-end">
+                    <span className="block text-[10px] font-medium text-slate-400 mb-0.5">
+                      {isAr ? "العربون المطلوب" : "Deposit Required"}
+                    </span>
+                    <div className="text-sm font-bold font-mono text-emerald-600">
+                      {Number(opt.depositAmount || 0).toLocaleString()}{" "}
+                      <span className="text-[10px] font-normal text-slate-500">EGP</span>
+                    </div>
                   </div>
                 </div>
-              )}
+              </div>
+
+              {/* Action Button: Navigate with Query Params */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleSelectPlan}
+                  className="w-full py-2 px-3 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <span>{isAr ? "طلب حجز / ترخيص" : "Request License"}</span>
+                  <ArrowLeft className="w-3.5 h-3.5 rtl:rotate-0 ltr:rotate-180" />
+                </button>
+              </div>
             </div>
+          );
+        })}
+      </div>
+    </div>
+  )}
+</div>
 
             {/* الأزرار السفلية */}
             <div className="p-4 sm:px-8 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
@@ -421,7 +500,7 @@ export default function Inventions() {
               >
                 {isAr ? "إغلاق" : "Close"}
               </button>
-              
+
             </div>
           </div>
         </div>
