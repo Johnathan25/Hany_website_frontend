@@ -602,7 +602,7 @@ export default function AdminInventionsManager() {
                         key={idx}
                         className="grid grid-cols-1 sm:grid-cols-12 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md items-center"
                       >
-                       
+                        
 
                         {/* Enum Select */}
                         <div className="sm:col-span-3">
