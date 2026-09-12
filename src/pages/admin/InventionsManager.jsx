@@ -602,19 +602,7 @@ export default function AdminInventionsManager() {
                         key={idx}
                         className="grid grid-cols-1 sm:grid-cols-12 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md items-center"
                       >
-                        {/* Name */}
-                        <div className="sm:col-span-3">
-                          <input
-                            type="text"
-                            required
-                            placeholder={isAr ? "اسم الخطة (مثال: ترخيص)" : "Tier Name"}
-                            value={opt.name}
-                            onChange={(e) =>
-                              updatePricingOption(idx, "name", e.target.value)
-                            }
-                            className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded text-xs outline-none focus:border-slate-500"
-                          />
-                        </div>
+                       
 
                         {/* Enum Select */}
                         <div className="sm:col-span-3">
