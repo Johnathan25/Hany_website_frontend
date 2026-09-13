@@ -48,7 +48,7 @@ function Profile() {
         }
 
     try {
-      const res = await api.get("/users/getProfile");
+      const res = await api.get("/users/profile");
       const u = res.data.user;
       setUser(u);
       setForm({
