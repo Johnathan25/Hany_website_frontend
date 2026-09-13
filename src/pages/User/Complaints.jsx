@@ -84,18 +84,20 @@ export default function ComplaintForm() {
               defaultValue=""
               className="w-full pr-10 pl-10 py-3 bg-slate-50/60 border border-slate-200 rounded-2xl text-xs sm:text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 appearance-none cursor-pointer"
             >
-              <option value="" disabled>-- اختر تصنيف الشكوى --</option>
+              
+              <option value="refund_exchange">طلب استبدال أو استرجاع (استرداد ثلثي المبلغ)</option>
               <option value="delay">تأخر في تنفيذ الطلب</option>
               <option value="service_quality">جودة الخدمة المقدمة</option>
               <option value="payment">مشكلة في الدفع أو الفواتير</option>
               <option value="technical">استفسار أو عطل تقني</option>
+              <option value="" disabled>-- اختر تصنيف الشكوى أو الطلب --</option>
               <option value="other">أخرى</option>
             </select>
             
             {/* أيقونة التصنيف على اليمين */}
             <Tag className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
             
-            {/* سهم القائمة المنسدلة الأنيق على اليسار */}
+            {/* سهم القائمة المنسدلة على اليسار */}
             <ChevronDown className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           </div>
         </div>

@@ -303,7 +303,7 @@ export default function MyOrders() {
                           </td>
                           <td className="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">
                             {Number(item.price || 0).toLocaleString()}{" "}
-                            <span className="text-[10px] font-normal text-slate-500">{item.currency || "EGP"}</span>
+                            <span className="text-[10px] font-normal text-slate-500">{item.currency || "الجنيه المصري"}</span>
                           </td>
                           <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
                             {formatDate(item.createdAt)}
@@ -506,7 +506,7 @@ export default function MyOrders() {
                       selectedInventionRequest.pricingOption?.depositAmount ||
                       0
                     ).toLocaleString()}{" "}
-                    <span className="text-[10px] font-normal">{isAr ? "جنيه" : "EGP"}</span>
+                    <span className="text-[10px] font-normal">{isAr ? "جنيه" : "الجنيه المصري"}</span>
                   </div>
                 </div>
                 <div>
@@ -519,7 +519,7 @@ export default function MyOrders() {
                       selectedInventionRequest.pricingOption?.price ||
                       0
                     ).toLocaleString()}{" "}
-                    <span className="text-[10px] font-normal">{isAr ? "جنيه" : "EGP"}</span>
+                    <span className="text-[10px] font-normal">{isAr ? "جنيه" : "الجنيه المصري"}</span>
                   </div>
                 </div>
               </div>

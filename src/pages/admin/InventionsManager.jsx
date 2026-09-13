@@ -433,7 +433,7 @@ const addPricingOption = () => {
                             >
                              
                               <span className="font-mono font-semibold text-slate-900">
-                                {opt.price} EGP
+                                {opt.price} الجنيه المصري
                               </span>
                               <span className="text-[10px] text-amber-600 font-medium">
                                 ({isAr ? "عربون:" : "Dep:"} {opt.depositAmount || 0})
@@ -722,7 +722,7 @@ const addPricingOption = () => {
                                 className="w-full pl-8 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400"
                               />
                               <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium">
-                                EGP
+                                الجنيه المصري
                               </span>
                             </div>
                           </div>
@@ -750,7 +750,7 @@ const addPricingOption = () => {
                                 className="w-full pl-8 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400"
                               />
                               <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium">
-                                EGP
+                                الجنيه المصري
                               </span>
                             </div>
                           </div>

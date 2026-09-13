@@ -261,7 +261,7 @@ export default function Inventions() {
                                 <span className="font-mono font-bold text-blue-600 whitespace-nowrap">
                                   {Number(opt.price || 0).toLocaleString()}{" "}
                                   <span className="text-[10px] text-slate-400 font-normal">
-                                    EGP
+                                    الجنيه المصري
                                   </span>
                                 </span>
                               </div>
@@ -449,7 +449,7 @@ export default function Inventions() {
                                 </span>
                                 <div className="text-sm font-black font-mono text-blue-600">
                                   {Number(opt.price || 0).toLocaleString()}{" "}
-                                  <span className="text-[10px] font-normal text-slate-500">EGP</span>
+                                  <span className="text-[10px] font-normal text-slate-500">الجنيه المصري</span>
                                 </div>
                               </div>
 
@@ -460,7 +460,7 @@ export default function Inventions() {
                                 </span>
                                 <div className="text-sm font-bold font-mono text-emerald-600">
                                   {Number(opt.depositAmount || 0).toLocaleString()}{" "}
-                                  <span className="text-[10px] font-normal text-slate-500">EGP</span>
+                                  <span className="text-[10px] font-normal text-slate-500">الجنيه المصري</span>
                                 </div>
                               </div>
                             </div>

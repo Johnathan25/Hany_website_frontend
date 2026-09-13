@@ -145,7 +145,7 @@ export default function BookService() {
   // =====================================================
 
   const [price, setPrice] = useState(null);
-  const [currency, setCurrency] = useState("EGP");
+  const [currency, setCurrency] = useState("الجنيه المصري");
   const [priceLoading, setPriceLoading] = useState(false);
 
   // =====================================================
@@ -242,7 +242,7 @@ export default function BookService() {
         const data = response.data?.data;
 
         setPrice(data?.price ?? null);
-        setCurrency(data?.currency || "EGP");
+        setCurrency(data?.currency || "الجنيه المصري");
       } catch (err) {
         if (cancelled) return;
 

@@ -25,7 +25,7 @@ export default function Properties() {
     const propertyData = {
         title: isAr ? 'فيلا الجوهرة الفاخرة - التجمع الخامس' : 'The Diamond Luxury Villa - New Cairo',
         location: isAr ? 'القاهرة الجديدة، التجمع الخامس، مصر' : 'New Cairo, Fifth Settlement, Egypt',
-        price: isAr ? '18,500,000 ج.م' : 'EGP 18,500,000',
+        price: isAr ? '18,500,000 ج.م' : 'الجنيه المصري 18,500,000',
         description: isAr
             ? 'فيلا مستقلة راقية بتصميم معماري حديث وتشطيب فندقي متكامل، تطل مباشرة على بحيرة صناعية ومساحات خضراء، مجهزة بأحدث أنظمة المنازل الذكية وتأمين متكامل على مدار الساعة.'
             : 'An exclusive detached villa featuring state-of-the-art contemporary architecture, premium high-end finishing, private infinity pool, and integrated smart home automation.',

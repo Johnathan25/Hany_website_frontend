@@ -295,7 +295,7 @@ export default function CreateInvoicePayment() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                                المبلغ (EGP) <span className="text-rose-500">*</span>
+                                المبلغ (الجنيه المصري) <span className="text-rose-500">*</span>
                             </label>
                             <input
                                 type="number"

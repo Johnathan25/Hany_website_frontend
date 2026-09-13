@@ -182,7 +182,7 @@ export default function AdminPricing() {
                             </span>
                             <h3 className="text-2xl font-black text-slate-900 mt-1 font-mono">
                                 {currentActivePricing.inspectionPrice}{' '}
-                                <span className="text-xs font-normal text-slate-400">EGP</span>
+                                <span className="text-xs font-normal text-slate-400">الجنيه المصري</span>
                             </h3>
                         </div>
                         <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
@@ -198,7 +198,7 @@ export default function AdminPricing() {
                             </span>
                             <h3 className="text-2xl font-black text-slate-900 mt-1 font-mono">
                                 {currentActivePricing.consultationPrice}{' '}
-                                <span className="text-xs font-normal text-slate-400">EGP</span>
+                                <span className="text-xs font-normal text-slate-400">الجنيه المصري</span>
                             </h3>
                         </div>
                         <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
@@ -214,7 +214,7 @@ export default function AdminPricing() {
                             </span>
                             <h3 className="text-2xl font-black text-slate-900 mt-1 font-mono">
                                 {currentActivePricing.maintenanceDeposit}{' '}
-                                <span className="text-xs font-normal text-slate-400">EGP</span>
+                                <span className="text-xs font-normal text-slate-400">الجنيه المصري</span>
                             </h3>
                         </div>
                         <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -282,17 +282,17 @@ export default function AdminPricing() {
 
                                             {/* سعر المعاينة */}
                                             <td className="py-3.5 px-4 font-bold text-slate-900 font-mono">
-                                                {p.inspectionPrice} EGP
+                                                {p.inspectionPrice} الجنيه المصري
                                             </td>
 
                                             {/* سعر الاستشارة */}
                                             <td className="py-3.5 px-4 font-bold text-slate-900 font-mono">
-                                                {p.consultationPrice} EGP
+                                                {p.consultationPrice} الجنيه المصري
                                             </td>
 
                                             {/* تأمين الصيانة */}
                                             <td className="py-3.5 px-4 font-bold text-slate-900 font-mono">
-                                                {p.maintenanceDeposit} EGP
+                                                {p.maintenanceDeposit} الجنيه المصري
                                             </td>
 
                                             {/* التاريخ */}
@@ -345,7 +345,7 @@ export default function AdminPricing() {
                             {/* سعر المعاينة */}
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                                    {isAr ? 'سعر المعاينة (Inspection Price - EGP)' : 'Inspection Price (EGP)'} *
+                                    {isAr ? 'سعر المعاينة (Inspection Price - الجنيه المصري)' : 'Inspection Price (الجنيه المصري)'} *
                                 </label>
                                 <input
                                     type="number"
@@ -364,7 +364,7 @@ export default function AdminPricing() {
                             {/* سعر الاستشارة */}
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                                    {isAr ? 'سعر الاستشارة (Consultation Price - EGP)' : 'Consultation Price (EGP)'} *
+                                    {isAr ? 'سعر الاستشارة (Consultation Price - الجنيه المصري)' : 'Consultation Price (الجنيه المصري)'} *
                                 </label>
                                 <input
                                     type="number"
@@ -384,8 +384,8 @@ export default function AdminPricing() {
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">
                                     {isAr
-                                        ? 'مقدم / تأمين الصيانة (Maintenance Deposit - EGP)'
-                                        : 'Maintenance Deposit (EGP)'} *
+                                        ? 'مقدم / تأمين الصيانة (Maintenance Deposit - الجنيه المصري)'
+                                        : 'Maintenance Deposit (الجنيه المصري)'} *
                                 </label>
                                 <input
                                     type="number"

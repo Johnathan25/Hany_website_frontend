@@ -245,7 +245,7 @@ export default function InventionsInvoicesRecords() {
                                             <span className="font-mono font-black text-slate-900 text-sm">
                                                 {Number(p.amount || 0).toLocaleString()}
                                             </span>{" "}
-                                            <span className="text-[10px] text-slate-500">{p.currency || "EGP"}</span>
+                                            <span className="text-[10px] text-slate-500">{p.currency || "الجنيه المصري"}</span>
                                         </td>
 
                                         {/* Payment Type */}

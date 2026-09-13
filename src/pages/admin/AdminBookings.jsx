@@ -470,7 +470,7 @@ export default function AdminBookings() {
                                                     {req.price}
                                                 </span>
                                                 <span className="text-xs text-slate-500 mr-1 font-medium">
-                                                    {req.currency || 'EGP'}
+                                                    {req.currency || 'الجنيه المصري'}
                                                 </span>
                                             </td>
 
@@ -604,7 +604,7 @@ export default function AdminBookings() {
                                 <div className="flex justify-between items-center">
                                     <span className="text-slate-500">{isAr ? 'المبلغ المستحق:' : 'Fee:'}</span>
                                     <span className="font-bold font-mono text-slate-900">
-                                        {bookingToDelete.price} {bookingToDelete.currency || 'EGP'}
+                                        {bookingToDelete.price} {bookingToDelete.currency || 'الجنيه المصري'}
                                     </span>
                                 </div>
                             </div>

@@ -17,7 +17,7 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
   const isLoggedIn = Boolean(localStorage.getItem("token") || localStorage.getItem("user"));
 
-  // Navigation items grouped under Home
+  // أقسام الصفحة الرئيسية
   const homeSections = [
     { id: 'home', labelAr: 'الرئيسية', labelEn: 'Home' },
     { id: 'services', labelAr: 'خدماتنا', labelEn: 'Services' },
@@ -25,7 +25,7 @@ export default function Navbar() {
     { id: 'complaints', labelAr: 'الشكاوى والاقتراحات', labelEn: 'Complaints' },
   ];
 
-  // Close dropdown on click outside
+  // إغلاق الدروب داون عند النقر في الخارج
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -36,7 +36,7 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Sync auth state
+  // مزامنة حالة المصادقة
   useEffect(() => {
     const token = localStorage.getItem('token');
     let rawName = localStorage.getItem('userName');
@@ -88,7 +88,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-blue-100/80 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         
-        {/* 1. Auth & Mobile Trigger */}
+        {/* 1. أزرار الحساب والموبايل */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -135,11 +135,11 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* 2. Desktop Navigation */}
+        {/* 2. روابط الـ Navbar على الشاشات الكبيرة */}
         <div className="hidden md:flex items-center justify-center flex-1">
-          <nav className="flex items-center gap-5 lg:gap-7 text-sm lg:text-base font-bold text-slate-700">
+          <nav className="flex items-center gap-4 lg:gap-6 text-sm lg:text-base font-bold text-slate-700">
             
-            {/* Dropdown for Home and sub-sections */}
+            {/* قائمة منسدلة للرئيسية وأقسامها */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsSectionsDropdownOpen((prev) => !prev)}
@@ -190,6 +190,8 @@ export default function Navbar() {
               {isAr ? "معرض الأعمال" : "Portfolio"}
             </NavLink>
 
+            
+
             {isLoggedIn && (
               <NavLink
                 to="/my-orders"
@@ -202,10 +204,22 @@ export default function Navbar() {
                 {isAr ? "طلباتي وسجلاتي" : "My Requests"}
               </NavLink>
             )}
+
+            {/* رابط سياسة الاستبدال والاسترجاع */}
+            <NavLink
+              to="/return-policy"
+              className={({ isActive }) =>
+                `relative py-1.5 transition-colors cursor-pointer ${
+                  isActive ? "text-blue-600" : "hover:text-blue-600"
+                }`
+              }
+            >
+              {isAr ? "سياسة الاسترجاع" : "Refund Policy"}
+            </NavLink>
           </nav>
         </div>
 
-        {/* 3. Logo & Brand Name */}
+        {/* 3. الشعار واسم الموقع */}
         <div className="flex items-center justify-end shrink-0">
           <div
             onClick={() => handleNavClick('home')}
@@ -226,12 +240,12 @@ export default function Navbar() {
 
       </div>
 
-      {/* 4. Mobile Navigation Drawer */}
+      {/* 4. قائمة الهاتف (Mobile Menu) */}
       {isMobileMenuOpen && (
         <div className="md:hidden border-t border-slate-100 bg-white/98 backdrop-blur-lg px-6 py-6 shadow-xl space-y-5 animate-in slide-in-from-top-2 duration-200">
           <nav className="flex flex-col gap-1 font-bold text-slate-700">
             
-            {/* Accordion for Home + Sub-sections */}
+            {/* القائمة المنسدلة للرئيسية في الموبايل */}
             <div className="border-b border-slate-100 pb-2">
               <button
                 onClick={() => setIsMobileSectionsOpen((prev) => !prev)}
@@ -276,6 +290,15 @@ export default function Navbar() {
               {isAr ? 'معرض الأعمال' : 'Portfolio'}
             </NavLink>
 
+            {/* رابط سياسة الاسترجاع للموبايل */}
+            <NavLink
+              to="/return-policy"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2.5 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-100 text-start"
+            >
+              {isAr ? 'سياسة الاسترجاع' : 'Refund Policy'}
+            </NavLink>
+
             {isLoggedIn && (
               <NavLink
                 to="/my-orders"
@@ -287,7 +310,7 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Mobile Auth Buttons */}
+          {/* أزرار تسجيل الدخول / الخروج للموبايل */}
           <div className="pt-2 flex flex-col gap-3">
             {isAuthenticated ? (
               <>

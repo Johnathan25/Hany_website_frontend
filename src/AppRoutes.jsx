@@ -10,7 +10,7 @@ import ScrollToTop from "./services/scrollToTop";
 // Pages
 import Home from "./pages/User/Home";
 import About from "./pages/User/About";
-import Properties from './pages/User/Properties';
+//import Properties from './pages/User/Properties';
 import Services from './pages/User/Services';
 import BookingService from './pages/User/BookingService';
 import Complaints from './pages/User/Complaints';
@@ -30,6 +30,7 @@ import AdminInventionsManager from './pages/admin/InventionsManager';
 import InventionsSecurityManager from "./pages/admin/InventionsSecurityManager";
 import CreateInvoicePayment from "./pages/admin/CreateInvoicePayment";
 import InventionsInvoicesRecords from "./pages/admin/InventionsInvoicesRecords";
+import ReturnPolicy from './pages/User/ReturnPolicy';
 
 import Profile from "./pages/admin/profile";
 // =====================
@@ -69,6 +70,8 @@ function AppRoutes() {
           <Route path="/inventions/request" element={<InventionRequest />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/my-orders" element={<MyOrders />} />
+       
+<Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/booking-service" element={
             <ProtectedRoute>
               <BookingService />

@@ -905,14 +905,14 @@ const InventionDepositPayment = () => {
                   <div className="p-3.5 bg-slate-50 border border-slate-100 rounded-2xl">
                     <span className="block text-[10px] text-slate-400 font-medium">السعر الإجمالي</span>
                     <span className="text-xs font-black font-mono text-slate-800 block mt-1">
-                      {Number(pricingOption.price).toLocaleString()} EGP
+                      {Number(pricingOption.price).toLocaleString()} الجنيه المصري
                     </span>
                   </div>
 
                   <div className="p-3.5 bg-blue-50/70 border border-blue-100 rounded-2xl">
                     <span className="block text-[10px] text-blue-700 font-medium">العربون المطلوب</span>
                     <span className="text-xs font-black font-mono text-blue-700 block mt-1">
-                      {Number(pricingOption.depositAmount).toLocaleString()} EGP
+                      {Number(pricingOption.depositAmount).toLocaleString()} الجنيه المصري
                     </span>
                   </div>
                 </div>
@@ -1034,7 +1034,7 @@ const InventionDepositPayment = () => {
                 <div className="flex justify-between items-center text-slate-500">
                   <span>السعر الإجمالي:</span>
                   <span className="font-mono font-bold text-slate-800">
-                    {Number(pricingOption?.price || 0).toLocaleString()} EGP
+                    {Number(pricingOption?.price || 0).toLocaleString()} الجنيه المصري
                   </span>
                 </div>
 
@@ -1045,7 +1045,7 @@ const InventionDepositPayment = () => {
                   </div>
                   <span className="text-xl font-black font-mono text-blue-600">
                     {Number(pricingOption?.depositAmount || 0).toLocaleString()}{" "}
-                    <span className="text-xs font-normal text-slate-500">EGP</span>
+                    <span className="text-xs font-normal text-slate-500">الجنيه المصري</span>
                   </span>
                 </div>
               </div>
@@ -1073,7 +1073,7 @@ const InventionDepositPayment = () => {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    <span>دفع العربون ({Number(pricingOption?.depositAmount || 0).toLocaleString()} EGP)</span>
+                    <span>دفع العربون ({Number(pricingOption?.depositAmount || 0).toLocaleString()} الجنيه المصري)</span>
                   </>
                 )}
               </button>
