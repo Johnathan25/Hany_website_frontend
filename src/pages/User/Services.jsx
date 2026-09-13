@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { AlertCircle, LogIn, Loader2 } from 'lucide-react';
 import axios from 'axios'; // or your configured `api` instance: import api from '../../services/api';
+import api from '../../services/api';
 
 export default function Services() {
     const { isAr } = useLanguage();
