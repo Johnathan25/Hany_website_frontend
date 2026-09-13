@@ -78,7 +78,7 @@ export default function MyOrders() {
     try {
       let res;
       try {
-        res = await api.get("/serviceRequests/customer", { params: { page, limit: 10 } });
+        res = await api.get("/serviceRequests/my-requests", { params: { page, limit: 10 } });
       } catch (err1) {
         if (err1.response?.status === 404) {
           res = await api.get("/serviceRequests/my-requests", { params: { page, limit: 10 } });
