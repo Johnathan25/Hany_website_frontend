@@ -71,7 +71,7 @@ export default function PaymentResult() {
 
   const statusLabels = {
     paid: "تم الدفع",
-    failed: "فشلت العملية",
+    umpaid: "فشلت العملية",
     processing: "قيد المعالجة",
     pending: "قيد الانتظار",
   };
