@@ -246,9 +246,7 @@ function Profile() {
                 {!isEditing && activeTab === "profile" && (
                 
                 <>
-                   <button disabled={deleteLoading} onClick={() => deleteAccount()} className="delete-trigger-btn">
-                    <Trash2 size={18} /> حذف الحساب
-                  </button>
+                 
 
 
                   <button onClick={() => setIsEditing(true)} className="edit-trigger-btn">

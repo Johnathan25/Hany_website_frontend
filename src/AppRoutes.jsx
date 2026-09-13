@@ -30,6 +30,7 @@ import AdminInventionsManager from './pages/admin/InventionsManager';
 import InventionsSecurityManager from "./pages/admin/InventionsSecurityManager";
 import CreateInvoicePayment from "./pages/admin/CreateInvoicePayment";
 import InventionsInvoicesRecords from "./pages/admin/InventionsInvoicesRecords";
+
 import Profile from "./pages/admin/profile";
 // =====================
 // Auth (Lazy optional)
@@ -99,7 +100,7 @@ function AppRoutes() {
           <Route path="items-pricing" element={<AdminItemsPricing />} />
           {/* Child page: "/admin_dashboard/complaints" */}
           <Route path="complaints" element={<AdminComplaints />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="Profile" element={<Profile />} />
           <Route path="services" element={<AdminServices />} />
           <Route path="InventionsManager" element={<AdminInventionsManager />} />
           <Route path="inventions-security" element={<InventionsSecurityManager />} />
