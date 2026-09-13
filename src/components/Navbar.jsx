@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Menu, X, LogOut, User } from 'lucide-react';
+import { Menu, X, LogOut, User, ChevronDown } from 'lucide-react';
 import logo from '../../public/logo.jpeg';
 
 export default function Navbar() {
@@ -9,11 +9,34 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSectionsDropdownOpen, setIsSectionsDropdownOpen] = useState(false);
+  const [isMobileSectionsOpen, setIsMobileSectionsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('');
+
+  const dropdownRef = useRef(null);
   const isLoggedIn = Boolean(localStorage.getItem("token") || localStorage.getItem("user"));
 
-  // Sync authentication state on render and whenever route changes
+  // Navigation items grouped under Home
+  const homeSections = [
+    { id: 'home', labelAr: 'الرئيسية', labelEn: 'Home' },
+    { id: 'services', labelAr: 'خدماتنا', labelEn: 'Services' },
+    { id: 'about', labelAr: 'من نحن', labelEn: 'About Us' },
+    { id: 'complaints', labelAr: 'الشكاوى والاقتراحات', labelEn: 'Complaints' },
+  ];
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsSectionsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Sync auth state
   useEffect(() => {
     const token = localStorage.getItem('token');
     let rawName = localStorage.getItem('userName');
@@ -27,9 +50,7 @@ export default function Navbar() {
       }
     }
 
-    const validName =
-      rawName && rawName !== 'undefined' && rawName !== 'null' ? rawName : '';
-
+    const validName = rawName && rawName !== 'undefined' && rawName !== 'null' ? rawName : '';
     setIsAuthenticated(!!token);
     setUserName(validName);
   }, [location.pathname]);
@@ -44,9 +65,10 @@ export default function Navbar() {
     navigate('/login');
   };
 
-  // معالجة الانتقال والتمرير إلى السكشن المطلوب
   const handleNavClick = (sectionId) => {
     setIsMobileMenuOpen(false);
+    setIsSectionsDropdownOpen(false);
+    setIsMobileSectionsOpen(false);
 
     if (location.pathname === '/') {
       if (sectionId === 'home') {
@@ -58,16 +80,15 @@ export default function Navbar() {
         }
       }
     } else {
-      // إذا كنا في صفحة أخرى، ننتقل للرئيسية ونمرر الـ ID
       navigate('/', { state: { scrollTo: sectionId } });
     }
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-blue-100/80 -[0_2px_15px_-3px_rgba(0,0,0,0.07)] transition-all">
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-blue-100/80 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-
-        {/* 1. أزرار المصادقة والموبايل (يسار في RTL، يمين في LTR) */}
+        
+        {/* 1. Auth & Mobile Trigger */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -105,7 +126,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => navigate('/register')}
-                  className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide transition-all -sm hover:-md hover:-blue-500/20 whitespace-nowrap transform hover:-translate-y-0.5 cursor-pointer"
+                  className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:shadow-blue-500/20 whitespace-nowrap transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   {isAr ? 'إنشاء حساب' : 'Register'}
                 </button>
@@ -114,40 +135,38 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* 2. روابط التنقل (شاشات متوسطة وكبيرة) */}
+        {/* 2. Desktop Navigation */}
         <div className="hidden md:flex items-center justify-center flex-1">
           <nav className="flex items-center gap-5 lg:gap-7 text-sm lg:text-base font-bold text-slate-700">
-            <button
-              onClick={() => handleNavClick('home')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
-            >
-              {isAr ? 'الرئيسية' : 'Home'}
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-            </button>
+            
+            {/* Dropdown for Home and sub-sections */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsSectionsDropdownOpen((prev) => !prev)}
+                className="inline-flex items-center gap-1 py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
+              >
+                <span>{isAr ? 'الرئيسية' : 'Home'}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isSectionsDropdownOpen ? 'rotate-180 text-blue-600' : 'text-slate-400 group-hover:text-blue-600'
+                  }`}
+                />
+              </button>
 
-            <button
-              onClick={() => handleNavClick('services')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
-            >
-              {isAr ? 'خدماتنا' : 'Services'}
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-            </button>
-
-            <button
-              onClick={() => handleNavClick('about')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
-            >
-              {isAr ? 'من نحن' : 'About Us'}
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-            </button>
-
-            <button
-              onClick={() => handleNavClick('complaints')}
-              className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
-            >
-              {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
-            </button>
+              {isSectionsDropdownOpen && (
+                <div className="absolute top-full mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  {homeSections.map((sec) => (
+                    <button
+                      key={sec.id}
+                      onClick={() => handleNavClick(sec.id)}
+                      className="w-full text-start px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    >
+                      {isAr ? sec.labelAr : sec.labelEn}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <NavLink
               to="/Invention"
@@ -186,7 +205,7 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* 3. الشعار والاسم */}
+        {/* 3. Logo & Brand Name */}
         <div className="flex items-center justify-end shrink-0">
           <div
             onClick={() => handleNavClick('home')}
@@ -195,7 +214,7 @@ export default function Navbar() {
             <span className="text-lg sm:text-xl font-extrabold tracking-wider text-slate-800 uppercase font-serif group-hover:text-blue-600 transition-colors">
               Large Step
             </span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-blue-500 overflow-hidden group-hover:scale-105 transition-transform -sm group-hover:-blue-500/20">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-blue-500 overflow-hidden group-hover:scale-105 transition-transform shadow-sm group-hover:shadow-blue-500/20">
               <img
                 src={logo}
                 alt="Large Step Logo"
@@ -207,42 +226,44 @@ export default function Navbar() {
 
       </div>
 
-      {/* 4. قائمة الموبايل */}
+      {/* 4. Mobile Navigation Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-100 bg-white/98 backdrop-blur-lg px-6 py-6 -xl space-y-5 animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col gap-3 font-bold text-slate-700 text-right">
-            <button
-              onClick={() => handleNavClick('home')}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
-            >
-              {isAr ? 'الرئيسية' : 'Home'}
-            </button>
+        <div className="md:hidden border-t border-slate-100 bg-white/98 backdrop-blur-lg px-6 py-6 shadow-xl space-y-5 animate-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col gap-1 font-bold text-slate-700">
+            
+            {/* Accordion for Home + Sub-sections */}
+            <div className="border-b border-slate-100 pb-2">
+              <button
+                onClick={() => setIsMobileSectionsOpen((prev) => !prev)}
+                className="w-full flex items-center justify-between py-2 text-slate-800 hover:text-blue-600 transition-colors"
+              >
+                <span>{isAr ? 'الرئيسية وأقسامها' : 'Home & Sections'}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isMobileSectionsOpen ? 'rotate-180 text-blue-600' : 'text-slate-400'
+                  }`}
+                />
+              </button>
 
-            <button
-              onClick={() => handleNavClick('services')}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
-            >
-              {isAr ? 'خدماتنا' : 'Services'}
-            </button>
-
-            <button
-              onClick={() => handleNavClick('about')}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
-            >
-              {isAr ? 'من نحن' : 'About Us'}
-            </button>
-
-            <button
-              onClick={() => handleNavClick('complaints')}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
-            >
-              {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
-            </button>
+              {isMobileSectionsOpen && (
+                <div className="flex flex-col gap-1 pr-3 pl-3 pt-1">
+                  {homeSections.map((sec) => (
+                    <button
+                      key={sec.id}
+                      onClick={() => handleNavClick(sec.id)}
+                      className="py-1.5 text-sm font-semibold text-slate-600 hover:text-blue-600 text-start transition-colors"
+                    >
+                      {isAr ? sec.labelAr : sec.labelEn}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <NavLink
               to="/Invention"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
+              className="py-2.5 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-100 text-start"
             >
               {isAr ? 'براءات الاختراع' : 'Inventions'}
             </NavLink>
@@ -250,7 +271,7 @@ export default function Navbar() {
             <NavLink
               to="/portfolio"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
+              className="py-2.5 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-100 text-start"
             >
               {isAr ? 'معرض الأعمال' : 'Portfolio'}
             </NavLink>
@@ -259,14 +280,14 @@ export default function Navbar() {
               <NavLink
                 to="/my-orders"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="py-2 text-blue-600 font-bold border-b border-slate-50 text-right"
+                className="py-2.5 text-blue-600 font-bold border-b border-slate-100 text-start"
               >
                 {isAr ? 'طلباتي وسجلاتي' : 'My Requests'}
               </NavLink>
             )}
           </nav>
 
-          {/* أزرار الحساب في الموبايل */}
+          {/* Mobile Auth Buttons */}
           <div className="pt-2 flex flex-col gap-3">
             {isAuthenticated ? (
               <>
@@ -301,7 +322,7 @@ export default function Navbar() {
                     navigate('/register');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm -md transition-all"
+                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition-all"
                 >
                   {isAr ? 'إنشاء حساب' : 'Register'}
                 </button>

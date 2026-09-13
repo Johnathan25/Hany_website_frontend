@@ -18,6 +18,7 @@ import {
   Award,
   ChevronDown,
   Receipt,
+   UserCog,
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -57,7 +58,9 @@ export default function AdminLayout() {
     setSidebarOpen(false);
   }, [location.pathname]);
 
-  const navigationSections = [
+
+
+const navigationSections = [
   {
     categoryName: "نظرة عامة",
     items: [
@@ -111,7 +114,6 @@ export default function AdminLayout() {
           },
         ],
       },
-      // تجميع صفحات الفواتير في مجموعة واحدة
       {
         key: "invoicesGroup",
         label: "الفواتير والمدفوعات",
@@ -131,7 +133,6 @@ export default function AdminLayout() {
       },
     ],
   },
-
   {
     categoryName: "إدارة النظام والعملاء",
     items: [
@@ -144,6 +145,11 @@ export default function AdminLayout() {
         to: "/admin_dashboard/complaints",
         label: "إدارة الشكاوى",
         icon: MessageSquareWarning,
+      },
+      {
+        to: "/admin_dashboard/profile",
+        label: "الملف الشخصي",
+        icon: UserCog,
       },
     ],
   },

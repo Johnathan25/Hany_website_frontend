@@ -60,7 +60,7 @@ const PORTFOLIO_PROJECTS = [
     categoryEn: "Generators & Power",
     locationAr: "موقع هندسي",
     locationEn: "Engineering Site",
-    youtubeVideoUrl: "https://youtube.com/shorts/7GcuOodvqxA?si=KIzJU_SJZPb1pqAb",
+    youtubeVideoUrl: "https://youtu.be/eoGRb4wZehw?si=7K5fTA-PdR72TTxh",
     descriptionAr:
       "تصميم وتنفيذ دوائر ربط المولدات على التوازي (Synchronization) وتوزيع الأحمال آلياً لضمان استقرار الشبكة وعدم انقطاع التيار.",
     descriptionEn:
@@ -106,7 +106,7 @@ const PORTFOLIO_PROJECTS = [
     categoryEn: "Interior Finishing",
     locationAr: "الزمالك",
     locationEn: "Zamalek",
-    youtubeVideoUrl: "https://youtu.be/eoGRb4wZehw?si=7K5fTA-PdR72TTxh",
+    youtubeVideoUrl: "https://youtube.com/shorts/7GcuOodvqxA?si=KIzJU_SJZPb1pqAb",
     descriptionAr:
       "تصنيع وتركيب باب خشب بتكسية مرايا كاملة بنظام جرار مخفي يعطي اتساعاً للمكان ومظهراً ديكورياً فاخراً.",
     descriptionEn:

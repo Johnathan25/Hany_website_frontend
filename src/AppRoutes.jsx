@@ -60,7 +60,7 @@ function AppRoutes() {
         <Route element={<ClientLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} /> {/* مسار صفحة من نحن */}
-          <Route path="/properties" element={<Properties />} />
+          {/* <Route path="/properties" element={<Properties />} /> */}
           <Route path="/services" element={<Services />} />
           {/* المسار الجديد لبراءات الاختراع والحلول */}
           <Route path="/inventions" element={<Inventions />} />
