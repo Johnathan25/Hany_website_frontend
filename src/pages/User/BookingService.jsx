@@ -242,7 +242,7 @@ export default function BookService() {
         const data = response.data?.data;
 
         setPrice(data?.price ?? null);
-        setCurrency(data?.currency || "الجنيه المصري");
+        setCurrency("الجنيه المصري");            //الصورة الوحيدة هي الجنيه المصري 
       } catch (err) {
         if (cancelled) return;
 
@@ -252,9 +252,9 @@ export default function BookService() {
 
         setError(
           err.response?.data?.message ||
-            (isAr
-              ? "تعذر الحصول على سعر الخدمة"
-              : "Failed to get service price")
+          (isAr
+            ? "تعذر الحصول على سعر الخدمة"
+            : "Failed to get service price")
         );
       } finally {
         if (!cancelled) {
@@ -352,9 +352,9 @@ export default function BookService() {
 
       setError(
         err.response?.data?.message ||
-          (isAr
-            ? "حدث خطأ أثناء إنشاء الطلب"
-            : "Failed to create service request")
+        (isAr
+          ? "حدث خطأ أثناء إنشاء الطلب"
+          : "Failed to create service request")
       );
     } finally {
       setLoading(false);
@@ -380,17 +380,28 @@ export default function BookService() {
         <div className="w-full max-w-xl">
 
           {/* DYNAMIC HEADER */}
-          <div className="text-center mb-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              {getHeaderTitle()}
-            </h1>
+          <div className="text-center mb-8">
+  {/* 1. العنوان الرئيسي */}
+  <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+    {getHeaderTitle()}
+  </h1>
 
-            <p className="text-sm text-slate-500">
-              {isAr
-                ? "أدخل بياناتك واختر الخدمة والبند ثم أكمل عملية الدفع."
-                : "Enter your details, select your service and item, then proceed to payment."}
-            </p>
-          </div>
+  {/* 2. تنبيه مقدم الحجز في سطر منفصل وفي المنتصف */}
+  {formData.serviceType === "maintenance" && (
+    <div className="mt-2.5 flex justify-center">
+      <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-amber-50 text-amber-700 border border-amber-200 shadow-sm">
+        {isAr ? "الدفع مقدم حجز خدمة" : "Payment is a booking deposit"}
+      </span>
+    </div>
+  )}
+
+  {/* 3. النص الفرعي التوضيحي */}
+  <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed mt-2">
+    {isAr
+      ? "أدخل بياناتك واختر الخدمة والبند ثم أكمل عملية الدفع."
+      : "Enter your details, select the service item, and complete the payment."}
+  </p>
+</div>
 
           {/* CARD */}
           <div className="bg-white rounded-2xl -sm border border-slate-200/80 p-6 sm:p-8">
@@ -529,11 +540,20 @@ export default function BookService() {
                         </span>
                       </div>
                     ) : (
-                      <strong className="text-xl text-blue-600">
-                        {price !== null
-                          ? `${price.toLocaleString()} ${currency}`
-                          : "--"}
-                      </strong>
+                      <div className="text-end">
+                        <strong className="text-xl text-blue-600 block">
+                          {price !== null
+                            ? `${price.toLocaleString()} ${currency}`
+                            : "--"}
+                        </strong>
+
+                        {/* تظهر فقط عند اختيار خدمة الصيانة المستعجلة */}
+                        {formData.serviceType === "maintenance" && (
+                          <span className="text-xs text-slate-500 font-medium block mt-0.5">
+                            {isAr ? "* مقدم حجز خدمة" : "* Booking deposit"}
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -549,11 +569,10 @@ export default function BookService() {
                 {/* Dropdown Toggle Header */}
                 <div
                   onClick={() => setIsDropdownOpen((prev) => !prev)}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 bg-slate-50/50 border rounded-xl cursor-pointer transition-all ${
-                    isDropdownOpen
-                      ? "border-blue-500 ring-2 ring-blue-100 bg-white"
-                      : "border-slate-200 hover:border-slate-300"
-                  }`}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 bg-slate-50/50 border rounded-xl cursor-pointer transition-all ${isDropdownOpen
+                    ? "border-blue-500 ring-2 ring-blue-100 bg-white"
+                    : "border-slate-200 hover:border-slate-300"
+                    }`}
                 >
                   <div className="flex-1 truncate">
                     {selectedItem ? (
@@ -579,9 +598,8 @@ export default function BookService() {
                       </button>
                     )}
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
-                        isDropdownOpen ? "rotate-180 text-blue-500" : ""
-                      }`}
+                      className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isDropdownOpen ? "rotate-180 text-blue-500" : ""
+                        }`}
                     />
                   </div>
                 </div>
@@ -625,11 +643,10 @@ export default function BookService() {
                               key={item._id}
                               type="button"
                               onClick={() => handleSelectItem(item)}
-                              className={`w-full text-start p-2.5 rounded-xl transition-colors flex items-center justify-between gap-3 cursor-pointer ${
-                                isSelected
-                                  ? "bg-blue-50 text-blue-700"
-                                  : "hover:bg-slate-50 text-slate-800"
-                              }`}
+                              className={`w-full text-start p-2.5 rounded-xl transition-colors flex items-center justify-between gap-3 cursor-pointer ${isSelected
+                                ? "bg-blue-50 text-blue-700"
+                                : "hover:bg-slate-50 text-slate-800"
+                                }`}
                             >
                               <div className="overflow-hidden">
                                 <div className="font-bold text-xs sm:text-sm truncate">
@@ -702,16 +719,14 @@ export default function BookService() {
                       <CreditCard className="w-4 h-4" />
                       <span>
                         {isAr
-                          ? `المتابعة للدفع - ${
-                              price !== null
-                                ? price.toLocaleString()
-                                : "--"
-                            } ${currency}`
-                          : `Proceed to Payment - ${
-                              price !== null
-                                ? price.toLocaleString()
-                                : "--"
-                            } ${currency}`}
+                          ? `المتابعة للدفع - ${price !== null
+                            ? price.toLocaleString()
+                            : "--"
+                          } ${currency}`
+                          : `Proceed to Payment - ${price !== null
+                            ? price.toLocaleString()
+                            : "--"
+                          } ${currency}`}
                       </span>
                       <Arrow className="w-4 h-4" />
                     </>
