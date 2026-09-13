@@ -23,6 +23,7 @@ import {
     ShieldAlert,
     Inbox,
     MessageCircle,
+    Eye,
 } from 'lucide-react';
 
 // Friendly relative date formatter
@@ -82,6 +83,9 @@ export default function AdminBookings() {
     // Filters
     const [searchQuery, setSearchQuery] = useState('');
     const [typeFilter, setTypeFilter] = useState('all');
+
+    // Description Modal State
+    const [selectedDescription, setSelectedDescription] = useState(null);
 
     // Delete Modal States
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -159,18 +163,18 @@ export default function AdminBookings() {
         switch (status) {
             case 'paid':
                 return (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 -xs">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         {isAr ? 'تم السداد بالكامل' : 'Paid & Settled'}
                     </span>
                 );
             case 'unpaid':
-                return (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                        <Clock className="w-3 h-3 text-amber-600" />
-                        {isAr ? 'بانتظار التحصيل' : 'Payment Pending'}
-                    </span>
-                );
+              return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+        <Clock className="w-3 h-3 text-rose-600" />
+        {isAr ? 'غير مدفوع' : 'Payment Pending'}
+    </span>
+);
             case 'confirmed':
                 return (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
@@ -193,8 +197,7 @@ export default function AdminBookings() {
             case 'inspection':
                 return (
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-blue-500 border border-indigo-100">
-                
-                        {isAr ? 'معاينة ' : 'Site Inspection'}
+                        {isAr ? 'معاينة' : 'Site Inspection'}
                     </span>
                 );
             case 'consultation':
@@ -244,9 +247,9 @@ export default function AdminBookings() {
     });
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir={isAr ? 'rtl' : 'ltr'}>
             {/* Header & Mission Statement */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/80 -xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/80">
                 <div>
                     <div className="flex items-center gap-2.5">
                         <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
@@ -287,20 +290,20 @@ export default function AdminBookings() {
 
             {/* Notifications */}
             {successMessage && (
-                <div className="p-4 bg-emerald-50/90 border border-emerald-200/80 text-emerald-900 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 -xs animate-in fade-in">
+                <div className="p-4 bg-emerald-50/90 border border-emerald-200/80 text-emerald-900 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 animate-in fade-in">
                     <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
                     <span className="font-medium">{successMessage}</span>
                 </div>
             )}
 
             {error && (
-                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 -xs">
+                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5">
                     <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
                     <span>{error}</span>
                 </div>
             )}
 
-            {/* Human Search & Filter Bar */}
+            {/* Search & Filter Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2 relative">
                     <Search className="w-4 h-4 absolute top-1/2 -translate-y-1/2 right-3.5 text-slate-400 pointer-events-none" />
@@ -313,7 +316,7 @@ export default function AdminBookings() {
                                 ? 'ابحث باسم العميل، الهاتف، رقم الطلب، أو البند...'
                                 : 'Search by client, phone number, order ID, or service...'
                         }
-                        className="w-full pl-9 pr-10 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm focus:ring-2 focus:ring-blue-600 outline-none -xs transition-all"
+                        className="w-full pl-9 pr-10 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm focus:ring-2 focus:ring-blue-600 outline-none transition-all"
                     />
                     {searchQuery && (
                         <button
@@ -330,7 +333,7 @@ export default function AdminBookings() {
                     <select
                         value={typeFilter}
                         onChange={(e) => setTypeFilter(e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-600 -xs cursor-pointer"
+                        className="w-full px-4 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
                     >
                         <option value="all">{isAr ? 'كافة أنواع الخدمات' : 'All Categories'}</option>
                         <option value="inspection">{isAr ? 'طلبات المعاينة الميدانية' : 'Inspections'}</option>
@@ -341,7 +344,7 @@ export default function AdminBookings() {
             </div>
 
             {/* Table / Content Area */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 -xs overflow-hidden">
+            <div className="bg-white rounded-3xl border border-slate-200/90 overflow-hidden">
                 {loading ? (
                     <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
                         <div className="p-3 bg-blue-50 rounded-2xl">
@@ -353,7 +356,7 @@ export default function AdminBookings() {
                     </div>
                 ) : filteredRequests.length === 0 ? (
                     <div className="py-20 flex flex-col items-center justify-center text-center px-4">
-                        <div className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-400 mb-3 -inner">
+                        <div className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-400 mb-3">
                             <Inbox className="w-7 h-7" />
                         </div>
                         <h3 className="text-base font-bold text-slate-800">
@@ -385,7 +388,6 @@ export default function AdminBookings() {
                             <tbody className="divide-y divide-slate-100/90">
                                 {filteredRequests.map((req) => {
                                     const clientName = req.userName || req.customer?.userName || req.customer?.name || (isAr ? 'عميل كرام' : 'Guest Client');
-                                    const initial = clientName.trim()[0]?.toUpperCase() || 'U';
                                     const dateMeta = formatFriendlyDate(req.createdAt, isAr);
                                     const rawPhone = req.phone || req.customer?.phone;
                                     const formattedPhone = Array.isArray(rawPhone) ? rawPhone[0] : rawPhone;
@@ -409,10 +411,9 @@ export default function AdminBookings() {
                                                 </div>
                                             </td>
 
-                                            {/* Client Avatar & Contact Card */}
+                                            {/* Client Contact */}
                                             <td className="py-4 px-5">
                                                 <div className="flex items-start gap-3">
-                                                    
                                                     <div className="space-y-1">
                                                         <p className="font-bold text-slate-900 text-sm leading-tight">
                                                             {clientName}
@@ -433,8 +434,6 @@ export default function AdminBookings() {
                                                                     {isAr ? 'بدون رقم هاتف' : 'No phone'}
                                                                 </span>
                                                             )}
-
-                                                            
                                                         </div>
 
                                                         {req.customer?.email && (
@@ -447,20 +446,27 @@ export default function AdminBookings() {
                                                 </div>
                                             </td>
 
-                                            {/* Service & Request Item */}
+                                            {/* Service & Description Details with Eye Button */}
                                             <td className="py-4 px-5">
                                                 <div className="space-y-1 max-w-xs">
                                                     <div className="flex items-center gap-1.5">
                                                         {renderTypeBadge(req.requestType)}
                                                     </div>
-                                                    <p className="font-bold text-slate-800 text-xs">
-                                                        {req.serviceItem?.name || (isAr ? 'معاينة متخصصة' : 'Specialized Item')}
-                                                    </p>
-                                                    {req.description && (
-                                                        <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed bg-slate-50 p-1.5 rounded-lg border border-slate-100">
-                                                            "{req.description}"
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="font-bold text-slate-800 text-xs">
+                                                            {req.serviceItem?.name || (isAr ? 'معاينة متخصصة' : 'Specialized Item')}
                                                         </p>
-                                                    )}
+                                                        {req.description && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setSelectedDescription(req.description)}
+                                                                className="p-1 rounded-md text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer"
+                                                                title={isAr ? 'عرض التفاصيل والوصف' : 'View Description'}
+                                                            >
+                                                                <Eye className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </td>
 
@@ -474,7 +480,7 @@ export default function AdminBookings() {
                                                 </span>
                                             </td>
 
-                                            {/* Human Payment Status */}
+                                            {/* Payment Status */}
                                             <td className="py-4 px-5 text-center whitespace-nowrap">
                                                 {renderStatusBadge(req.status)}
                                             </td>
@@ -491,7 +497,7 @@ export default function AdminBookings() {
                                                 ) : (
                                                     <button
                                                         onClick={() => handleOpenDeleteModal(req)}
-                                                        className="p-2 text-rose-500 hover:text-white hover:bg-rose-600 rounded-xl transition-all border border-rose-100 hover:border-rose-600 cursor-pointer -2xs"
+                                                        className="p-2 text-rose-500 hover:text-white hover:bg-rose-600 rounded-xl transition-all border border-rose-100 hover:border-rose-600 cursor-pointer"
                                                         title={isAr ? 'إلغاء وحذف الحجز' : 'Cancel booking'}
                                                     >
                                                         <Trash2 className="w-4 h-4" />
@@ -519,7 +525,7 @@ export default function AdminBookings() {
                             <button
                                 disabled={!pagination.hasPrevPage}
                                 onClick={() => fetchRequests(pagination.currentPage - 1)}
-                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors -2xs"
+                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
                                 title={isAr ? 'الصفحة السابقة' : 'Previous'}
                             >
                                 <ChevronRight className="w-4 h-4" />
@@ -527,7 +533,7 @@ export default function AdminBookings() {
                             <button
                                 disabled={!pagination.hasNextPage}
                                 onClick={() => fetchRequests(pagination.currentPage + 1)}
-                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors -2xs"
+                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
                                 title={isAr ? 'الصفحة التالية' : 'Next'}
                             >
                                 <ChevronLeft className="w-4 h-4" />
@@ -537,10 +543,53 @@ export default function AdminBookings() {
                 )}
             </div>
 
-            {/* Humanized Delete Modal */}
+            {/* Modal: View Description Details */}
+            {selectedDescription && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
+                    <div className="w-full max-w-md bg-white rounded-3xl p-6 border border-slate-100 relative animate-in zoom-in-95 duration-150">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <div className="flex items-center gap-2.5 text-blue-600">
+                                <div className="p-2 bg-blue-50 rounded-xl">
+                                    <Eye className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                                        {isAr ? 'تفاصيل ووصف الطلب' : 'Request Description'}
+                                    </h3>
+                                    <p className="text-[11px] text-slate-400">
+                                        {isAr ? 'النص والملاحظات المقدمة من العميل' : 'Notes provided by the client'}
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setSelectedDescription(null)}
+                                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg cursor-pointer transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-xs sm:text-sm text-slate-700 leading-relaxed max-h-60 overflow-y-auto whitespace-pre-wrap">
+                            {selectedDescription}
+                        </div>
+
+                        <div className="flex justify-end pt-4 mt-4 border-t border-slate-100">
+                            <button
+                                type="button"
+                                onClick={() => setSelectedDescription(null)}
+                                className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                            >
+                                {isAr ? 'إغلاق' : 'Close'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
             {deleteModalOpen && bookingToDelete && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
-                    <div className="w-full max-w-md bg-white rounded-3xl p-6 -2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
+                    <div className="w-full max-w-md bg-white rounded-3xl p-6 border border-slate-100 relative animate-in zoom-in-95 duration-150">
                         {/* Modal Header */}
                         <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                             <div className="flex items-center gap-2.5 text-rose-600">
@@ -623,7 +672,7 @@ export default function AdminBookings() {
                                     type="button"
                                     onClick={handleConfirmDelete}
                                     disabled={deleting}
-                                    className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white rounded-xl text-xs font-bold -xs transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                                    className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                                 >
                                     {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                                     <span>{isAr ? 'نعم، قم بالحذف' : 'Confirm Cancellation'}</span>

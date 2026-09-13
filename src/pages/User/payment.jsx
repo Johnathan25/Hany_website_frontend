@@ -65,7 +65,7 @@ export default function PaymentResult() {
   }
 
   const isPaid = payment?.status === "paid";
-  const isFailed = payment?.status === "failed";
+  const isFailed = payment?.status === "unpaid";
   const isProcessing =
     payment?.status === "processing" || payment?.status === "pending";
 
