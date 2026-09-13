@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { AlertCircle, LogIn } from 'lucide-react';
+import { AlertCircle, LogIn, Loader2 } from 'lucide-react';
+import axios from 'axios'; // or your configured `api` instance: import api from '../../services/api';
 
 export default function Services() {
     const { isAr } = useLanguage();
@@ -37,17 +38,63 @@ export default function Services() {
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
-    // التحقق من حالة تسجيل الدخول
+    // حالة تخزين أسعار الخدمات وحالة التحميل
+    const [prices, setPrices] = useState({});
+    const [pricesLoading, setPricesLoading] = useState(true);
+
+    const currency = isAr ? 'الجنيه المصري' : 'EGP';
     const isLoggedIn = Boolean(localStorage.getItem('token') || localStorage.getItem('user'));
 
+    // جلب أسعار جميع الخدمات عند فتح الصفحة
+    useEffect(() => {
+        let cancelled = false;
+
+        const fetchAllPrices = async () => {
+            setPricesLoading(true);
+            try {
+                const results = await Promise.allSettled(
+                    services.map((srv) =>
+                        axios.get(`/serviceMangement/getPricingByName/${srv.id}`)
+                    )
+                );
+
+                console.log(results)
+
+                if (cancelled) return;
+
+                const pricesMap = {};
+                results.forEach((res, index) => {
+                    const srvId = services[index].id;
+                    if (res.status === 'fulfilled') {
+                        pricesMap[srvId] = res.value.data?.data?.price ?? null;
+                    } else {
+                        pricesMap[srvId] = null;
+                    }
+                });
+
+                setPrices(pricesMap);
+            } catch (err) {
+                console.error("Error fetching service prices:", err);
+            } finally {
+                if (!cancelled) {
+                    setPricesLoading(false);
+                }
+            }
+        };
+
+        fetchAllPrices();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
     const handleServiceAction = (serviceId, e) => {
-        if (e) e.stopPropagation(); // منع انتشار الحدث
+        if (e) e.stopPropagation();
         
         if (isLoggedIn) {
-            // إذا كان مسجل دخول يذهب لصفحة الحجز مباشرة
             navigate(`/booking-service?service=${serviceId}`);
         } else {
-            // إذا لم يكن مسجل دخول يظهر الـ Modal
             setSelectedServiceId(serviceId);
             setShowAuthModal(true);
         }
@@ -107,15 +154,42 @@ export default function Services() {
                                 </div>
                             </div>
 
-                            {/* زر الحجز */}
-                            <div className="px-6 pb-6 pt-2">
+                            {/* السعر وزر الحجز بجانب بعضهما */}
+                            <div className="px-6 pb-6 pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
+                                
+                                {/* عرض السعر */}
+                                <div className="flex flex-col">
+                                    <span className="text-[11px] text-slate-400 font-medium">
+                                        {isAr ? 'السعر' : 'Price'}
+                                    </span>
+                                    {pricesLoading ? (
+                                        <div className="flex items-center gap-1 text-slate-400">
+                                            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                                            <span className="text-xs">...</span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-baseline gap-1 font-bold text-blue-600 text-base">
+                                            <span>
+                                                {prices[srv.id] !== null && prices[srv.id] !== undefined
+                                                    ? prices[srv.id].toLocaleString()
+                                                    : '--'}
+                                            </span>
+                                            <span className="text-[11px] font-medium text-slate-500">
+                                                {currency}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* زر الحجز */}
                                 <button
                                     type="button"
                                     onClick={(e) => handleServiceAction(srv.id, e)}
-                                    className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg -md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer"
+                                    className="py-2.5 px-6 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer whitespace-nowrap shadow-xs"
                                 >
                                     {isAr ? 'احجز الآن' : 'Book Now'}
                                 </button>
+
                             </div>
                         </div>
                     ))}
@@ -126,7 +200,7 @@ export default function Services() {
             {/* نافذة التنبيه لطلب تسجيل الدخول */}
             {showAuthModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center -2xl border border-slate-100 animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
 
                         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-600 ring-6 ring-amber-50/60">
                             <AlertCircle className="h-7 w-7" />
@@ -145,7 +219,7 @@ export default function Services() {
                             <button
                                 type="button"
                                 onClick={handleConfirmLogin}
-                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm -sm transition-all cursor-pointer"
+                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all cursor-pointer shadow-sm"
                             >
                                 <LogIn className="w-4 h-4" />
                                 <span>{isAr ? 'تسجيل الدخول' : 'Login Now'}</span>
