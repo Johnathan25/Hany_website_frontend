@@ -49,14 +49,14 @@ export default function Properties() {
               
 
                 {/* 2. حاوية الوسائط (صورة / فيديو) */}
-                <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-md space-y-4">
+                <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/80 -md space-y-4">
 
                     {/* شريط أزرار التبديل بين المعاينة بالصورة أو الفيديو */}
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setActiveMedia('image')}
                             className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeMedia === 'image'
-                                ? 'bg-gradient-to-r from-blue-900 to-sky-600 text-white shadow-sm'
+                                ? 'bg-gradient-to-r from-blue-900 to-sky-600 text-white -sm'
                                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                 }`}
                         >
@@ -68,7 +68,7 @@ export default function Properties() {
                     </div>
 
                     {/* شاشة العرض الرئيسية */}
-                    <div className="relative w-full h-[320px] sm:h-[480px] lg:h-[540px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-100 shadow-inner">
+                    <div className="relative w-full h-[320px] sm:h-[480px] lg:h-[540px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-100 -inner">
                         {activeMedia === 'image' ? (
                             <img
                                 src={propertyData.imageUrl}
@@ -106,7 +106,7 @@ export default function Properties() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                     {/* العمود الرئيسي: الوصف والمميزات */}
-                    <div className="lg:col-span-2 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+                    <div className="lg:col-span-2 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 -sm space-y-6">
                         <div>
                             <div className="flex items-center gap-2 text-sky-600 text-xs font-semibold mb-2">
                                 <MapPin className="w-4 h-4" />
@@ -138,7 +138,7 @@ export default function Properties() {
                     </div>
 
                     {/* العمود الجانبي: إحصائيات سريعة وزر طلب المعاينة */}
-                    <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-6">
+                    <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 -sm flex flex-col justify-between space-y-6">
                         <div className="space-y-4">
                             <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">
                                 {isAr ? 'بيانات المساحة والتقسيم' : 'Overview Specs'}
@@ -163,7 +163,7 @@ export default function Properties() {
                         <div className="space-y-3 pt-2">
                             <button
                                 onClick={() => navigate('/about')}
-                                className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-900 to-sky-600 hover:from-blue-950 hover:to-sky-700 text-white font-bold text-xs tracking-wider transition-all shadow-md hover:shadow-lg text-center"
+                                className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-900 to-sky-600 hover:from-blue-950 hover:to-sky-700 text-white font-bold text-xs tracking-wider transition-all -md hover:-lg text-center"
                             >
                                 {isAr ? 'حجز معاينة ميدانية معتمدة' : 'Schedule On-Site Inspection'}
                             </button>

@@ -233,7 +233,7 @@ function Signup() {
             disabled={loading}
               type="button"
               onClick={SignupProcess}
-              className="w-full py-5 mt-6 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl transition-all active:scale-[0.98]"
+              className="w-full py-5 mt-6 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] -xl transition-all active:scale-[0.98]"
             >
             {loading ? "جارٍ الإرسال..." : "انشاء الحساب"}
             </button>

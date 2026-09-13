@@ -36,7 +36,7 @@ function App() {
   type="button"
   onClick={upToTop}
   aria-label="Scroll to top"
-  className="fixed bottom-8 right-8 z-50 bg-[#0284c7] text-white p-4 rounded-[20px] shadow-2xl hover:-translate-y-2 active:scale-90 transition-all cursor-pointer"
+  className="fixed bottom-8 right-8 z-50 bg-[#0284c7] text-white p-4 rounded-[20px] -2xl hover:-translate-y-2 active:scale-90 transition-all cursor-pointer"
 >
   <FaAngleUp className="text-2xl" />
 </button> */}
@@ -56,7 +56,7 @@ function App() {
               <span className="text-slate-500 text-xs tracking-widest uppercase mb-2">LARGE STEP FOR CONSTRUCTION</span>
 
               {/* حاوية الصورة مع تأثير التوهج الدائري الأزرق */}
-              <div className="relative w-24 h-24 rounded-full p-1 bg-gradient-to-b from-[#0284c7]/30 to-transparent flex items-center justify-center shadow-[0_0_30px_rgba(2,132,199,0.3)] border border-[#0284c7]/20">
+              <div className="relative w-24 h-24 rounded-full p-1 bg-gradient-to-b from-[#0284c7]/30 to-transparent flex items-center justify-center border border-[#0284c7]/20">
                 <img
                   src={logo}
                   alt="Large Step Logo"
@@ -66,7 +66,7 @@ function App() {
             </div>
 
             {/* 2. كارت جلاسمورفيزم (Glassmorphism Card) */}
-            <div className="relative z-10 flex flex-col items-center w-full max-w-md p-8 rounded-3xl bg-white/[0.02] backdrop-blur-md border border-white/[0.05] shadow-2xl mx-4">
+            <div className="relative z-10 flex flex-col items-center w-full max-w-md p-8 rounded-3xl bg-white/[0.02] backdrop-blur-md border border-white/[0.05] -2xl mx-4">
 
             
 

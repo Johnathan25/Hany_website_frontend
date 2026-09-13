@@ -193,7 +193,7 @@ function OrderCard({ order }) {
   });
 
   return (
-    <div className="bg-white w-full border border-slate-200 rounded-2xl p-3.5 mt-2 text-xs shadow-sm">
+    <div className="bg-white w-full border border-slate-200 rounded-2xl p-3.5 mt-2 text-xs -sm">
       <div className="flex justify-between items-center pb-2 mb-2 border-b border-slate-100">
         <div>
           <p className="font-bold text-slate-800 text-[12px]">{order.orderNumber}</p>
@@ -237,7 +237,7 @@ function MessageBubble({ msg }) {
       )}
       <div className="max-w-[85%]">
         {msg.text && (
-          <div className={`px-3.5 py-2.5 text-[12.5px] font-medium leading-relaxed whitespace-pre-line ${isUser ? "bg-sky-500 text-white rounded-[18px] rounded-tr-[4px]" : "bg-white text-slate-800 border border-slate-200 rounded-[18px] rounded-tl-[4px] shadow-[0_2px_8px_rgba(0,0,0,0.04)]"}`}>
+          <div className={`px-3.5 py-2.5 text-[12.5px] font-medium leading-relaxed whitespace-pre-line ${isUser ? "bg-sky-500 text-white rounded-[18px] rounded-tr-[4px]" : "bg-white text-slate-800 border border-slate-200 rounded-[18px] rounded-tl-[4px] -[0_2px_8px_rgba(0,0,0,0.04)]"}`}>
             {msg.text}
           </div>
         )}
@@ -446,7 +446,7 @@ export default function ChatBot() {
     //   {open && (
     //     /* ── 2. تعديل كلاسات الحاوية الرئيسية لتتغير ديناميكياً مع الـ Fullscreen ── */
     //     <div 
-    //       className={`fixed bg-white  shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-slate-200 flex flex-col overflow-hidden transition-all duration-300
+    //       className={`fixed bg-white  -[0_20px_60px_rgba(0,0,0,0.12)] border border-slate-200 flex flex-col overflow-hidden transition-all duration-300
     //         ${isFullscreen 
     //           ? "inset-0 w-full h-full rounded-none bottom-0 left-0" // كلاسات ملء الشاشة الكاملة
     //           : "bottom-24 left-5 w-[340px] sm:w-[380px] h-[500px]  md:h-[580px] rounded-[24px]" // الكلاسات الأصلية
@@ -486,13 +486,13 @@ export default function ChatBot() {
 
     //       {/* ── Mode Tabs ── */}
     //       <div className="flex gap-1 p-2 bg-slate-100 border-b border-slate-200 flex-shrink-0">
-    //         <button onClick={() => handleModeChange("general")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "general" ? "bg-white text-sky-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+    //         <button onClick={() => handleModeChange("general")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "general" ? "bg-white text-sky-600 -sm" : "text-slate-500 hover:text-slate-700"}`}>
     //           <Info size={12} /> استفسار عام
     //         </button>
-    //         <button onClick={() => handleModeChange("products")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "products" ? "bg-sky-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+    //         <button onClick={() => handleModeChange("products")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "products" ? "bg-sky-500 text-white -sm" : "text-slate-500 hover:text-slate-700"}`}>
     //           <Package size={12} /> البحث عن المنتجات
     //         </button>
-    //         <button onClick={() => handleModeChange("myOrder")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "myOrder" ? "bg-sky-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+    //         <button onClick={() => handleModeChange("myOrder")} className={`flex-1 flex items-center justify-center gap-1 py-2 px-1.5 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer ${activeMode === "myOrder" ? "bg-sky-500 text-white -sm" : "text-slate-500 hover:text-slate-700"}`}>
     //           <Truck size={12} /> عرض طلباتي
     //         </button>
     //       </div>
@@ -553,7 +553,7 @@ export default function ChatBot() {
     //   )}
 
     //   {/* ── FAB ── */}
-    //   <button onClick={() => setOpen(!open)} className="fixed bottom-8 cursor-pointer left-6 w-14 h-14 rounded-[18px] bg-[#0f172a] text-sky-400 shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:scale-105 transition-all flex items-center justify-center border border-slate-800" style={{ zIndex: 9999 }}>
+    //   <button onClick={() => setOpen(!open)} className="fixed bottom-8 cursor-pointer left-6 w-14 h-14 rounded-[18px] bg-[#0f172a] text-sky-400 -[0_15px_40px_rgba(0,0,0,0.3)] hover:scale-105 transition-all flex items-center justify-center border border-slate-800" style={{ zIndex: 9999 }}>
     //     {open ? <X size={22} className="text-white" /> : <div className="relative"><MessageCircle size={24} /><span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky-500 rounded-full border-2 border-[#0f172a] animate-pulse" /></div>}
     //   </button>
     // </>

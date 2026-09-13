@@ -17,7 +17,7 @@ export default function SuccessModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 text-center shadow-2xl border border-slate-100 transform transition-all animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 text-center -2xl border border-slate-100 transform transition-all animate-in zoom-in-95 duration-200">
         
         {/* أيقونة الصح مع تأثير النبض المتناسق */}
         <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
@@ -41,7 +41,7 @@ export default function SuccessModal({
           <button
             type="button"
             onClick={onAction || onClose}
-            className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md hover:shadow-blue-500/25 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm -md hover:-blue-500/25 transition-all"
           >
             <span>{actionText || (isAr ? 'حسناً، متابعة' : 'Continue')}</span>
             <Arrow className="w-4 h-4" />

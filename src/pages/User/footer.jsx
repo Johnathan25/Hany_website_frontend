@@ -178,7 +178,7 @@ export default function Footer() {
                                 href="https://wa.me/201228213969"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-[#00b4d8] hover:text-white flex items-center justify-center transition-all text-slate-300 shadow-sm"
+                                className="w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-[#00b4d8] hover:text-white flex items-center justify-center transition-all text-slate-300 -sm"
                                 aria-label="WhatsApp"
                             >
                                 <MessageCircle className="w-4 h-4" />

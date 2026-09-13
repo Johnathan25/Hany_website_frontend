@@ -113,7 +113,7 @@ export default function Complaints() {
         </div>
 
         {/* 2. Form Container */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-7 sm:p-10">
+        <div className="bg-white rounded-3xl border border-slate-200/80 -xs p-7 sm:p-10">
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center gap-3 text-rose-700 text-sm">
               <AlertCircle className="w-5 h-5 shrink-0" />
@@ -227,7 +227,7 @@ export default function Complaints() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide -md hover:-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>

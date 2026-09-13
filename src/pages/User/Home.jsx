@@ -35,24 +35,24 @@ export default function Home() {
     const location = useLocation();
 
     useEffect(() => {
-        // Check if a target section was passed from another page
-        if (location.state?.targetSection) {
-            const targetId = location.state.targetSection;
+    // التحقق من وجود scrollTo قادم من النافبار
+    const targetId = location.state?.scrollTo;
 
-            // Small timeout ensures the DOM components are fully rendered before scrolling
-            const timer = setTimeout(() => {
-                const el = document.getElementById(targetId);
-                if (el) {
-                    el.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 150);
-
-            // Clean the history state so a normal page refresh doesn't scroll again
-            window.history.replaceState({}, document.title);
-
-            return () => clearTimeout(timer);
+    if (targetId) {
+      // نضع مهلة صغيرة للتأكد من اكتمال رسم عناصر الـ DOM
+      const timer = setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
         }
-    }, [location.state]);
+      }, 150);
+
+      // تنظيف الـ state حتى لا يعيد التمرير عند إعادة التحميل
+      window.history.replaceState({}, document.title);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
     const scrollToSection = (id) => {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -233,7 +233,7 @@ export default function Home() {
                 {/* Hero Center Content */}
                 <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 text-center my-auto">
                     <div className="max-w-4xl mx-auto space-y-6">
-                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-medium text-white tracking-wide drop-shadow-md">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-medium text-white tracking-wide drop--md">
                             LUXURY REAL ESTATE{' '}
                             <span className="opacity-75 font-light mx-2">
                                 <br />
@@ -241,7 +241,7 @@ export default function Home() {
                             العقارات الفاخرة
                         </h1>
 
-                        <p className="text-slate-100 text-base sm:text-xl font-light tracking-wider drop-shadow">
+                        <p className="text-slate-100 text-base sm:text-xl font-light tracking-wider drop-">
                             Exceptional Living in Prestigious Locations
                         </p>
 

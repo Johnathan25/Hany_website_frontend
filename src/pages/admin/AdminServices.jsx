@@ -238,7 +238,7 @@ export default function AdminServices() {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => fetchItems(pagination.currentPage, searchQuery)}
-                        className="p-2.5 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 text-slate-700 shadow-xs transition-colors cursor-pointer"
+                        className="p-2.5 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 text-slate-700 -xs transition-colors cursor-pointer"
                         title={isAr ? 'تحديث' : 'Refresh'}
                     >
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -246,7 +246,7 @@ export default function AdminServices() {
 
                     <button
                         onClick={() => handleOpenFormModal()}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-sm transition-all cursor-pointer"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold -sm transition-all cursor-pointer"
                     >
                         <Plus className="w-4 h-4" />
                         <span>{isAr ? 'إضافة خدمة جديدة' : 'Add Service'}</span>
@@ -281,7 +281,7 @@ export default function AdminServices() {
                             ? 'ابحث باسم الخدمة مباشرة (مثال: نجارة، سباكة...)'
                             : 'Type to search services in real-time...'
                     }
-                    className="w-full pl-9 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none shadow-xs transition-all"
+                    className="w-full pl-9 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none -xs transition-all"
                 />
                 {searchQuery && (
                     <button
@@ -296,7 +296,7 @@ export default function AdminServices() {
             </div>
 
             {/* Services Table View */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-2xl border border-slate-200 -xs overflow-hidden">
                 {loading ? (
                     <div className="py-20 flex flex-col items-center justify-center text-slate-400 gap-3">
                         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -411,7 +411,7 @@ export default function AdminServices() {
             {/* FORM MODAL (Add / Edit) */}
             {formModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xs animate-in fade-in duration-150">
-                    <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
+                    <div className="w-full max-w-md bg-white rounded-2xl p-6 -2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
                         <div className="flex items-center justify-between border-b pb-3 mb-4">
                             <h3 className="font-bold text-slate-900 text-base">
                                 {editingItem
@@ -475,7 +475,7 @@ export default function AdminServices() {
                                 <button
                                     type="submit"
                                     disabled={submitting}
-                                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold -sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                                 >
                                     {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                                     <span>{isAr ? 'حفظ' : 'Save'}</span>
@@ -489,7 +489,7 @@ export default function AdminServices() {
             {/* DELETE MODAL */}
             {deleteModalOpen && itemToDelete && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xs animate-in fade-in duration-150">
-                    <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
+                    <div className="w-full max-w-md bg-white rounded-2xl p-6 -2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
                         <div className="flex items-center justify-between border-b pb-3 mb-4">
                             <div className="flex items-center gap-2 text-rose-600">
                                 <Trash2 className="w-5 h-5" />
@@ -533,7 +533,7 @@ export default function AdminServices() {
                                     type="button"
                                     onClick={handleConfirmDelete}
                                     disabled={deleting}
-                                    className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                                    className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold -sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                                 >
                                     {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                                     <span>{isAr ? 'تأكيد الحذف' : 'Confirm Delete'}</span>

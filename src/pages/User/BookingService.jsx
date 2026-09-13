@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom"; // 1. استيراد hook الـ Query Params
+import React, { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext";
 
 import {
@@ -14,6 +14,8 @@ import {
   Loader2,
   CreditCard,
   X,
+  ChevronDown,
+  Check,
 } from "lucide-react";
 
 import api from "../../services/api";
@@ -46,7 +48,7 @@ export default function BookService() {
 
   useEffect(() => {
     const validServices = ["inspection", "consultation", "maintenance"];
-    
+
     if (queryService && validServices.includes(queryService)) {
       setFormData((prev) => ({
         ...prev,
@@ -56,13 +58,87 @@ export default function BookService() {
   }, [queryService]);
 
   // =====================================================
-  // ITEMS
+  // SERVICE ITEMS (DROPDOWN & SEARCH)
   // =====================================================
 
   const [items, setItems] = useState([]);
   const [itemSearch, setItemSearch] = useState("");
-  const [selectedItemName, setSelectedItemName] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
   const [itemsLoading, setItemsLoading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // جلب البنود من الباك إند
+  const fetchServiceItems = async (searchQuery = "") => {
+    setItemsLoading(true);
+    try {
+      const params = {
+        limit: 50,
+        search: searchQuery.trim() || undefined,
+      };
+
+      let res;
+      try {
+        res = await api.get("/serviceMangement/items", { params });
+      } catch (err1) {
+        if (err1.response?.status === 404) {
+          res = await api.get("/serviceItem", { params });
+        } else {
+          throw err1;
+        }
+      }
+
+      setItems(res.data?.data || []);
+    } catch (err) {
+      console.error("Fetch Service Items Error:", err);
+    } finally {
+      setItemsLoading(false);
+    }
+  };
+
+  // جلب البنود عند فتح القائمة أو الكتابة في حقل البحث
+  useEffect(() => {
+    if (isDropdownOpen) {
+      const timer = setTimeout(() => {
+        fetchServiceItems(itemSearch);
+      }, 250);
+      return () => clearTimeout(timer);
+    }
+  }, [itemSearch, isDropdownOpen]);
+
+  // إغلاق القائمة عند النقر في أي مكان خارجها
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // اختيار بند
+  const handleSelectItem = (item) => {
+    setSelectedItem(item);
+    setFormData((prev) => ({
+      ...prev,
+      serviceItem: item._id,
+    }));
+    setIsDropdownOpen(false);
+    setItemSearch("");
+    setError("");
+  };
+
+  // مسح الاختيار
+  const clearSelectedItem = (e) => {
+    e.stopPropagation();
+    setSelectedItem(null);
+    setFormData((prev) => ({
+      ...prev,
+      serviceItem: "",
+    }));
+    setItemSearch("");
+  };
 
   // =====================================================
   // PRICE
@@ -87,7 +163,7 @@ export default function BookService() {
   const [error, setError] = useState("");
 
   // =====================================================
-  // SERVICES
+  // SERVICES LIST
   // =====================================================
 
   const servicesList = [
@@ -195,86 +271,11 @@ export default function BookService() {
   }, [formData.serviceType, isAr]);
 
   // =====================================================
-  // SEARCH SERVICE ITEMS
-  // =====================================================
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const timer = setTimeout(async () => {
-      try {
-        setItemsLoading(true);
-
-        const response = await api.get(
-          `/serviceMangement/items?page=1&limit=10&search=${encodeURIComponent(
-            itemSearch
-          )}`
-        );
-
-        if (cancelled) return;
-
-        setItems(response.data?.data || []);
-      } catch (err) {
-        if (cancelled) return;
-
-        console.error("Get Items Error:", err);
-
-        setError(
-          err.response?.data?.message ||
-            (isAr
-              ? "تعذر تحميل البنود"
-              : "Failed to load service items")
-        );
-      } finally {
-        if (!cancelled) {
-          setItemsLoading(false);
-        }
-      }
-    }, 300);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, [itemSearch, isAr]);
-
-  // =====================================================
-  // SELECT ITEM
-  // =====================================================
-
-  const handleSelectItem = (item) => {
-    setFormData((prev) => ({
-      ...prev,
-      serviceItem: item._id,
-    }));
-
-    setSelectedItemName(item.name);
-    setItemSearch("");
-    setError("");
-  };
-
-  // =====================================================
-  // CLEAR SELECTED ITEM
-  // =====================================================
-
-  const clearSelectedItem = () => {
-    setSelectedItemName("");
-
-    setFormData((prev) => ({
-      ...prev,
-      serviceItem: "",
-    }));
-
-    setItemSearch("");
-  };
-
-  // =====================================================
   // SUBMIT
   // =====================================================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
 
     if (!formData.userName.trim()) {
@@ -326,9 +327,9 @@ export default function BookService() {
         serviceItem: formData.serviceItem,
         requestType: formData.serviceType,
         description: formData.description,
-        userName:formData.userName,
-        phone:formData.phone,
-        address:formData.address,
+        userName: formData.userName.trim(),
+        phone: formData.phone.trim(),
+        address: formData.location.trim(),
       });
 
       console.log("Create Service Request:", response.data);
@@ -341,7 +342,6 @@ export default function BookService() {
             ? "تم إنشاء الطلب ولكن رابط الدفع غير موجود"
             : "Order created but payment URL is missing"
         );
-
         return;
       }
 
@@ -393,7 +393,7 @@ export default function BookService() {
           </div>
 
           {/* CARD */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
+          <div className="bg-white rounded-2xl -sm border border-slate-200/80 p-6 sm:p-8">
 
             {/* ERROR */}
             {error && (
@@ -403,22 +403,17 @@ export default function BookService() {
               </div>
             )}
 
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-5"
-            >
+            <form onSubmit={handleSubmit} className="space-y-5">
 
               {/* NAME */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
                   {isAr ? "الاسم بالكامل" : "Full Name"}
-
                   <span className="text-rose-500"> *</span>
                 </label>
 
                 <div className="relative">
                   <User className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-
                   <input
                     type="text"
                     name="userName"
@@ -439,13 +434,11 @@ export default function BookService() {
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
                   {isAr ? "رقم الهاتف" : "Phone Number"}
-
                   <span className="text-rose-500"> *</span>
                 </label>
 
                 <div className="relative">
                   <Phone className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-
                   <input
                     type="tel"
                     dir="ltr"
@@ -465,13 +458,11 @@ export default function BookService() {
                   {isAr
                     ? "الموقع أو العنوان بالتفصيل"
                     : "Location / Detailed Address"}
-
                   <span className="text-rose-500"> *</span>
                 </label>
 
                 <div className="relative">
                   <MapPin className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-
                   <input
                     type="text"
                     name="location"
@@ -494,19 +485,17 @@ export default function BookService() {
                   {isAr
                     ? "نوع الخدمة المطلوبة"
                     : "Service Type"}
-
                   <span className="text-rose-500"> *</span>
                 </label>
 
                 <div className="relative">
                   <Briefcase className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-
                   <select
-                    disabled={true}
+                    disabled={Boolean(queryService)}
                     name="serviceType"
                     value={formData.serviceType}
                     onChange={handleChange}
-                    className="w-full ps-10 pe-8 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    className="w-full ps-10 pe-8 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:opacity-75 disabled:cursor-not-allowed"
                     required
                   >
                     <option value="">
@@ -516,13 +505,8 @@ export default function BookService() {
                     </option>
 
                     {servicesList.map((srv) => (
-                      <option
-                        key={srv.id}
-                        value={srv.id}
-                      >
-                        {isAr
-                          ? srv.titleAr
-                          : srv.titleEn}
+                      <option key={srv.id} value={srv.id}>
+                        {isAr ? srv.titleAr : srv.titleEn}
                       </option>
                     ))}
                   </select>
@@ -533,21 +517,15 @@ export default function BookService() {
               {formData.serviceType && (
                 <div className="p-4 rounded-xl bg-blue-50 border border-blue-100">
                   <div className="flex justify-between items-center gap-4">
-
                     <span className="font-bold text-slate-700">
-                      {isAr
-                        ? "سعر الخدمة"
-                        : "Service Price"}
+                      {isAr ? "سعر الخدمة" : "Service Price"}
                     </span>
 
                     {priceLoading ? (
                       <div className="flex items-center gap-2 text-blue-600">
                         <Loader2 className="w-5 h-5 animate-spin" />
-
                         <span className="text-sm">
-                          {isAr
-                            ? "جاري تحميل السعر..."
-                            : "Loading price..."}
+                          {isAr ? "جاري تحميل السعر..." : "Loading price..."}
                         </span>
                       </div>
                     ) : (
@@ -561,95 +539,117 @@ export default function BookService() {
                 </div>
               )}
 
-              {/* SERVICE ITEM */}
-              <div>
+              {/* SERVICE ITEM - CUSTOM SEARCHABLE DROPDOWN */}
+              <div className="relative" ref={dropdownRef}>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  {isAr ? "البند" : "Service Item"}
-
+                  {isAr ? "البند والخدمة المطلوبة" : "Service Item"}
                   <span className="text-rose-500"> *</span>
                 </label>
 
-                <div className="relative">
-                  <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                {/* Dropdown Toggle Header */}
+                <div
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 bg-slate-50/50 border rounded-xl cursor-pointer transition-all ${
+                    isDropdownOpen
+                      ? "border-blue-500 ring-2 ring-blue-100 bg-white"
+                      : "border-slate-200 hover:border-slate-300"
+                  }`}
+                >
+                  <div className="flex-1 truncate">
+                    {selectedItem ? (
+                      <span className="text-sm font-bold text-slate-900">
+                        {selectedItem.name}
+                      </span>
+                    ) : (
+                      <span className="text-sm text-slate-400">
+                        {isAr ? "اختر الخدمة من القائمة..." : "Select a service item..."}
+                      </span>
+                    )}
+                  </div>
 
-                  <input
-                    type="text"
-                    value={
-                      selectedItemName
-                        ? selectedItemName
-                        : itemSearch
-                    }
-                    onChange={(e) => {
-                      setSelectedItemName("");
-
-                      setFormData((prev) => ({
-                        ...prev,
-                        serviceItem: "",
-                      }));
-
-                      setItemSearch(e.target.value);
-                    }}
-                    placeholder={
-                      isAr
-                        ? "اكتب اسم البند..."
-                        : "Type service item..."
-                    }
-                    className="w-full ps-10 pe-10 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                  />
-
-                  {selectedItemName && (
-                    <button
-                      type="button"
-                      onClick={clearSelectedItem}
-                      className="absolute end-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
+                  <div className="flex items-center gap-1.5 ms-2">
+                    {selectedItem && (
+                      <button
+                        type="button"
+                        onClick={clearSelectedItem}
+                        className="p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 transition"
+                        title={isAr ? "إلغاء التحديد" : "Clear"}
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                        isDropdownOpen ? "rotate-180 text-blue-500" : ""
+                      }`}
+                    />
+                  </div>
                 </div>
 
-                {/* RESULTS */}
-                {!selectedItemName && itemSearch.trim() && (
-                  <div className="mt-2 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
-
-                    {itemsLoading ? (
-                      <div className="p-4 text-center text-slate-500">
-                        <Loader2 className="w-5 h-5 animate-spin mx-auto" />
-
-                        <p className="text-xs mt-2">
-                          {isAr
-                            ? "جاري البحث..."
-                            : "Searching..."}
-                        </p>
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-2xl -xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                    {/* Search Field inside dropdown */}
+                    <div className="p-2.5 border-b border-slate-100 bg-slate-50/50">
+                      <div className="relative">
+                        <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+                        <input
+                          type="text"
+                          autoFocus
+                          value={itemSearch}
+                          onChange={(e) => setItemSearch(e.target.value)}
+                          placeholder={isAr ? "ابحث عن بند أو خدمة..." : "Filter services..."}
+                          className="w-full ps-8 pe-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                        />
                       </div>
-                    ) : items.length === 0 ? (
-                      <div className="p-4 text-center text-slate-500 text-sm">
-                        {isAr
-                          ? "لا توجد نتائج"
-                          : "No results found"}
-                      </div>
-                    ) : (
-                      items.map((item) => (
-                        <button
-                          type="button"
-                          key={item._id}
-                          onClick={() =>
-                            handleSelectItem(item)
-                          }
-                          className="w-full text-start px-4 py-3 hover:bg-slate-50 border-b last:border-b-0 border-slate-100 transition"
-                        >
-                          <div className="font-bold text-slate-800">
-                            {item.name}
-                          </div>
+                    </div>
 
-                          {item.description && (
-                            <div className="text-xs text-slate-500 mt-1">
-                              {item.description}
-                            </div>
-                          )}
-                        </button>
-                      ))
-                    )}
+                    {/* Items List */}
+                    <div className="max-h-60 overflow-y-auto divide-y divide-slate-50 p-1">
+                      {itemsLoading ? (
+                        <div className="p-6 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
+                          <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                          <span className="text-xs">
+                            {isAr ? "جاري تحميل البنود..." : "Loading items..."}
+                          </span>
+                        </div>
+                      ) : items.length === 0 ? (
+                        <div className="p-6 text-center text-slate-400 text-xs font-medium">
+                          {isAr ? "لا توجد خدمات مطابقة" : "No services found"}
+                        </div>
+                      ) : (
+                        items.map((item) => {
+                          const isSelected = selectedItem?._id === item._id;
+                          return (
+                            <button
+                              key={item._id}
+                              type="button"
+                              onClick={() => handleSelectItem(item)}
+                              className={`w-full text-start p-2.5 rounded-xl transition-colors flex items-center justify-between gap-3 cursor-pointer ${
+                                isSelected
+                                  ? "bg-blue-50 text-blue-700"
+                                  : "hover:bg-slate-50 text-slate-800"
+                              }`}
+                            >
+                              <div className="overflow-hidden">
+                                <div className="font-bold text-xs sm:text-sm truncate">
+                                  {item.name}
+                                </div>
+                                {item.description && (
+                                  <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                                    {item.description}
+                                  </div>
+                                )}
+                              </div>
+
+                              {isSelected && (
+                                <Check className="w-4 h-4 text-blue-600 shrink-0" />
+                              )}
+                            </button>
+                          );
+                        })
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -686,12 +686,11 @@ export default function BookService() {
                     price === null ||
                     !formData.serviceItem
                   }
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm disabled:opacity-60 disabled:cursor-not-allowed transition"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm disabled:opacity-60 disabled:cursor-not-allowed transition cursor-pointer"
                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-
                       <span>
                         {isAr
                           ? "جاري إنشاء الطلب..."
@@ -701,7 +700,6 @@ export default function BookService() {
                   ) : (
                     <>
                       <CreditCard className="w-4 h-4" />
-
                       <span>
                         {isAr
                           ? `المتابعة للدفع - ${
@@ -715,7 +713,6 @@ export default function BookService() {
                                 : "--"
                             } ${currency}`}
                       </span>
-
                       <Arrow className="w-4 h-4" />
                     </>
                   )}
@@ -732,12 +729,9 @@ export default function BookService() {
 
       {showPayment && paymentUrl && (
         <div className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-3 sm:p-5">
-
-          <div className="bg-white w-full max-w-5xl h-[95vh] rounded-2xl overflow-hidden shadow-2xl relative">
-
+          <div className="bg-white w-full max-w-5xl h-[95vh] rounded-2xl overflow-hidden -2xl relative">
             {/* HEADER */}
             <div className="h-14 px-4 sm:px-5 border-b flex items-center justify-between bg-white">
-
               <h2 className="font-bold text-slate-800">
                 {isAr
                   ? "إتمام عملية الدفع"
@@ -747,22 +741,20 @@ export default function BookService() {
               <button
                 type="button"
                 onClick={closePayment}
-                className="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center transition"
+                className="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* PAYMENT */}
+            {/* PAYMENT IFRAME */}
             <div className="h-[calc(95vh-3.5rem)] bg-slate-100">
-
               <iframe
                 src={paymentUrl}
                 title="Kashier Payment"
                 className="w-full h-full border-0"
                 allow="payment *"
               />
-
             </div>
           </div>
         </div>

@@ -216,7 +216,7 @@ const InventionDepositPayment = () => {
                 dir="rtl"
                 className="min-h-screen bg-gray-50 flex items-center justify-center p-6"
             >
-                <div className="bg-white border rounded-2xl shadow-sm p-8 max-w-md w-full text-center">
+                <div className="bg-white border rounded-2xl -sm p-8 max-w-md w-full text-center">
                     <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
                     <h2 className="text-xl font-bold text-gray-800 mb-2">حدث خطأ</h2>
                     <p className="text-gray-600">{error}</p>
@@ -232,7 +232,7 @@ const InventionDepositPayment = () => {
         return (
             <div dir="rtl" className="min-h-screen bg-gray-50 p-4 md:p-8">
                 <div className="max-w-5xl mx-auto">
-                    <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+                    <div className="bg-white rounded-2xl border -sm overflow-hidden">
                         <div className="p-5 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-11 h-11 rounded-full bg-green-100 flex items-center justify-center shrink-0">
@@ -298,7 +298,7 @@ const InventionDepositPayment = () => {
                 )}
 
                 {/* ====================================== INVENTION INFO ======================================= */}
-                <div className="bg-white rounded-2xl border shadow-sm p-6 mb-6">
+                <div className="bg-white rounded-2xl border -sm p-6 mb-6">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
                             <FileText className="w-6 h-6 text-blue-600" />
@@ -323,7 +323,7 @@ const InventionDepositPayment = () => {
                     <div className="lg:col-span-2">
                         {/* SELECTED PRICING */}
                         {pricingOption && (
-                            <div className="bg-white rounded-2xl border shadow-sm p-6">
+                            <div className="bg-white rounded-2xl border -sm p-6">
                                 <h2 className="text-lg font-bold text-gray-800 mb-5">
                                     تفاصيل الترخيص المختار
                                 </h2>
@@ -378,7 +378,7 @@ const InventionDepositPayment = () => {
 
                         {/* ================================== CUSTOMER FORM =================================== */}
                         {showForm && (
-                            <div className="bg-white rounded-2xl border shadow-sm p-6 mt-6">
+                            <div className="bg-white rounded-2xl border -sm p-6 mt-6">
                                 <div className="mb-6">
                                     <h2 className="text-lg font-bold text-gray-800">
                                         بيانات العميل
@@ -467,7 +467,7 @@ const InventionDepositPayment = () => {
 
                     {/* ==================================== PAYMENT SUMMARY ==================================== */}
                     <div>
-                        <div className="bg-white rounded-2xl border shadow-sm p-6 lg:sticky lg:top-5">
+                        <div className="bg-white rounded-2xl border -sm p-6 lg:sticky lg:top-5">
                             <h2 className="text-lg font-bold text-gray-800 mb-5">
                                 ملخص الطلب
                             </h2>

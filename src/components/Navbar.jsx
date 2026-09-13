@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Globe, Menu, X, LogOut, User } from 'lucide-react';
+import { Menu, X, LogOut, User } from 'lucide-react';
 import logo from '../../public/logo.jpeg';
-import { NavLink, Link } from "react-router-dom";
 
 export default function Navbar() {
-  const { isAr, toggleLang } = useLanguage();
+  const { isAr } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +18,6 @@ export default function Navbar() {
     const token = localStorage.getItem('token');
     let rawName = localStorage.getItem('userName');
 
-    // Fallback: check if stored inside user JSON object
     if (!rawName || rawName === 'undefined' || rawName === 'null') {
       try {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -46,26 +44,31 @@ export default function Navbar() {
     navigate('/login');
   };
 
+  // معالجة الانتقال والتمرير إلى السكشن المطلوب
   const handleNavClick = (sectionId) => {
     setIsMobileMenuOpen(false);
+
     if (location.pathname === '/') {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      if (sectionId === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     } else {
+      // إذا كنا في صفحة أخرى، ننتقل للرئيسية ونمرر الـ ID
       navigate('/', { state: { scrollTo: sectionId } });
     }
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-blue-100/80 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] transition-all">
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-blue-100/80 -[0_2px_15px_-3px_rgba(0,0,0,0.07)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 
-        {/* 1. Div الأيمن: أزرار المصادقة (تسجيل الدخول / الخروج) + زر الموبايل */}
+        {/* 1. أزرار المصادقة والموبايل (يسار في RTL، يمين في LTR) */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-
-          {/* Toggle Menu Button (للموبايل فقط) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
@@ -74,11 +77,10 @@ export default function Navbar() {
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
 
-          {/* أزرار الشاشات المتوسطة والكبيرة */}
           <div className="hidden md:flex items-center gap-2 sm:gap-3">
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
-                {userName && userName !== 'undefined' && (
+                {userName && (
                   <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-sm font-semibold">
                     <User className="w-4 h-4 text-blue-600" />
                     <span>{userName}</span>
@@ -103,19 +105,18 @@ export default function Navbar() {
 
                 <button
                   onClick={() => navigate('/register')}
-                  className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:shadow-blue-500/20 whitespace-nowrap transform hover:-translate-y-0.5 cursor-pointer"
+                  className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide transition-all -sm hover:-md hover:-blue-500/20 whitespace-nowrap transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   {isAr ? 'إنشاء حساب' : 'Register'}
                 </button>
               </>
             )}
           </div>
-
         </div>
 
-        {/* 2. Div المنتصف: روابط التنقل */}
-        <div className="hidden md:flex items-center justify-center flex-1 cursor-pointer">
-          <nav className="flex items-center gap-6 lg:gap-8 text-base font-bold text-slate-700">
+        {/* 2. روابط التنقل (شاشات متوسطة وكبيرة) */}
+        <div className="hidden md:flex items-center justify-center flex-1">
+          <nav className="flex items-center gap-5 lg:gap-7 text-sm lg:text-base font-bold text-slate-700">
             <button
               onClick={() => handleNavClick('home')}
               className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
@@ -145,36 +146,38 @@ export default function Navbar() {
               className="relative py-1.5 hover:text-blue-600 transition-colors group cursor-pointer"
             >
               {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
-
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </button>
 
             <NavLink
               to="/Invention"
-              className="relative py-1.5 text-slate-900 hover:text-blue-600 transition-colors group cursor-pointer"
+              className={({ isActive }) =>
+                `relative py-1.5 transition-colors cursor-pointer ${
+                  isActive ? "text-blue-600" : "hover:text-blue-600"
+                }`
+              }
             >
               {isAr ? "براءات الاختراع" : "Inventions"}
-
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-200" />
             </NavLink>
-            {/* Added directly after Innovations */}
+
             <NavLink
               to="/portfolio"
               className={({ isActive }) =>
-                isActive ? "text-blue-600 font-bold" : "text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                `relative py-1.5 transition-colors cursor-pointer ${
+                  isActive ? "text-blue-600" : "hover:text-blue-600"
+                }`
               }
             >
               {isAr ? "معرض الأعمال" : "Portfolio"}
             </NavLink>
 
-            {/* Inside your Navbar links list, visible only if user is logged in */}
             {isLoggedIn && (
               <NavLink
                 to="/my-orders"
                 className={({ isActive }) =>
-                  isActive
-                    ? "text-blue-600 font-bold"
-                    : "text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                  `relative py-1.5 transition-colors cursor-pointer ${
+                    isActive ? "text-blue-600" : "hover:text-blue-600"
+                  }`
                 }
               >
                 {isAr ? "طلباتي وسجلاتي" : "My Requests"}
@@ -183,7 +186,7 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* 3. Div الأيسر: الشعار واللوجو */}
+        {/* 3. الشعار والاسم */}
         <div className="flex items-center justify-end shrink-0">
           <div
             onClick={() => handleNavClick('home')}
@@ -192,7 +195,7 @@ export default function Navbar() {
             <span className="text-lg sm:text-xl font-extrabold tracking-wider text-slate-800 uppercase font-serif group-hover:text-blue-600 transition-colors">
               Large Step
             </span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-blue-500 overflow-hidden group-hover:scale-105 transition-transform shadow-sm group-hover:shadow-blue-500/20">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-blue-500 overflow-hidden group-hover:scale-105 transition-transform -sm group-hover:-blue-500/20">
               <img
                 src={logo}
                 alt="Large Step Logo"
@@ -204,24 +207,15 @@ export default function Navbar() {
 
       </div>
 
-      {/* 4. Pop-up Mobile Navigation Drawer */}
+      {/* 4. قائمة الموبايل */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-100 bg-white/98 backdrop-blur-lg px-6 py-6 shadow-xl space-y-5 animate-in slide-in-from-top-2 duration-200">
-
-          {/* روابط التنقل الموبايل */}
-          <nav className="flex flex-col gap-4 font-bold text-slate-700 text-right">
+        <div className="md:hidden border-t border-slate-100 bg-white/98 backdrop-blur-lg px-6 py-6 -xl space-y-5 animate-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col gap-3 font-bold text-slate-700 text-right">
             <button
               onClick={() => handleNavClick('home')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'الرئيسية' : 'Home'}
-            </button>
-
-            <button
-              onClick={() => handleNavClick('about')}
-              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
-            >
-              {isAr ? 'من نحن' : 'About Us'}
             </button>
 
             <button
@@ -232,19 +226,52 @@ export default function Navbar() {
             </button>
 
             <button
+              onClick={() => handleNavClick('about')}
+              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
+            >
+              {isAr ? 'من نحن' : 'About Us'}
+            </button>
+
+            <button
               onClick={() => handleNavClick('complaints')}
               className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
             >
               {isAr ? 'الشكاوى والاقتراحات' : 'Complaints'}
             </button>
+
+            <NavLink
+              to="/Invention"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
+            >
+              {isAr ? 'براءات الاختراع' : 'Inventions'}
+            </NavLink>
+
+            <NavLink
+              to="/portfolio"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 text-slate-800 hover:text-blue-600 transition-colors border-b border-slate-50 text-right"
+            >
+              {isAr ? 'معرض الأعمال' : 'Portfolio'}
+            </NavLink>
+
+            {isLoggedIn && (
+              <NavLink
+                to="/my-orders"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 text-blue-600 font-bold border-b border-slate-50 text-right"
+              >
+                {isAr ? 'طلباتي وسجلاتي' : 'My Requests'}
+              </NavLink>
+            )}
           </nav>
 
-          {/* أزرار الإجراءات على الموبايل */}
+          {/* أزرار الحساب في الموبايل */}
           <div className="pt-2 flex flex-col gap-3">
             {isAuthenticated ? (
               <>
-                {userName && userName !== 'undefined' && (
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-sm font-semibold">
+                {userName && (
+                  <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold">
                     <User className="w-4 h-4 text-blue-600" />
                     <span>{userName}</span>
                   </div>
@@ -274,14 +301,13 @@ export default function Navbar() {
                     navigate('/register');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition-all"
+                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm -md transition-all"
                 >
                   {isAr ? 'إنشاء حساب' : 'Register'}
                 </button>
               </>
             )}
           </div>
-
         </div>
       )}
     </header>

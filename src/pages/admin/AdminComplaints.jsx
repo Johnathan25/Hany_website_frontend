@@ -40,7 +40,7 @@ export default function AdminComplaints() {
         </div>
         <button
           onClick={fetchComplaints}
-          className="flex items-center gap-2 px-3 py-2 text-xs font-bold bg-white border border-slate-300 rounded-xl hover:bg-slate-50 text-slate-700 shadow-xs cursor-pointer"
+          className="flex items-center gap-2 px-3 py-2 text-xs font-bold bg-white border border-slate-300 rounded-xl hover:bg-slate-50 text-slate-700 -xs cursor-pointer"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>{isAr ? 'تحديث' : 'Refresh'}</span>
@@ -54,7 +54,7 @@ export default function AdminComplaints() {
         </div>
       )}
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200 -xs overflow-hidden">
         {loading ? (
           <div className="py-20 flex flex-col items-center justify-center text-slate-400 gap-3">
             <Loader2 className="w-8 h-8 animate-spin text-blue-600" />

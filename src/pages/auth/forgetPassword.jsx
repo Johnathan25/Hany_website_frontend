@@ -69,7 +69,7 @@ export default function ForgetPassword() {
 
           {/* Header */}
           <div className="mb-10 text-right">
-             <div className="w-16 h-16 bg-[#e0f2fe] rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+             <div className="w-16 h-16 bg-[#e0f2fe] rounded-2xl flex items-center justify-center mb-6 -sm">
                 <HiOutlineMail className="w-8 h-8 text-[#0284c7]" />
              </div>
              <h1 className="text-4xl font-extrabold text-[#0f172a] mb-4">نسيت كلمة المرور؟</h1>
@@ -102,7 +102,7 @@ export default function ForgetPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-5 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl shadow-blue-100 transition-all active:scale-[0.98] disabled:opacity-50"
+                className="w-full py-5 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] -xl -blue-100 transition-all active:scale-[0.98] disabled:opacity-50"
               >
                 {loading ? "جارٍ الإرسال..." : "إرسال رابط إعادة التعيين"}
               </button>

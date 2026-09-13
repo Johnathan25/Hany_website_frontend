@@ -16,7 +16,7 @@ export default function NotFound() {
         {/* اللوجو واسم الشركة */}
         <div className="flex flex-col items-center justify-center space-y-3">
           <Link to="/" className="inline-block group">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-3xl p-2 shadow-md border border-slate-200/80 group-hover:scale-105 transition-transform overflow-hidden flex items-center justify-center">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-3xl p-2 -md border border-slate-200/80 group-hover:scale-105 transition-transform overflow-hidden flex items-center justify-center">
               <img
                 src={logo}
                 alt="Large Step Logo"
@@ -40,7 +40,7 @@ export default function NotFound() {
             404
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-xs sm:text-sm font-bold shadow-xs">
+            <span className="px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-xs sm:text-sm font-bold -xs">
               {isAr ? 'عفواً، الصفحة غير موجودة' : 'Page Not Found'}
             </span>
           </div>
@@ -62,7 +62,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
           <button
             onClick={() => navigate(-1)}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-100 hover:text-slate-900 transition-all shadow-xs"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-100 hover:text-slate-900 transition-all -xs"
           >
             <Arrow className="w-4 h-4" />
             <span>{isAr ? 'الرجوع للخلف' : 'Go Back'}</span>
@@ -70,7 +70,7 @@ export default function NotFound() {
 
           <Link
             to="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-blue-500/25 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm -md hover:-blue-500/25 transition-all"
           >
             <Home className="w-4 h-4" />
             <span>{isAr ? 'الصفحة الرئيسية' : 'Back to Home'}</span>

@@ -65,7 +65,7 @@ export default function StoreNavigationMenu() {
             key={index}
             to={item.path}
             onClick={() => setIsOpen(false)} 
-            className={`flex items-center gap-2.5 text-white font-medium px-4 py-2.5 rounded-xl shadow-lg transition-all duration-300 hover:-translate-x-1 border border-white/10 ${
+            className={`flex items-center gap-2.5 text-white font-medium px-4 py-2.5 rounded-xl -lg transition-all duration-300 hover:-translate-x-1 border border-white/10 ${
               item.color
             }`}
             style={{ 
@@ -83,7 +83,7 @@ export default function StoreNavigationMenu() {
       {/* الزر الرئيسي الثابت */}
 <button
   onClick={() => setIsOpen(!isOpen)}
-  className={`pointer-events-auto cursor-pointer w-14 h-14 rounded-2xl flex flex-col items-center justify-center text-white shadow-xl transition-all duration-300 border border-white/10 active:scale-95 ${
+  className={`pointer-events-auto cursor-pointer w-14 h-14 rounded-2xl flex flex-col items-center justify-center text-white -xl transition-all duration-300 border border-white/10 active:scale-95 ${
     isOpen
       ? 'bg-[#0284ca] rotate-95'
       : 'bg-[#0284c7]'

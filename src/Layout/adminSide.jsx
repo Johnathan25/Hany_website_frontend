@@ -58,82 +58,96 @@ export default function AdminLayout() {
   }, [location.pathname]);
 
   const navigationSections = [
-    {
-      categoryName: "نظرة عامة",
-      items: [
-        {
-          to: "/admin_dashboard",
-          end: true,
-          label: "لوحة المتابعة",
-          icon: LayoutDashboard,
-        },
-      ],
-    },
-    {
-      categoryName: "إدارة العمليات والخدمات",
-      items: [
-        {
-          key: "servicesGroup",
-          label: "الخدمات والمعاينات",
-          icon: Layers,
-          subItems: [
-            {
-              to: "/admin_dashboard/services",
-              label: "دليل الخدمات",
-              icon: Layers,
-            },
-            {
-              to: "/admin_dashboard/items-pricing",
-              label: "تسعير الخدمات",
-              icon: Package,
-            },
-            {
-              to: "/admin_dashboard/bookings",
-              label: "حجوزات المعاينة",
-              icon: CalendarCheck,
-            },
-          ],
-        },
-        {
-          key: "inventionsGroup",
-          label: "براءات الاختراع",
-          icon: Award,
-          subItems: [
-            {
-              to: "/admin_dashboard/InventionsManager",
-              label: "إدارة براءات الاختراع",
-              icon: Award,
-            },
-            {
-              to: "/admin_dashboard/inventions-security",
-              label: "سجل براءات الاختراع (أمن)",
-              icon: ShieldCheck,
-            },
-          ],
-        },
-        {
-          to: "/admin_dashboard/create-invoice",
-          label: "إنشاء فاتورة ورابط دفع",
-          icon: Receipt,
-        },
-      ],
-    },
-    {
-      categoryName: "إدارة النظام والعملاء",
-      items: [
-        {
-          to: "/admin_dashboard/users",
-          label: "المستخدمين والصلاحيات",
-          icon: Users,
-        },
-        {
-          to: "/admin_dashboard/complaints",
-          label: "إدارة الشكاوى",
-          icon: MessageSquareWarning,
-        },
-      ],
-    },
-  ];
+  {
+    categoryName: "نظرة عامة",
+    items: [
+      {
+        to: "/admin_dashboard",
+        end: true,
+        label: "لوحة المتابعة",
+        icon: LayoutDashboard,
+      },
+    ],
+  },
+  {
+    categoryName: "إدارة العمليات والخدمات",
+    items: [
+      {
+        key: "servicesGroup",
+        label: "الخدمات والمعاينات",
+        icon: Layers,
+        subItems: [
+          {
+            to: "/admin_dashboard/services",
+            label: "دليل الخدمات",
+            icon: Layers,
+          },
+          {
+            to: "/admin_dashboard/items-pricing",
+            label: "تسعير الخدمات",
+            icon: Package,
+          },
+          {
+            to: "/admin_dashboard/bookings",
+            label: "حجوزات المعاينة",
+            icon: CalendarCheck,
+          },
+        ],
+      },
+      {
+        key: "inventionsGroup",
+        label: "براءات الاختراع",
+        icon: Award,
+        subItems: [
+          {
+            to: "/admin_dashboard/InventionsManager",
+            label: "إدارة براءات الاختراع",
+            icon: Award,
+          },
+          {
+            to: "/admin_dashboard/inventions-security",
+            label: "سجل براءات الاختراع (أمن)",
+            icon: ShieldCheck,
+          },
+        ],
+      },
+      // تجميع صفحات الفواتير في مجموعة واحدة
+      {
+        key: "invoicesGroup",
+        label: "الفواتير والمدفوعات",
+        icon: Receipt,
+        subItems: [
+          {
+            to: "/admin_dashboard/create-invoice",
+            label: "إنشاء فاتورة ورابط دفع",
+            icon: Receipt,
+          },
+          {
+            to: "/admin_dashboard/inventions-invoices-records",
+            label: "سجل فواتير براءات الاختراع",
+            icon: Receipt,
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    categoryName: "إدارة النظام والعملاء",
+    items: [
+      {
+        to: "/admin_dashboard/users",
+        label: "المستخدمين والصلاحيات",
+        icon: Users,
+      },
+      {
+        to: "/admin_dashboard/complaints",
+        label: "إدارة الشكاوى",
+        icon: MessageSquareWarning,
+      },
+    ],
+  },
+];
 
   useEffect(() => {
     navigationSections.forEach((section) => {
@@ -199,7 +213,7 @@ export default function AdminLayout() {
       }}
     >
       <div dir="rtl" className="min-h-screen bg-slate-100 flex flex-col lg:flex-row text-slate-800 font-sans">
-        <header className="lg:hidden bg-slate-900 text-white px-4 py-3 flex items-center justify-between shadow-md border-b border-slate-800 sticky top-0 z-40">
+        <header className="lg:hidden bg-slate-900 text-white px-4 py-3 flex items-center justify-between -md border-b border-slate-800 sticky top-0 z-40">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm">
               LS
@@ -225,7 +239,7 @@ export default function AdminLayout() {
         )}
 
         <aside
-          className={`fixed lg:sticky top-0 bottom-0 right-0 h-screen w-64 bg-slate-900 text-slate-200 flex flex-col justify-between shrink-0 shadow-2xl lg:shadow-xl border-l border-slate-800 z-50 transition-transform duration-300 ease-in-out ${
+          className={`fixed lg:sticky top-0 bottom-0 right-0 h-screen w-64 bg-slate-900 text-slate-200 flex flex-col justify-between shrink-0 -2xl lg:-xl border-l border-slate-800 z-50 transition-transform duration-300 ease-in-out ${
             sidebarOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
           }`}
         >
@@ -236,7 +250,7 @@ export default function AdminLayout() {
                   src="/logo.jpeg"
                   alt="Logo"
                   onClick={() => navigate("/")}
-                  className="w-10 h-10 rounded-xl object-contain shadow-md shadow-blue-600/30 cursor-pointer hover:opacity-90 transition-opacity"
+                  className="w-10 h-10 rounded-xl object-contain -md -blue-600/30 cursor-pointer hover:opacity-90 transition-opacity"
                 />
                 <div>
                   <h2
@@ -309,7 +323,7 @@ export default function AdminLayout() {
                                     className={({ isActive }) =>
                                       `flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
                                         isActive
-                                          ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30 font-bold"
+                                          ? "bg-blue-600 text-white -sm -blue-600/30 font-bold"
                                           : "text-slate-400 hover:bg-slate-800/70 hover:text-white"
                                       }`
                                     }
@@ -333,7 +347,7 @@ export default function AdminLayout() {
                         className={({ isActive }) =>
                           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                             isActive
-                              ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 font-bold"
+                              ? "bg-blue-600 text-white -md -blue-600/30 font-bold"
                               : "text-slate-400 hover:bg-slate-800 hover:text-white"
                           }`
                         }

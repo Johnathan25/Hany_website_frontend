@@ -47,7 +47,7 @@ export default function AdminDashboard() {
         {metrics.map((m, idx) => {
           const Icon = m.icon;
           return (
-            <div key={idx} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+            <div key={idx} className="bg-white p-5 rounded-2xl border border-slate-200 -xs flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold text-slate-500 mb-1">{m.title}</p>
                 <h3 className="text-2xl font-black text-slate-900">{m.value}</h3>

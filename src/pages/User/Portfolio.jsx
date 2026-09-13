@@ -213,7 +213,7 @@ export default function Portfolio() {
                 onClick={() => setSelectedCategory(cat.key)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   selectedCategory === cat.key
-                    ? "bg-slate-900 text-white shadow-xs"
+                    ? "bg-slate-900 text-white -xs"
                     : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
                 }`}
               >
@@ -262,7 +262,7 @@ export default function Portfolio() {
               return (
                 <div
                   key={project._id}
-                  className="bg-white border border-slate-200 hover:border-blue-300 rounded-3xl overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group"
+                  className="bg-white border border-slate-200 hover:border-blue-300 rounded-3xl overflow-hidden -xs hover:-lg transition-all flex flex-col justify-between group"
                 >
                   <div>
                     {/* Video Thumbnail with YouTube Play Overlay */}
@@ -280,7 +280,7 @@ export default function Portfolio() {
 
                       {/* Play Button */}
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-13 h-13 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-xl group-hover:bg-red-600 group-hover:scale-115 transition-all">
+                        <div className="w-13 h-13 rounded-full bg-red-600/90 text-white flex items-center justify-center -xl group-hover:bg-red-600 group-hover:scale-115 transition-all">
                           <Play className="w-5 h-5 fill-white rtl:translate-x-0.5 ltr:translate-x-0.5" />
                         </div>
                       </div>
@@ -334,7 +334,7 @@ export default function Portfolio() {
       {/* Video Modal with Embedded YouTube iFrame */}
       {activeProject && (
         <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-slate-100 max-h-[94vh] flex flex-col">
+          <div className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden -2xl border border-slate-100 max-h-[94vh] flex flex-col">
             {/* Modal Header */}
             <div className="p-4 px-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
               <div>
@@ -356,7 +356,7 @@ export default function Portfolio() {
 
             {/* Modal Body: Embedded Player */}
             <div className="p-6 space-y-5 overflow-y-auto">
-              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-lg">
+              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black -lg">
                 <iframe
                   src={getYouTubeEmbedUrl(activeProject.youtubeVideoUrl)}
                   title={isAr ? activeProject.titleAr : activeProject.titleEn}

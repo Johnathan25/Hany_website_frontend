@@ -145,7 +145,7 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-5 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-2xl font-bold text-xl shadow-lg shadow-blue-100 hover:shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full py-5 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-2xl font-bold text-xl -lg -blue-100 hover:-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? "جارٍ التحديث..." : "تحديث كلمة المرور"}
               </button>

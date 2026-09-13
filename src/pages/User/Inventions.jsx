@@ -164,7 +164,7 @@ export default function Inventions() {
                   ? "ابحث بالعنوان أو الوصف أو المواصفات..."
                   : "Search innovations and structural patents..."
               }
-              className="w-full pl-10 pr-10 py-3 bg-white border border-slate-200 rounded-2xl text-xs sm:text-sm shadow-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+              className="w-full pl-10 pr-10 py-3 bg-white border border-slate-200 rounded-2xl text-xs sm:text-sm -xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
             />
             {search && (
               <button
@@ -211,7 +211,7 @@ export default function Inventions() {
               return (
                 <div
                   key={item._id}
-                  className="bg-white border border-slate-200 hover:border-blue-300 rounded-3xl overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group"
+                  className="bg-white border border-slate-200 hover:border-blue-300 rounded-3xl overflow-hidden -xs hover:-lg transition-all flex flex-col justify-between group"
                 >
                   <div>
                     {/* صورة المبنى الحديث الفخم في قمة الكارت */}
@@ -226,14 +226,14 @@ export default function Inventions() {
 
                       {/* شارة التوثيق فوق الصورة */}
                       <div className="absolute top-3 right-3">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-mono text-white bg-slate-900/80 backdrop-blur-xs px-2.5 py-1 rounded-full border border-white/20 shadow-xs">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-mono text-white bg-slate-900/80 backdrop-blur-xs px-2.5 py-1 rounded-full border border-white/20 -xs">
                           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                           {isAr ? "براءة موثقة" : "Registered IP"}
                         </span>
                       </div>
 
                       {/* كود الابتكار فوق الصورة */}
-                      <div className="absolute bottom-3 right-3 text-white text-xs font-mono font-medium drop-shadow-md">
+                      <div className="absolute bottom-3 right-3 text-white text-xs font-mono font-medium drop--md">
                         #{item._id?.slice(-6)?.toUpperCase()}
                       </div>
                     </div>
@@ -307,7 +307,7 @@ export default function Inventions() {
               type="button"
               disabled={!pagination.hasPreviousPage}
               onClick={() => fetchClientInventions(pagination.currentPage - 1)}
-              className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none text-slate-600 cursor-pointer shadow-xs"
+              className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none text-slate-600 cursor-pointer -xs"
             >
               <ChevronRight className="w-4 h-4 rtl:rotate-0 ltr:rotate-180" />
             </button>
@@ -320,7 +320,7 @@ export default function Inventions() {
               type="button"
               disabled={!pagination.hasNextPage}
               onClick={() => fetchClientInventions(pagination.currentPage + 1)}
-              className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none text-slate-600 cursor-pointer shadow-xs"
+              className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none text-slate-600 cursor-pointer -xs"
             >
               <ChevronLeft className="w-4 h-4 rtl:rotate-0 ltr:rotate-180" />
             </button>
@@ -331,7 +331,7 @@ export default function Inventions() {
       {/* النافذة المنبثقة للتفاصيل الكاملة */}
       {selectedInvention && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-100 max-h-[92vh] flex flex-col">
+          <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden -2xl border border-slate-100 max-h-[92vh] flex flex-col">
             {/* صورة المبنى في أعلى الـ Modal مع زر الإغلاق */}
             <div className="relative h-44 w-full shrink-0 bg-slate-900">
               <img
@@ -412,7 +412,7 @@ export default function Inventions() {
           return (
             <div
               key={opt._id || idx}
-              className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all space-y-3 shadow-xs flex flex-col justify-between"
+              className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all space-y-3 -xs flex flex-col justify-between"
             >
               <div className="space-y-3">
                 {/* Top row: Pricing Model Name & Duration Tag */}

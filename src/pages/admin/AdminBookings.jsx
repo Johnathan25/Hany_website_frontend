@@ -159,7 +159,7 @@ export default function AdminBookings() {
         switch (status) {
             case 'paid':
                 return (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 -xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         {isAr ? 'تم السداد بالكامل' : 'Paid & Settled'}
                     </span>
@@ -246,7 +246,7 @@ export default function AdminBookings() {
     return (
         <div className="space-y-6">
             {/* Header & Mission Statement */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/80 -xs">
                 <div>
                     <div className="flex items-center gap-2.5">
                         <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
@@ -287,14 +287,14 @@ export default function AdminBookings() {
 
             {/* Notifications */}
             {successMessage && (
-                <div className="p-4 bg-emerald-50/90 border border-emerald-200/80 text-emerald-900 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 shadow-xs animate-in fade-in">
+                <div className="p-4 bg-emerald-50/90 border border-emerald-200/80 text-emerald-900 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 -xs animate-in fade-in">
                     <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
                     <span className="font-medium">{successMessage}</span>
                 </div>
             )}
 
             {error && (
-                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 shadow-xs">
+                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm rounded-2xl flex items-center gap-2.5 -xs">
                     <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
                     <span>{error}</span>
                 </div>
@@ -313,7 +313,7 @@ export default function AdminBookings() {
                                 ? 'ابحث باسم العميل، الهاتف، رقم الطلب، أو البند...'
                                 : 'Search by client, phone number, order ID, or service...'
                         }
-                        className="w-full pl-9 pr-10 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm focus:ring-2 focus:ring-blue-600 outline-none shadow-xs transition-all"
+                        className="w-full pl-9 pr-10 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm focus:ring-2 focus:ring-blue-600 outline-none -xs transition-all"
                     />
                     {searchQuery && (
                         <button
@@ -330,7 +330,7 @@ export default function AdminBookings() {
                     <select
                         value={typeFilter}
                         onChange={(e) => setTypeFilter(e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-600 shadow-xs cursor-pointer"
+                        className="w-full px-4 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-600 -xs cursor-pointer"
                     >
                         <option value="all">{isAr ? 'كافة أنواع الخدمات' : 'All Categories'}</option>
                         <option value="inspection">{isAr ? 'طلبات المعاينة الميدانية' : 'Inspections'}</option>
@@ -341,7 +341,7 @@ export default function AdminBookings() {
             </div>
 
             {/* Table / Content Area */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-3xl border border-slate-200/90 -xs overflow-hidden">
                 {loading ? (
                     <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
                         <div className="p-3 bg-blue-50 rounded-2xl">
@@ -353,7 +353,7 @@ export default function AdminBookings() {
                     </div>
                 ) : filteredRequests.length === 0 ? (
                     <div className="py-20 flex flex-col items-center justify-center text-center px-4">
-                        <div className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-400 mb-3 shadow-inner">
+                        <div className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-400 mb-3 -inner">
                             <Inbox className="w-7 h-7" />
                         </div>
                         <h3 className="text-base font-bold text-slate-800">
@@ -491,7 +491,7 @@ export default function AdminBookings() {
                                                 ) : (
                                                     <button
                                                         onClick={() => handleOpenDeleteModal(req)}
-                                                        className="p-2 text-rose-500 hover:text-white hover:bg-rose-600 rounded-xl transition-all border border-rose-100 hover:border-rose-600 cursor-pointer shadow-2xs"
+                                                        className="p-2 text-rose-500 hover:text-white hover:bg-rose-600 rounded-xl transition-all border border-rose-100 hover:border-rose-600 cursor-pointer -2xs"
                                                         title={isAr ? 'إلغاء وحذف الحجز' : 'Cancel booking'}
                                                     >
                                                         <Trash2 className="w-4 h-4" />
@@ -519,7 +519,7 @@ export default function AdminBookings() {
                             <button
                                 disabled={!pagination.hasPrevPage}
                                 onClick={() => fetchRequests(pagination.currentPage - 1)}
-                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shadow-2xs"
+                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors -2xs"
                                 title={isAr ? 'الصفحة السابقة' : 'Previous'}
                             >
                                 <ChevronRight className="w-4 h-4" />
@@ -527,7 +527,7 @@ export default function AdminBookings() {
                             <button
                                 disabled={!pagination.hasNextPage}
                                 onClick={() => fetchRequests(pagination.currentPage + 1)}
-                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shadow-2xs"
+                                className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors -2xs"
                                 title={isAr ? 'الصفحة التالية' : 'Next'}
                             >
                                 <ChevronLeft className="w-4 h-4" />
@@ -540,7 +540,7 @@ export default function AdminBookings() {
             {/* Humanized Delete Modal */}
             {deleteModalOpen && bookingToDelete && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
-                    <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
+                    <div className="w-full max-w-md bg-white rounded-3xl p-6 -2xl border border-slate-100 relative animate-in zoom-in-95 duration-150">
                         {/* Modal Header */}
                         <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                             <div className="flex items-center gap-2.5 text-rose-600">
@@ -623,7 +623,7 @@ export default function AdminBookings() {
                                     type="button"
                                     onClick={handleConfirmDelete}
                                     disabled={deleting}
-                                    className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                                    className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white rounded-xl text-xs font-bold -xs transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                                 >
                                     {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                                     <span>{isAr ? 'نعم، قم بالحذف' : 'Confirm Cancellation'}</span>

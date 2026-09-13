@@ -112,7 +112,7 @@ export default function Services() {
                                 <button
                                     type="button"
                                     onClick={(e) => handleServiceAction(srv.id, e)}
-                                    className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer"
+                                    className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg -md hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer"
                                 >
                                     {isAr ? 'احجز الآن' : 'Book Now'}
                                 </button>
@@ -126,7 +126,7 @@ export default function Services() {
             {/* نافذة التنبيه لطلب تسجيل الدخول */}
             {showAuthModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center -2xl border border-slate-100 animate-in zoom-in-95 duration-200">
 
                         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-600 ring-6 ring-amber-50/60">
                             <AlertCircle className="h-7 w-7" />
@@ -145,7 +145,7 @@ export default function Services() {
                             <button
                                 type="button"
                                 onClick={handleConfirmLogin}
-                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer"
+                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm -sm transition-all cursor-pointer"
                             >
                                 <LogIn className="w-4 h-4" />
                                 <span>{isAr ? 'تسجيل الدخول' : 'Login Now'}</span>

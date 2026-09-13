@@ -203,7 +203,7 @@ function Login() {
               disabled={loading}
               type="button"
               onClick={LoginProcess}
-              className="w-full py-5 mt-4 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] shadow-xl shadow-blue-100 transition-all flex items-center justify-center gap-4 active:scale-[0.98]"
+              className="w-full py-5 mt-4 rounded-2xl text-white font-bold text-xl bg-gradient-to-l from-blue-700 to-blue-500 hover:from-[#0369a1] hover:to-[#0ea5e9] -xl -blue-100 transition-all flex items-center justify-center gap-4 active:scale-[0.98]"
             >
               {loading ? "جارٍ الإرسال..." : "تسجيل الدخول"}
 

@@ -38,7 +38,7 @@ export default function WhatsAppButton() {
     //   className="no-print fixed bottom-24 right-8 z-50 
     //              bg-[#25D366] text-white 
     //              p-4 rounded-[20px] 
-    //              shadow-2xl shadow-[#25d366]/40 
+    //              -2xl -[#25d366]/40 
     //              hover:bg-[#20ba5a] hover:-translate-y-2 
     //              hover:rotate-[10deg]
     //              active:scale-90 

@@ -29,6 +29,8 @@ import AdminServices from './pages/admin/AdminServices';
 import AdminInventionsManager from './pages/admin/InventionsManager';
 import InventionsSecurityManager from "./pages/admin/InventionsSecurityManager";
 import CreateInvoicePayment from "./pages/admin/CreateInvoicePayment";
+import InventionsInvoicesRecords from "./pages/admin/InventionsInvoicesRecords";
+import Profile from "./pages/admin/profile";
 // =====================
 // Auth (Lazy optional)
 // =====================
@@ -61,12 +63,12 @@ function AppRoutes() {
           <Route path="/services" element={<Services />} />
           {/* المسار الجديد لبراءات الاختراع والحلول */}
           <Route path="/inventions" element={<Inventions />} />
-          <Route path="/Invention" element={<Inventions />} /> {/* يدعم أيضاً حرف I كبير */}
+
+          <Route path="/Invention" element={<ProtectedRoute><Inventions /> </ProtectedRoute>} /> {/* يدعم أيضاً حرف I كبير */}
           <Route path="/inventions/request" element={<InventionRequest />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/booking-service" element={
-
             <ProtectedRoute>
               <BookingService />
             </ProtectedRoute>} />
@@ -97,11 +99,13 @@ function AppRoutes() {
           <Route path="items-pricing" element={<AdminItemsPricing />} />
           {/* Child page: "/admin_dashboard/complaints" */}
           <Route path="complaints" element={<AdminComplaints />} />
-
+          <Route path="profile" element={<Profile />} />
           <Route path="services" element={<AdminServices />} />
           <Route path="InventionsManager" element={<AdminInventionsManager />} />
           <Route path="inventions-security" element={<InventionsSecurityManager />} />
           <Route path="create-invoice" element={<CreateInvoicePayment />} />
+          <Route path="inventions-invoices-records" element={<InventionsInvoicesRecords />} />
+
           {/* Child page: "/admin_dashboard/bookings" */}
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="users" element={<AdminUsers />} />
