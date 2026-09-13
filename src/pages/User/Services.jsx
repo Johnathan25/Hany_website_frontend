@@ -54,7 +54,7 @@ export default function Services() {
             try {
                 const results = await Promise.allSettled(
                     services.map((srv) =>
-                        axios.get(`/serviceMangement/getPricingByName/${srv.id}`)
+                        api.get(`/serviceMangement/getPricingByName/${srv.id}`)
                     )
                 );
 
