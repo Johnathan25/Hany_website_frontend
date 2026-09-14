@@ -67,6 +67,9 @@ export default function MyOrders() {
   const [selectedInventionRequest, setSelectedInventionRequest] = useState(null);
   const [modalLoading, setModalLoading] = useState(false);
 
+  // Modal State for Service Description
+  const [selectedServiceDesc, setSelectedServiceDesc] = useState(null);
+
   const [error, setError] = useState("");
 
   // ==========================================
@@ -201,7 +204,7 @@ export default function MyOrders() {
               if (activeTab === "services") fetchServices(servicesPage);
               else fetchInventions(inventionsPage);
             }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold -xs transition-colors cursor-pointer self-start sm:self-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>{isAr ? "تحديث" : "Refresh"}</span>
@@ -215,7 +218,7 @@ export default function MyOrders() {
             onClick={() => setActiveTab("services")}
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
               activeTab === "services"
-                ? "bg-slate-900 text-white -xs"
+                ? "bg-slate-900 text-white shadow-xs"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
             }`}
           >
@@ -231,7 +234,7 @@ export default function MyOrders() {
             onClick={() => setActiveTab("inventions")}
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
               activeTab === "inventions"
-                ? "bg-slate-900 text-white -xs"
+                ? "bg-slate-900 text-white shadow-xs"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
             }`}
           >
@@ -255,7 +258,7 @@ export default function MyOrders() {
         {/* ========================================================= */}
         {activeTab === "services" && (
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-slate-200 -xs overflow-hidden">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
               {servicesLoading ? (
                 <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-400">
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -285,20 +288,35 @@ export default function MyOrders() {
                     <tbody className="divide-y divide-slate-100">
                       {services.map((item) => (
                         <tr key={item._id} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="py-3.5 px-4 font-mono font-bold text-blue-600">
+                          <td className="py-3.5 px-4 font-mono font-bold text-blue-600 whitespace-nowrap">
                             {item.orderNumber}
                           </td>
                           <td className="py-3.5 px-4">
-                            <span className="font-bold text-slate-900 line-clamp-1">
-                              {item.serviceItem?.name || (isAr ? "خدمة هندسية عامة" : "Engineering Service")}
-                            </span>
-                            {item.description && (
-                              <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
-                                {item.description}
-                              </p>
-                            )}
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-slate-900 line-clamp-1">
+                                {item.serviceItem?.name || (isAr ? "خدمة هندسية عامة" : "Engineering Service")}
+                              </span>
+
+                              {/* أيقونة العين لعرض تفاصيل ووصف الخدمة */}
+                              {item.description && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setSelectedServiceDesc({
+                                      name: item.serviceItem?.name || (isAr ? "خدمة هندسية" : "Service"),
+                                      desc: item.description,
+                                      orderNumber: item.orderNumber,
+                                    })
+                                  }
+                                  className="p-1 rounded-md text-blue-600 hover:text-white hover:bg-blue-600 bg-blue-50 transition-colors cursor-pointer shrink-0"
+                                  title={isAr ? "عرض وصف وتفاصيل الطلب" : "View Description"}
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
                           </td>
-                          <td className="py-3.5 px-4 text-slate-600">
+                          <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">
                             {formatServiceType(item.requestType)}
                           </td>
                           <td className="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">
@@ -311,7 +329,7 @@ export default function MyOrders() {
                           <td className="py-3.5 px-4 text-slate-600 max-w-[150px] truncate">
                             {item.address || "---"}
                           </td>
-                          <td className="py-3.5 px-4 text-center">
+                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
                             <StatusBadge status={item.status} isAr={isAr} />
                           </td>
                         </tr>
@@ -332,7 +350,7 @@ export default function MyOrders() {
                       type="button"
                       disabled={!servicesPagination.hasPrevPage}
                       onClick={() => fetchServices(servicesPagination.currentPage - 1)}
-                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors cursor-pointer"
                     >
                       <ChevronRight className="w-4 h-4 rtl:rotate-0 ltr:rotate-180" />
                     </button>
@@ -340,7 +358,7 @@ export default function MyOrders() {
                       type="button"
                       disabled={!servicesPagination.hasNextPage}
                       onClick={() => fetchServices(servicesPagination.currentPage + 1)}
-                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4 rtl:rotate-0 ltr:rotate-180" />
                     </button>
@@ -356,7 +374,7 @@ export default function MyOrders() {
         {/* ========================================================= */}
         {activeTab === "inventions" && (
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-slate-200 -xs overflow-hidden">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
               {inventionsLoading ? (
                 <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-400">
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -385,7 +403,7 @@ export default function MyOrders() {
                     <tbody className="divide-y divide-slate-100">
                       {inventions.map((item) => (
                         <tr key={item._id} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="py-3.5 px-4 font-mono font-bold text-blue-600">
+                          <td className="py-3.5 px-4 font-mono font-bold text-blue-600 whitespace-nowrap">
                             {item.orderNumber || `#${item._id.slice(-6).toUpperCase()}`}
                           </td>
                           <td className="py-3.5 px-4">
@@ -404,10 +422,10 @@ export default function MyOrders() {
                           <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
                             {formatDate(item.createdAt)}
                           </td>
-                          <td className="py-3.5 px-4 text-center">
+                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
                             <StatusBadge status={item.status} isAr={isAr} />
                           </td>
-                          <td className="py-3.5 px-4 text-center">
+                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
                             <button
                               type="button"
                               onClick={() => handleOpenInventionDetails(item._id)}
@@ -435,7 +453,7 @@ export default function MyOrders() {
                       type="button"
                       disabled={!inventionsPagination.hasPreviousPage}
                       onClick={() => fetchInventions(inventionsPagination.currentPage - 1)}
-                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors cursor-pointer"
                     >
                       <ChevronRight className="w-4 h-4 rtl:rotate-0 ltr:rotate-180" />
                     </button>
@@ -443,7 +461,7 @@ export default function MyOrders() {
                       type="button"
                       disabled={!inventionsPagination.hasNextPage}
                       onClick={() => fetchInventions(inventionsPagination.currentPage + 1)}
-                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                      className="p-1.5 bg-white border border-slate-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4 rtl:rotate-0 ltr:rotate-180" />
                     </button>
@@ -456,11 +474,62 @@ export default function MyOrders() {
       </div>
 
       {/* ========================================================= */}
+      {/* SERVICE DESCRIPTION MODAL                                 */}
+      {/* ========================================================= */}
+      {selectedServiceDesc && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            {/* Header */}
+            <div className="p-4 sm:px-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div className="flex items-center gap-2 text-blue-600">
+                <div className="p-2 bg-blue-100/70 rounded-xl">
+                  <Eye className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">
+                    {isAr ? "تفاصيل ووصف الخدمة" : "Service Description"}
+                  </h3>
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    #{selectedServiceDesc.orderNumber} - {selectedServiceDesc.name}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedServiceDesc(null)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-white transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-6">
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed max-h-60 overflow-y-auto whitespace-pre-wrap">
+                {selectedServiceDesc.desc}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 border-t border-slate-100 flex justify-end bg-slate-50">
+              <button
+                type="button"
+                onClick={() => setSelectedServiceDesc(null)}
+                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+              >
+                {isAr ? "إغلاق" : "Close"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
       {/* INVENTION DETAILS MODAL                                   */}
       {/* ========================================================= */}
       {selectedInventionRequest && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-xl w-full overflow-hidden -2xl border border-slate-100 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl border border-slate-100 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
             {/* Header */}
             <div className="p-4 sm:px-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <div>

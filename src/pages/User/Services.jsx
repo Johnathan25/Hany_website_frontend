@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { AlertCircle, LogIn, Loader2 } from 'lucide-react';
-import axios from 'axios'; // or your configured `api` instance: import api from '../../services/api';
+import { AlertCircle, LogIn, Loader2, Sparkles } from 'lucide-react';
 import api from '../../services/api';
 
 export default function Services() {
@@ -37,16 +36,12 @@ export default function Services() {
     ];
 
     const [showAuthModal, setShowAuthModal] = useState(false);
-    const [selectedServiceId, setSelectedServiceId] = useState(null);
-
-    // حالة تخزين أسعار الخدمات وحالة التحميل
     const [prices, setPrices] = useState({});
     const [pricesLoading, setPricesLoading] = useState(true);
 
     const currency = isAr ? 'الجنيه المصري' : 'EGP';
     const isLoggedIn = Boolean(localStorage.getItem('token') || localStorage.getItem('user'));
 
-    // جلب أسعار جميع الخدمات عند فتح الصفحة
     useEffect(() => {
         let cancelled = false;
 
@@ -58,8 +53,6 @@ export default function Services() {
                         api.get(`/serviceMangement/getPricingByName/${srv.id}`)
                     )
                 );
-
-                console.log(results)
 
                 if (cancelled) return;
 
@@ -77,9 +70,7 @@ export default function Services() {
             } catch (err) {
                 console.error("Error fetching service prices:", err);
             } finally {
-                if (!cancelled) {
-                    setPricesLoading(false);
-                }
+                if (!cancelled) setPricesLoading(false);
             }
         };
 
@@ -92,29 +83,17 @@ export default function Services() {
 
     const handleServiceAction = (serviceId, e) => {
         if (e) e.stopPropagation();
-        
         if (isLoggedIn) {
             navigate(`/booking-service?service=${serviceId}`);
         } else {
-            setSelectedServiceId(serviceId);
             setShowAuthModal(true);
         }
     };
 
-    const handleConfirmLogin = () => {
-        setShowAuthModal(false);
-        navigate('/login');
-    };
-
-    const handleCancel = () => {
-        setShowAuthModal(false);
-    };
-
-    return (
-        <div className="min-h-screen bg-white font-sans" dir={isAr ? 'rtl' : 'ltr'}>
+     return (
+        <div className="min-h-screen bg-transparent font-sans" dir={isAr ? 'rtl' : 'ltr'}>
             <div className="mx-auto px-5 sm:px-8 py-16 sm:py-20">
 
-                {/* عنوان الصفحة */}
                 <div className="max-w-xl mx-auto mb-14 text-center">
                     <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
                         {isAr ? 'خدماتنا' : 'What we do'}
@@ -126,42 +105,38 @@ export default function Services() {
                     </p>
                 </div>
 
-                {/* كروت الخدمات */}
+                {/* شبكة كروت الخدمات */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {services.map((srv) => (
                         <div
                             key={srv.id}
-                            className="group text-start rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-slate-300 transition-all duration-200 flex flex-col justify-between"
+                            className="group text-start rounded-3xl overflow-hidden bg-white/95 backdrop-blur-xs border border-slate-200/90 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-slate-300/50 transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1"
                         >
                             <div>
-                                {/* الصورة */}
-                                <div className="h-64 overflow-hidden bg-slate-100">
+                                <div className="h-60 overflow-hidden bg-slate-100 relative">
                                     <img
                                         src={srv.image}
                                         alt={srv.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent opacity-60" />
                                 </div>
 
-                                {/* المحتوى */}
-                                <div className="p-6">
-                                    <h2 className="text-lg font-semibold text-slate-900">
+                                <div className="p-6 sm:p-7">
+                                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                                         {srv.title}
-                                    </h2>
-                                    <div className="w-10 h-0.5 bg-teal-500 my-3" />
-                                    <p className="text-sm text-slate-500 leading-relaxed">
+                                    </h3>
+                                    <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-teal-400 rounded-full my-3" />
+                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                         {srv.desc}
                                     </p>
                                 </div>
                             </div>
 
-                            {/* السعر وزر الحجز بجانب بعضهما */}
-                            <div className="px-6 pb-6 pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
-                                
-                                {/* عرض السعر */}
+                            <div className="px-6 pb-6 pt-3 border-t border-slate-100/90 flex items-center justify-between gap-3 bg-slate-50/70">
                                 <div className="flex flex-col">
                                     <span className="text-[11px] text-slate-400 font-medium">
-                                        {isAr ? 'السعر' : 'Price'}
+                                        {isAr ? 'تكلفة الخدمة' : 'Service Fee'}
                                     </span>
                                     {pricesLoading ? (
                                         <div className="flex items-center gap-1 text-slate-400">
@@ -169,28 +144,26 @@ export default function Services() {
                                             <span className="text-xs">...</span>
                                         </div>
                                     ) : (
-                                        <div className="flex items-baseline gap-1 font-bold text-blue-600 text-base">
+                                        <div className="flex items-baseline gap-1 font-mono font-bold text-blue-600 text-base sm:text-lg">
                                             <span>
                                                 {prices[srv.id] !== null && prices[srv.id] !== undefined
                                                     ? prices[srv.id].toLocaleString()
                                                     : '--'}
                                             </span>
-                                            <span className="text-[11px] font-medium text-slate-500">
+                                            <span className="text-[10px] font-sans font-medium text-slate-500">
                                                 {currency}
                                             </span>
                                         </div>
                                     )}
                                 </div>
 
-                                {/* زر الحجز */}
                                 <button
                                     type="button"
                                     onClick={(e) => handleServiceAction(srv.id, e)}
-                                    className="py-2.5 px-6 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-white hover:text-blue-600 border border-blue-600 transition duration-300 ease-in-out cursor-pointer whitespace-nowrap shadow-xs"
+                                    className="py-2.5 px-6 bg-slate-900 hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md"
                                 >
                                     {isAr ? 'احجز الآن' : 'Book Now'}
                                 </button>
-
                             </div>
                         </div>
                     ))}
@@ -198,29 +171,28 @@ export default function Services() {
 
             </div>
 
-            {/* نافذة التنبيه لطلب تسجيل الدخول */}
+            {/* نافذة تسجيل الدخول المنبثقة */}
             {showAuthModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 text-center shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
-
-                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-600 ring-6 ring-amber-50/60">
+                    <div className="relative w-full max-w-sm bg-white rounded-3xl p-6 text-center shadow-2xl border border-slate-100">
+                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 border border-amber-200">
                             <AlertCircle className="h-7 w-7" />
                         </div>
 
                         <h3 className="text-lg font-bold text-slate-900 mb-2">
                             {isAr ? 'تسجيل الدخول مطلوب' : 'Login Required'}
                         </h3>
-                        <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
                             {isAr
-                                ? 'يجب تسجيل الدخول أولاً لتتمكن من حجز الخدمة ومتابعة طلبك.'
+                                ? 'يجب تسجيل الدخول أولاً لتتمكن من حجز الخدمة ومتابعة طلبك مباشرة.'
                                 : 'You need to login first to book a service and proceed with your request.'}
                         </p>
 
                         <div className="flex flex-col gap-2.5">
                             <button
                                 type="button"
-                                onClick={handleConfirmLogin}
-                                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all cursor-pointer shadow-sm"
+                                onClick={() => { setShowAuthModal(false); navigate('/login'); }}
+                                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all cursor-pointer shadow-sm"
                             >
                                 <LogIn className="w-4 h-4" />
                                 <span>{isAr ? 'تسجيل الدخول' : 'Login Now'}</span>
@@ -228,13 +200,12 @@ export default function Services() {
 
                             <button
                                 type="button"
-                                onClick={handleCancel}
+                                onClick={() => setShowAuthModal(false)}
                                 className="w-full py-2.5 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
                             >
                                 {isAr ? 'إلغاء' : 'Cancel'}
                             </button>
                         </div>
-
                     </div>
                 </div>
             )}

@@ -130,7 +130,7 @@ export default function AdminInventionsManager() {
       details: item.details || "",
       pricingOptions: Array.isArray(item.pricingOptions)
         ? item.pricingOptions.map((opt) => ({
-          durationYears:opt.durationYears|| 0,
+          durationYears: opt.durationYears || 0,
           type: opt.type || "license",
           price: opt.price !== undefined ? opt.price : "",
           depositAmount:
@@ -155,43 +155,43 @@ export default function AdminInventionsManager() {
   };
 
   // Add new tier with depositAmount initialized
-const addPricingOption = () => {
-  setForm((prev) => ({
-    ...prev,
-    pricingOptions: [
-      ...prev.pricingOptions,
-      {
-        type: "license",        // or your default enum value
-        durationYears: 1,        // default to 1 or null
-        price: "",
-        depositAmount: "",
-        isActive: true,
-      },
-    ],
-  }));
-};
+  const addPricingOption = () => {
+    setForm((prev) => ({
+      ...prev,
+      pricingOptions: [
+        ...prev.pricingOptions,
+        {
+          type: "license",        // or your default enum value
+          durationYears: 1,        // default to 1 or null
+          price: "",
+          depositAmount: "",
+          isActive: true,
+        },
+      ],
+    }));
+  };
 
- const updatePricingOption = (index, field, value) => {
-  setForm((prev) => {
-    const updated = [...prev.pricingOptions];
-    
-    if (field === "type") {
-      updated[index] = {
-        ...updated[index],
-        type: value,
-        // Reset duration to null automatically when selecting full_purchase
-        durationYears: value === "full_purchase" ? null : updated[index].durationYears || 1,
-      };
-    } else {
-      updated[index] = {
-        ...updated[index],
-        [field]: value,
-      };
-    }
+  const updatePricingOption = (index, field, value) => {
+    setForm((prev) => {
+      const updated = [...prev.pricingOptions];
 
-    return { ...prev, pricingOptions: updated };
-  });
-};
+      if (field === "type") {
+        updated[index] = {
+          ...updated[index],
+          type: value,
+          // Reset duration to null automatically when selecting full_purchase
+          durationYears: value === "full_purchase" ? null : updated[index].durationYears || 1,
+        };
+      } else {
+        updated[index] = {
+          ...updated[index],
+          [field]: value,
+        };
+      }
+
+      return { ...prev, pricingOptions: updated };
+    });
+  };
 
   const removePricingOption = (index) => {
     setForm((prev) => ({
@@ -220,14 +220,14 @@ const addPricingOption = () => {
       description: form.description.trim(),
       details: form.details.trim(),
       pricingOptions: form.pricingOptions.map((opt) => ({
-       
+
         type: opt.type,
         price: opt.price !== "" ? Number(opt.price) : 0,
         depositAmount:
           opt.depositAmount !== "" && opt.depositAmount !== undefined
             ? Number(opt.depositAmount)
             : 0,
-        durationYears:opt.durationYears,
+        durationYears: opt.durationYears,
         isActive: opt.isActive !== false,
       })),
     };
@@ -431,7 +431,7 @@ const addPricingOption = () => {
                               key={idx}
                               className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] bg-slate-50 border border-slate-200 text-slate-700"
                             >
-                             
+
                               <span className="font-mono font-semibold text-slate-900">
                                 {opt.price} الجنيه المصري
                               </span>
@@ -449,8 +449,8 @@ const addPricingOption = () => {
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${item.isActive !== false
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                            : "bg-slate-100 text-slate-500 border-slate-200"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "bg-slate-100 text-slate-500 border-slate-200"
                           }`}
                       >
                         {item.isActive !== false
@@ -719,41 +719,40 @@ const addPricingOption = () => {
                                     e.target.value === "" ? "" : Number(e.target.value)
                                   )
                                 }
-                                className="w-full pl-8 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400"
+                                className="w-full pl-16 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400 placeholder:text-[10px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               />
-                              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium">
-                                الجنيه المصري
+                              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 pointer-events-none font-medium whitespace-nowrap">
+                                {isAr ? "الجنيه المصري" : "EGP"}
                               </span>
                             </div>
                           </div>
-
                           {/* Deposit */}
                           <div className="sm:col-span-3">
-                            <label className="block sm:hidden text-[11px] font-medium text-slate-500 mb-1">
-                              {isAr ? "العربون" : "Deposit"}
-                            </label>
-                            <div className="relative">
-                              <input
-                                type="number"
-                                min="0"
-                                step="any"
-                                required
-                                placeholder={isAr ? "العربون" : "Deposit"}
-                                value={opt.depositAmount ?? ""}
-                                onChange={(e) =>
-                                  updatePricingOption(
-                                    idx,
-                                    "depositAmount",
-                                    e.target.value === "" ? "" : Number(e.target.value)
-                                  )
-                                }
-                                className="w-full pl-8 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400"
-                              />
-                              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium">
-                                الجنيه المصري
-                              </span>
-                            </div>
-                          </div>
+  <label className="block sm:hidden text-[11px] font-medium text-slate-500 mb-1">
+    {isAr ? "العربون" : "Deposit"}
+  </label>
+  <div className="relative">
+    <input
+      type="number"
+      min="0"
+      step="any"
+      required
+      placeholder={isAr ? "العربون" : "Deposit"}
+      value={opt.depositAmount ?? ""}
+      onChange={(e) =>
+        updatePricingOption(
+          idx,
+          "depositAmount",
+          e.target.value === "" ? "" : Number(e.target.value)
+        )
+      }
+      className="w-full pl-20 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400 placeholder:text-[10px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+    />
+    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium whitespace-nowrap">
+      الجنيه المصري
+    </span>
+  </div>
+</div>
 
                           {/* Delete Button */}
                           <div className="sm:col-span-1 flex justify-center items-center">
