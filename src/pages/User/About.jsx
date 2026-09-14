@@ -70,10 +70,10 @@ export default function About() {
           
           {/* عنوان القسم في المنتصف */}
           <div className="text-center max-w-xl mx-auto mt-2 mb-14 sm:mb-18 space-y-3 relative z-10">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight">
+            <h2 className="text-5xl sm:text-5xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight">
               {isAr ? 'أثرنا ورؤيتنا المعمارية' : 'Our Impact & Vision'}
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-600 text-m sm:text-base leading-relaxed">
               {isAr
                 ? 'نبني الثقة ونضمن سلامة الاستثمار العقاري من خلال حلول هندسية متقدمة وتدقيق فني وقانوني موثوق.'
                 : 'Securing real estate assets through high-grade engineering diligence.'}

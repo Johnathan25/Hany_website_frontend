@@ -95,10 +95,10 @@ export default function Complaints() {
         {/* رأس الصفحة */}
         <div className="text-center space-y-2">
         
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-5xl font-black text-slate-900 tracking-tight">
             {isAr ? "تقديم شكوى أو مقترح" : "Submit a Complaint / Feedback"}
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
+          <p className="text-xs sm:text-m text-slate-500 max-w-lg mx-auto leading-relaxed">
             {isAr
               ? "نحرص دائماً على تقديم أعلى جودة ممكنة. إذا واجهتك أي مشكلة أو كان لديك مقترح، يرجى إرسال التفاصيل لنقوم بدراستها مباشرة."
               : "We strive to deliver the highest standard of service. Let us know your issue or suggestion and we will review it immediately."}

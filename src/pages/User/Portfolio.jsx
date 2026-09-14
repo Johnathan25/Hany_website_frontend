@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import {
-  Briefcase,
-  Layers,
   MapPin,
   X,
   Search,
@@ -10,9 +8,11 @@ import {
   Play,
   Video,
   Wrench,
+  Sparkles,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 
-// Helper function to extract YouTube video ID from standard or shorts URLs
 const getYouTubeVideoId = (url) => {
   if (!url) return null;
   const match = url.match(
@@ -21,7 +21,6 @@ const getYouTubeVideoId = (url) => {
   return match && match[1] ? match[1] : null;
 };
 
-// Helper function to generate YouTube thumbnail
 const getYouTubeThumbnail = (url) => {
   const id = getYouTubeVideoId(url);
   return id
@@ -29,7 +28,6 @@ const getYouTubeThumbnail = (url) => {
     : "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80";
 };
 
-// Helper function to convert any YouTube URL (including Shorts) to embed URL
 const getYouTubeEmbedUrl = (url) => {
   const id = getYouTubeVideoId(url);
   return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : url;
@@ -81,7 +79,6 @@ const PORTFOLIO_PROJECTS = [
     descriptionEn:
       "Turnkey interior finishing and architectural modern decoration execution for an upscale apartment in Zamalek.",
   },
-  
   {
     _id: "p5",
     titleAr: "تشطيب ريسبشن مع مطبخ أمريكاني مفتوح",
@@ -127,7 +124,6 @@ const PORTFOLIO_PROJECTS = [
     descriptionEn:
       "Comprehensive luxury finishing and MEP implementation for a high-end duplex apartment in the Fifth Settlement.",
   },
-  // الرابط الجديد الأول
   {
     _id: "p8",
     titleAr: "أعمال تنفيذ وتشطيبات داخلية ومعمارية متطورة",
@@ -143,7 +139,6 @@ const PORTFOLIO_PROJECTS = [
     descriptionEn:
       "Field documentation demonstrating advanced interior craftsmanship, materials installation, and finishing details.",
   },
-  // الرابط الجديد الثاني
   {
     _id: "p9",
     titleAr: "تنفيذ حلول هندسية وتجهيزات كهروميكانيكية متخصصة",
@@ -163,6 +158,7 @@ const PORTFOLIO_PROJECTS = [
 
 export default function Portfolio() {
   const { isAr } = useLanguage();
+  const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
 
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
@@ -170,6 +166,15 @@ export default function Portfolio() {
 
   const categories = [
     { key: "all", labelAr: "جميع الأعمال", labelEn: "All Works" },
+    { key: "finishing", labelAr: "تشطيبات وديكور", labelEn: "Finishing" },
+    { key: "electrical", labelAr: "طاقة ومولدات", labelEn: "Generators" },
+    { key: "fire_safety", labelAr: "أنظمة حريق", labelEn: "Fire Safety" },
+  ];
+
+  const staggeredOffsets = [
+    "lg:translate-y-0",
+    "lg:translate-y-10",
+    "lg:translate-y-20",
   ];
 
   const filteredProjects = useMemo(() => {
@@ -187,19 +192,24 @@ export default function Portfolio() {
   return (
     <div
       dir={isAr ? "rtl" : "ltr"}
-      className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans"
+      className="relative w-full bg-gradient-to-b from-slate-50/70 via-white to-slate-50/50 pt-12 sm:pt-16 font-sans overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto space-y-10">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10 space-y-12">
         {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-         
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            {isAr ? "سجل المشاريع والتنفيذ" : "Projects & Execution Records"}
+        <div className="max-w-2xl mx-auto text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{isAr ? "سجل الإنجاز والتنفيذ" : "Portfolio & Field Work"}</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+            {isAr ? "معرض الأعمال والمشاريع" : "Our Projects Gallery"}
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
             {isAr
-              ? "استعرض توثيقاً بالفيديو لأحدث مشاريعنا في أعمال التشطيبات المعمارية، وربط المولدات، وصيانة أنظمة إطفاء الحريق."
-              : "Watch real project demonstrations covering architectural interior finishing, generator synchronization, and fire pump maintenance."}
+              ? "توثيق حي لأحدث مشاريعنا المنجزة في أعمال التشطيبات الراقية، التجهيزات الكهروميكانيكية، وصيانة شبكات إطفاء الحريق."
+              : "Field documentation of executed luxury interior designs, MEP setups, and specialized firefighting infrastructure."}
           </p>
         </div>
 
@@ -213,7 +223,7 @@ export default function Portfolio() {
                 onClick={() => setSelectedCategory(cat.key)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   selectedCategory === cat.key
-                    ? "bg-slate-900 text-white -xs"
+                    ? "bg-slate-900 text-white shadow-xs"
                     : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
                 }`}
               >
@@ -222,20 +232,20 @@ export default function Portfolio() {
             ))}
           </div>
 
-          <div className="relative w-full sm:w-72">
+          <div className="relative w-full sm:w-80">
             <Search className="w-4 h-4 absolute top-1/2 -translate-y-1/2 rtl:right-3.5 ltr:left-3.5 text-slate-400 pointer-events-none" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={isAr ? "ابحث عن مشروع..." : "Search project..."}
-              className="w-full rtl:pr-10 ltr:pl-10 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+              placeholder={isAr ? "ابحث عن مشروع..." : "Search projects..."}
+              className="w-full rtl:pr-10 ltr:pl-10 px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-xs"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch("")}
-                className="absolute top-1/2 -translate-y-1/2 rtl:left-3 ltr:right-3 text-slate-400 hover:text-slate-600"
+                className="absolute top-1/2 -translate-y-1/2 rtl:left-3 ltr:right-3 text-slate-400 hover:text-slate-600 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -243,7 +253,7 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Projects Grid */}
+        {/* Staggered Ladder Grid */}
         {filteredProjects.length === 0 ? (
           <div className="py-20 text-center bg-white rounded-3xl border border-dashed border-slate-200 p-8 max-w-md mx-auto">
             <Building2 className="w-10 h-10 text-slate-300 mx-auto mb-2" />
@@ -252,77 +262,86 @@ export default function Portfolio() {
             </h3>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 pb-28 lg:pb-36 items-start">
+            {filteredProjects.map((project, index) => {
               const title = isAr ? project.titleAr : project.titleEn;
               const desc = isAr ? project.descriptionAr : project.descriptionEn;
               const location = isAr ? project.locationAr : project.locationEn;
+              const categoryName = isAr ? project.categoryAr : project.categoryEn;
               const thumbnailUrl = getYouTubeThumbnail(project.youtubeVideoUrl);
 
               return (
                 <div
                   key={project._id}
-                  className="bg-white border border-slate-200 hover:border-blue-300 rounded-3xl overflow-hidden -xs hover:-lg transition-all flex flex-col justify-between group"
+                  className={`group relative flex flex-col transition-all duration-500 ease-out 
+                  `}
                 >
-                  <div>
-                    {/* Video Thumbnail with YouTube Play Overlay */}
-                    <div
-                      className="relative h-52 w-full overflow-hidden bg-slate-900 cursor-pointer"
-                      onClick={() => setActiveProject(project)}
-                    >
-                      <img
-                        src={thumbnailUrl}
-                        alt={title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent" />
+                  {/* Cover Image */}
+                  <div
+                    onClick={() => setActiveProject(project)}
+                    className="relative w-full h-64 sm:h-72 lg:h-80 rounded-3xl overflow-hidden shadow-lg group-hover:shadow-2xl transition-all duration-500 bg-slate-900 cursor-pointer"
+                  >
+                    <img
+                      src={thumbnailUrl}
+                      alt={title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90"
+                      loading="lazy"
+                    />
 
-                      {/* Play Button */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-13 h-13 rounded-full bg-red-600/90 text-white flex items-center justify-center -xl group-hover:bg-red-600 group-hover:scale-115 transition-all">
-                          <Play className="w-5 h-5 fill-white rtl:translate-x-0.5 ltr:translate-x-0.5" />
-                        </div>
-                      </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/15 to-transparent opacity-85 group-hover:opacity-70 transition-opacity" />
 
-                    
+                    {/* Category Badge */}
+                    <div className="absolute top-4 rtl:right-4 ltr:left-4 z-10">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/70 backdrop-blur-md text-white text-[11px] font-medium border border-white/10 shadow-xs">
+                        <Wrench className="w-3 h-3 text-blue-400" />
+                        <span>{categoryName}</span>
+                      </span>
                     </div>
 
-                    {/* Card Content */}
-                    <div className="p-6 space-y-3">
-                      <h3
-                        className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 cursor-pointer"
-                        onClick={() => setActiveProject(project)}
-                      >
-                        {title}
-                      </h3>
-                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                        {desc}
-                      </p>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span className="truncate max-w-[150px]">{location}</span>
-                        </div>
-                        <span className="text-[10px] text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-1">
-                          <Wrench className="w-3 h-3" />
-                          {isAr ? "تنفيذ معتمد" : "Verified Work"}
-                        </span>
+                    {/* Centered Play Button */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-13 h-13 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-xl group-hover:bg-red-600 group-hover:scale-115 transition-all">
+                        <Play className="w-5 h-5 fill-white rtl:translate-x-0.5 ltr:translate-x-0.5" />
                       </div>
                     </div>
                   </div>
 
-                  {/* Button to open Modal Player */}
-                  <div className="p-6 pt-0">
-                    <button
-                      type="button"
-                      onClick={() => setActiveProject(project)}
-                      className="w-full py-2.5 px-4 bg-slate-50 hover:bg-red-600 text-slate-700 hover:text-white border border-slate-200 hover:border-red-600 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                    >
-                      <Video className="w-4 h-4" />
-                      <span>{isAr ? "مشاهدة الفيديو الميداني" : "Watch Field Video"}</span>
-                    </button>
+                  {/* Overlapping Floating Info Card */}
+                  <div className="relative -mt-16 sm:-mt-20 mx-4 sm:mx-5 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-xl border border-slate-100 group-hover:border-blue-500/40 group-hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between space-y-4">
+                    <div className="space-y-2.5 text-start">
+                      <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
+                        <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                        <span className="truncate">{location}</span>
+                      </div>
+
+                      <h3
+                        onClick={() => setActiveProject(project)}
+                        className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-1 cursor-pointer"
+                      >
+                        {title}
+                      </h3>
+
+                      <div className="w-full h-0.5 bg-blue-500 to-transparent rounded-full" />
+
+                      <p className="text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-2">
+                        {desc}
+                      </p>
+                    </div>
+
+                    {/* Action Button */}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                      
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveProject(project)}
+                        className="inline-flex items-center gap-1.5 py-2.5 px-4 sm:px-5 bg-slate-900 hover:bg-red-600 active:bg-red-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all duration-200 cursor-pointer group-hover:shadow-md active:scale-95"
+                      >
+                        <Video className="w-3.5 h-3.5" />
+                        <span>{isAr ? "مشاهدة الفيديو" : "Watch Video"}</span>
+                        <ArrowIcon className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -331,11 +350,10 @@ export default function Portfolio() {
         )}
       </div>
 
-      {/* Video Modal with Embedded YouTube iFrame */}
+      {/* Video Modal Player */}
       {activeProject && (
         <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden -2xl border border-slate-100 max-h-[94vh] flex flex-col">
-            {/* Modal Header */}
+          <div className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-slate-100 max-h-[94vh] flex flex-col">
             <div className="p-4 px-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
               <div>
                 <span className="text-[11px] font-semibold text-blue-600 block">
@@ -354,9 +372,8 @@ export default function Portfolio() {
               </button>
             </div>
 
-            {/* Modal Body: Embedded Player */}
             <div className="p-6 space-y-5 overflow-y-auto">
-              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black -lg">
+              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-lg">
                 <iframe
                   src={getYouTubeEmbedUrl(activeProject.youtubeVideoUrl)}
                   title={isAr ? activeProject.titleAr : activeProject.titleEn}
@@ -366,14 +383,12 @@ export default function Portfolio() {
                 />
               </div>
 
-              {/* Location Badge */}
               <div className="flex items-center gap-2 text-xs text-slate-500 pb-2 border-b border-slate-100">
                 <MapPin className="w-4 h-4 text-blue-600" />
                 <span>{isAr ? activeProject.locationAr : activeProject.locationEn}</span>
               </div>
 
-              {/* Description */}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 text-start">
                 <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                   {isAr ? "تفاصيل تنفيذ المشروع" : "Project Execution Details"}
                 </h4>
@@ -383,7 +398,6 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="p-4 border-t border-slate-100 flex items-center justify-end bg-slate-50/70">
               <button
                 type="button"

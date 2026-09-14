@@ -147,11 +147,11 @@ export default function Services() {
                 <div className="max-w-2xl mx-auto mt-2 mb-20 sm:mb-28 text-center space-y-3 relative">
                    
 
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                    <h2 className="text-5xl sm:text-5xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                         {isAr ? 'خدماتنا' : 'What We Do'}
                     </h2>
 
-                    <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+                    <p className="text-slate-600 text-m sm:text-base leading-relaxed max-w-xl mx-auto">
                         {isAr
                             ? 'من قرار الشراء إلى الصيانة، فريقنا الهندسي والقانوني معاك في كل خطوة.'
                             : 'From acquisition decisions to routine diagnostics, our certified team secures every step.'}
