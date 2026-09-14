@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { AlertCircle, LogIn, Loader2, Sparkles } from 'lucide-react';
 import api from '../../services/api';
+import Image3 from '../../../public/image3.jpeg';
 
 export default function Services() {
     const { isAr } = useLanguage();
@@ -19,7 +20,7 @@ export default function Services() {
         },
         {
             id: 'inspection',
-            image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80',
+            image: Image3,
             title: isAr ? 'معاينة هندسية للموقع' : 'Engineering Inspection',
             desc: isAr
                 ? 'زيارة ميدانية من مهندسينا لفحص التشطيبات والتوصيلات، مع تقرير مصور مفصل عن حالة العقار.'
@@ -90,7 +91,7 @@ export default function Services() {
         }
     };
 
-     return (
+    return (
         <div className="min-h-screen bg-transparent font-sans" dir={isAr ? 'rtl' : 'ltr'}>
             <div className="mx-auto px-5 sm:px-8 py-16 sm:py-20">
 
@@ -105,68 +106,86 @@ export default function Services() {
                     </p>
                 </div>
 
-                {/* شبكة كروت الخدمات */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {services.map((srv) => (
-                        <div
-                            key={srv.id}
-                            className="group text-start rounded-3xl overflow-hidden bg-white/95 backdrop-blur-xs border border-slate-200/90 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-slate-300/50 transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1"
-                        >
-                            <div>
-                                <div className="h-60 overflow-hidden bg-slate-100 relative">
+                {/* شبكة عرض الخدمات بنظام الصفوف المتبادلة (Zig-Zag Table Layout) */}
+                <div className="flex flex-col gap-10 lg:gap-14">
+                    {services.map((srv, index) => {
+                        // تحديد ما إذا كان الصف زوجياً لعكس الترتيب
+                        const isEven = index % 2 === 1;
+
+                        return (
+                            <div
+                                key={srv.id}
+                                className="group rounded-3xl overflow-hidden bg-white/95 backdrop-blur-xs border border-slate-200/90 hover:border-blue-500/40 hover:shadow-2xl hover:shadow-slate-300/40 transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-stretch"
+                            >
+                                {/* عمود الوصف والبيانات المالية وزر الحجز */}
+                                <div
+                                    className={`lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between space-y-6 ${isEven ? "lg:order-2" : "lg:order-1"
+                                        }`}
+                                >
+                                    <div className="space-y-4 text-start">
+                                        
+
+                                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">
+                                            {srv.title}
+                                        </h3>
+
+                                        <div className="w-14 h-1 bg-gradient-to-r from-blue-600 to-teal-400 rounded-full" />
+
+                                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                                            {srv.desc}
+                                        </p>
+                                    </div>
+
+                                    {/* شريط السعر وزر الحجز */}
+                                    <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 p-4 rounded-2xl">
+                                        <div className="flex flex-col">
+                                            <span className="text-[11px] text-slate-400 font-medium">
+                                                {isAr ? "تكلفة الخدمة المقررة" : "Estimated Service Fee"}
+                                            </span>
+                                            {pricesLoading ? (
+                                                <div className="flex items-center gap-1.5 text-slate-400 mt-0.5">
+                                                    <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                                                    <span className="text-xs font-mono">...</span>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-baseline gap-1.5 font-mono font-black text-blue-600 text-lg sm:text-xl">
+                                                    <span>
+                                                        {prices[srv.id] !== null && prices[srv.id] !== undefined
+                                                            ? prices[srv.id].toLocaleString()
+                                                            : "--"}
+                                                    </span>
+                                                    <span className="text-xs font-sans font-semibold text-slate-500">
+                                                        {currency}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={(e) => handleServiceAction(srv.id, e)}
+                                            className="py-3 px-8 bg-slate-900 hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                        >
+                                            {isAr ? "احجز الآن" : "Book Now"}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* عمود الصورة */}
+                                <div
+                                    className={`lg:col-span-5 relative min-h-[260px] sm:min-h-[320px] lg:min-h-full overflow-hidden bg-slate-100 ${isEven ? "lg:order-1" : "lg:order-2"
+                                        }`}
+                                >
                                     <img
                                         src={srv.image}
                                         alt={srv.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent opacity-60" />
-                                </div>
-
-                                <div className="p-6 sm:p-7">
-                                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                                        {srv.title}
-                                    </h3>
-                                    <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-teal-400 rounded-full my-3" />
-                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                                        {srv.desc}
-                                    </p>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-60" />
                                 </div>
                             </div>
-
-                            <div className="px-6 pb-6 pt-3 border-t border-slate-100/90 flex items-center justify-between gap-3 bg-slate-50/70">
-                                <div className="flex flex-col">
-                                    <span className="text-[11px] text-slate-400 font-medium">
-                                        {isAr ? 'تكلفة الخدمة' : 'Service Fee'}
-                                    </span>
-                                    {pricesLoading ? (
-                                        <div className="flex items-center gap-1 text-slate-400">
-                                            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
-                                            <span className="text-xs">...</span>
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-baseline gap-1 font-mono font-bold text-blue-600 text-base sm:text-lg">
-                                            <span>
-                                                {prices[srv.id] !== null && prices[srv.id] !== undefined
-                                                    ? prices[srv.id].toLocaleString()
-                                                    : '--'}
-                                            </span>
-                                            <span className="text-[10px] font-sans font-medium text-slate-500">
-                                                {currency}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={(e) => handleServiceAction(srv.id, e)}
-                                    className="py-2.5 px-6 bg-slate-900 hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md"
-                                >
-                                    {isAr ? 'احجز الآن' : 'Book Now'}
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
             </div>
