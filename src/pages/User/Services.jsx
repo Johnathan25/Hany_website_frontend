@@ -185,7 +185,7 @@ export default function Services() {
                                     </h3>
 
                                     {/* الخط الفاصل اللوني */}
-                                    <div className="w-full h-0.5 bg-gradient-to-r from-teal-400 via-blue-500 to-transparent rounded-full" />
+                                    <div className="w-full h-0.5 bg-blue-500 to-transparent rounded-full" />
 
                                     <p className="text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-3">
                                         {srv.desc}

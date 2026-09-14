@@ -200,7 +200,7 @@ function Profile() {
                   {user?.userName || "مستخدم"}
                 </h1>
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  <Shield size={12} />
+                  
                   {formatRole(user?.role)}
                 </span>
               </div>

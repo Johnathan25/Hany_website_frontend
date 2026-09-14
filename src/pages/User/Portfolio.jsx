@@ -197,10 +197,7 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10 space-y-12">
         {/* Page Header */}
         <div className="max-w-2xl mx-auto text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{isAr ? "سجل الإنجاز والتنفيذ" : "Portfolio & Field Work"}</span>
-          </div>
+         
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             {isAr ? "معرض الأعمال والمشاريع" : "Our Projects Gallery"}
@@ -293,7 +290,7 @@ export default function Portfolio() {
                     {/* Category Badge */}
                     <div className="absolute top-4 rtl:right-4 ltr:left-4 z-10">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/70 backdrop-blur-md text-white text-[11px] font-medium border border-white/10 shadow-xs">
-                        <Wrench className="w-3 h-3 text-blue-400" />
+                  
                         <span>{categoryName}</span>
                       </span>
                     </div>

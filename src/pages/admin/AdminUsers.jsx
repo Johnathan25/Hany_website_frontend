@@ -484,19 +484,7 @@ export default function AdminUsers() {
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-bold text-slate-700 mb-1">
-                                    {isAr ? 'كلمة المرور' : 'Password'}{' '}
-                                    {editingAdmin ? (isAr ? '(اتركها فارغة لعدم التغيير)' : '(Leave blank to keep)') : '*'}
-                                </label>
-                                <input
-                                    type="password"
-                                    required={!editingAdmin}
-                                    value={formData.password}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none"
-                                />
-                            </div>
+                           
 
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">
