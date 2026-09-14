@@ -1,15 +1,7 @@
-import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   ArrowLeft, 
   ArrowRight, 
-  Building2, 
-  ShieldCheck, 
-  Hammer, 
-  Award,
-  Sparkles,
-  PhoneCall,
-  Compass,
 } from 'lucide-react';
 
 const Image = "/image2.jpeg";
@@ -18,40 +10,9 @@ export default function About() {
   const { isAr } = useLanguage();
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
-  const pillars = [
-    {
-      icon: Building2,
-      labelAr: 'فحص إنشائي معتمد',
-      labelEn: 'Structural Inspection',
-      subAr: 'سلامة الأساسات والخرسانات',
-      subEn: 'Certified Quality',
-      color: 'text-blue-400 bg-blue-500/10 border-blue-400/20',
-    },
-    {
-      icon: ShieldCheck,
-      labelAr: 'أمان وتدقيق قانوني',
-      labelEn: 'Legal Diligence',
-      subAr: 'مراجعة التراخيص والملكية',
-      subEn: 'Safe Ownership',
-      color: 'text-emerald-400 bg-emerald-500/10 border-emerald-400/20',
-    },
-    {
-      icon: Hammer,
-      labelAr: 'تنفيذ ومقاولات عامة',
-      labelEn: 'Turnkey Contracting',
-      subAr: 'أعلى المعايير المعمارية',
-      subEn: 'Premium Standards',
-      color: 'text-amber-400 bg-amber-500/10 border-amber-400/20',
-    },
-    {
-      icon: Award,
-      labelAr: 'توريدات وضمان شامل',
-      labelEn: 'Guaranteed Supply',
-      subAr: 'خامات معتمدة وموثوقة',
-      subEn: 'Approved Materials',
-      color: 'text-indigo-400 bg-indigo-500/10 border-indigo-400/20',
-    },
-  ];
+  
+
+  
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -59,83 +20,124 @@ export default function About() {
   };
 
   return (
-    <div 
-      className="relative w-full pt-16 sm:pt-24 font-sans select-none bg-gradient-to-b from-slate-300 via-blue-400 to-slate-400 text-white flex flex-col justify-between overflow-hidden" 
-      dir={isAr ? "rtl" : "ltr"}
-    >
-      
-      {/* هالات لونية ضبابية زرقاء تمنح عمقاً هندسياً فخماً */}
-      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-2/3 -left-40 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
+    <div className="w-full font-sans select-none bg-white text-slate-900" dir={isAr ? "rtl" : "ltr"}>
 
-      {/* 1. المحتوى الأساسي */}
-      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 space-y-16 w-full mb-16 sm:mb-20">
+
+      {/* 2. القسم الأوسط: الأسهم المعدلة + الصورة السحابية + النصوص والزر */}
+      <section className="relative w-full pt-12 sm:pt-16 pb-16 sm:pb-20 overflow-hidden">
         
-        {/* الترويسة الرئيسية */}
-        <div className="max-w-3xl mx-auto text-center space-y-3">
-          
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight">
-            {isAr ? 'أثرنا ورؤيتنا المعمارية' : 'Our Architectural Impact & Vision'}
-          </h2>
-
-          <p className="text-slate-800 text-sm sm:text-base font-medium leading-relaxed">
-            {isAr
-              ? 'نبني الثقة ونضمن سلامة الاستثمار العقاري من خلال حلول هندسية متقدمة وتدقيق فني وقانوني موثوق.'
-              : 'Securing real estate assets through high-grade engineering diligence and certified construction.'}
-          </p>
+        {/* السهم الأيسر: أعرض، أصغر حجماً، نازل من فوق مع margin-top */}
+        <div className="hidden lg:block absolute left-4 xl:left-12 top-0 mt-6 xl:mt-8 w-44 xl:w-56 pointer-events-none select-none text-blue-600 drop-shadow-sm z-20">
+          <svg viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path 
+              d="M10 20C60 15 90 75 140 55C165 45 185 65 205 92" 
+              stroke="currentColor" 
+              strokeWidth="6" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+            />
+            <path 
+              d="M185 86L207 95L202 72" 
+              stroke="currentColor" 
+              strokeWidth="6" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+            />
+          </svg>
         </div>
 
-        {/* شبكة النصوص والصورة المعمارية */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        {/* السهم الأيمن: أعرض، أصغر حجماً، نازل من فوق مع margin-top */}
+        <div className="hidden lg:block absolute right-4 xl:right-12 top-0 mt-6 xl:mt-8 w-44 xl:w-56 pointer-events-none select-none text-blue-600 drop-shadow-sm z-20">
+          <svg viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path 
+              d="M210 20C160 15 130 75 80 55C55 45 35 65 15 92" 
+              stroke="currentColor" 
+              strokeWidth="6" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+            />
+            <path 
+              d="M35 86L13 95L18 72" 
+              stroke="currentColor" 
+              strokeWidth="6" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+            />
+          </svg>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
           
-          <div className="lg:col-span-7 space-y-6">
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-950 leading-snug">
-              {isAr 
-                ? 'التزام راسخ بالنزاهة الهندسية وتأمين الأصول الاستثمارية' 
-                : 'Commitment to Engineering Integrity & Asset Security'}
-            </h3>
-
-            <p className="text-slate-800 text-sm sm:text-base font-medium leading-relaxed">
+          {/* عنوان القسم في المنتصف */}
+          <div className="text-center max-w-xl mx-auto mt-2 mb-14 sm:mb-18 space-y-3 relative z-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight">
+              {isAr ? 'أثرنا ورؤيتنا المعمارية' : 'Our Impact & Vision'}
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
               {isAr
-                ? 'تلتزم شركة Large Step بتقديم أعلى معايير النزاهة الهندسية والأمان الاستثماري عبر تلبية متطلبات المقاولات العامة وحماية أصول عملائنا العقارية بأدق تفاصيل السلامة الإنشائية.'
-                : 'Large Step follows strict engineering principles and investment diligence, responding to comprehensive contracting needs and delivering reliable asset security.'}
+                ? 'نبني الثقة ونضمن سلامة الاستثمار العقاري من خلال حلول هندسية متقدمة وتدقيق فني وقانوني موثوق.'
+                : 'Securing real estate assets through high-grade engineering diligence.'}
             </p>
-
-            <p className="text-slate-700 text-xs sm:text-sm font-normal leading-relaxed">
-              {isAr
-                ? 'نعمل جنباً إلى جنب مع كبرى المصانع والشركاء الهندسيين لتقديم خدمات المعاينات الدقيقة، الفحص القانوني المعتمد، والتوريدات الإنشائية المتكاملة لضمان استثمار آمن ومستدام.'
-                : 'Across major hubs, we collaborate with certified partners to perform on-site structural diagnostics, legal due diligence, and high-grade material supplies.'}
-            </p>
-
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={() => scrollToSection('services')}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-blue-600/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 cursor-pointer"
-              >
-                <span>{isAr ? 'استكشف ما نقدمه' : 'Explore Our Services'}</span>
-                <Arrow className="w-4 h-4" />
-              </button>
-            </div>
           </div>
 
-          <div className="lg:col-span-5 relative">
-            <div className="relative w-full aspect-4/3 sm:aspect-16/11 lg:aspect-4/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-200 bg-slate-900">
-              <img
-                src={Image}
-                alt="Large Step Building"
-                className="w-full h-full object-cover"
+          {/* شبكة: الصورة السحابية المنحنية (Image) مقابل النصوص (Label) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            
+            {/* الصورة السحابية (Organic Blob Image) */}
+            <div className="lg:col-span-6 relative flex items-center justify-center">
+              <div 
+                className="absolute inset-0 bg-blue-500/15 blur-2xl scale-105 pointer-events-none"
+                style={{ borderRadius: '42% 58% 70% 30% / 45% 45% 55% 55%' }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+              <div 
+                className="relative w-full max-w-md aspect-square shadow-2xl overflow-hidden border-4 border-white bg-slate-100 transition-transform duration-500 hover:scale-[1.02]"
+                style={{ borderRadius: '52% 48% 63% 37% / 40% 58% 42% 60%' }}
+              >
+                <img
+                  src={Image}
+                  alt="Large Step Architecture"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent pointer-events-none" />
+              </div>
             </div>
+
+            {/* النصوص والزر (Label) */}
+            <div className="lg:col-span-6 space-y-5 text-start">
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-950 leading-snug">
+                {isAr 
+                  ? 'التزام راسخ بالنزاهة الهندسية وتأمين الأصول' 
+                  : 'Commitment to Engineering Integrity'}
+              </h3>
+
+              <p className="text-slate-700 text-sm sm:text-base font-normal leading-relaxed">
+                {isAr
+                  ? 'تلتزم شركة Large Step بتقديم أعلى معايير النزاهة الهندسية والأمان الاستثماري عبر تلبية متطلبات المقاولات العامة وحماية أصول عملائنا العقارية بأدق تفاصيل السلامة الإنشائية.'
+                  : 'Large Step follows strict engineering principles and investment diligence, responding to comprehensive contracting needs.'}
+              </p>
+
+              <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed">
+                {isAr
+                  ? 'نعمل جنباً إلى جنب مع كبرى المصانع والشركاء الهندسيين لتقديم خدمات المعاينات الدقيقة، الفحص القانوني المعتمد، والتوريدات الإنشائية المتكاملة.'
+                  : 'We collaborate with certified partners to perform on-site structural diagnostics and high-grade material supplies.'}
+              </p>
+
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('services')}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs sm:text-sm transition-all shadow-md hover:shadow-blue-600/20 transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <span>{isAr ? 'استكشف خدماتنا' : 'Explore Our Services'}</span>
+                  <Arrow className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
           </div>
 
         </div>
-
-      </div>
-
-
-
+      </section>
     </div>
   );
 }
