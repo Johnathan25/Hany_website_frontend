@@ -312,7 +312,6 @@ export default function AdminServices() {
                             <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px] tracking-wider">
                                 <tr>
                                     <th className="py-3.5 px-4 text-start">{isAr ? 'اسم الخدمة' : 'Service Name'}</th>
-                                    <th className="py-3.5 px-4 text-start">{isAr ? 'الوصف والتفاصيل' : 'Description'}</th>
                                     <th className="py-3.5 px-4 text-start">{isAr ? 'تاريخ الإنشاء' : 'Date Created'}</th>
                                     <th className="py-3.5 px-4 text-center">{isAr ? 'إجراءات' : 'Actions'}</th>
                                 </tr>
@@ -341,12 +340,7 @@ export default function AdminServices() {
 
                                           
 
-                                            {/* Description */}
-                                            <td className="py-3.5 px-4 max-w-xs">
-                                                <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                                                    {item.description || (isAr ? 'لا يوجد وصف مضاف لهذه الخدمة.' : 'No description provided.')}
-                                                </p>
-                                            </td>
+                                            
 
                                             {/* Created Date */}
                                             <td className="py-3.5 px-4 whitespace-nowrap font-mono text-xs text-slate-500">
@@ -446,22 +440,7 @@ export default function AdminServices() {
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-bold text-slate-700 mb-1">
-                                    {isAr ? 'وصف تفصيلي للخدمة' : 'Description'}
-                                </label>
-                                <textarea
-                                    rows={4}
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none resize-none"
-                                    placeholder={
-                                        isAr
-                                            ? 'اكتب شرحاً لما تشمله هذه الخدمة...'
-                                            : 'Describe what this service covers...'
-                                    }
-                                />
-                            </div>
+                           
 
                             <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
                                 <button

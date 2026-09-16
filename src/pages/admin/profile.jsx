@@ -13,6 +13,9 @@ import {
   FileText,
   Trash2,
   Clock,
+  Lock,
+  KeyRound,
+  ArrowLeft,
 } from "lucide-react";
 
 import api from "../../services/api";
@@ -34,6 +37,17 @@ function Profile() {
     email: "",
     phone: "",
     notes: "",
+  });
+
+  // ---------------- تغيير كلمة المرور ----------------
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordStep, setPasswordStep] = useState("request"); // 'request' | 'verify'
+  const [sendingCode, setSendingCode] = useState(false);
+  const [resettingPassword, setResettingPassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    resetCode: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const checkAuth = () => {
@@ -143,6 +157,98 @@ function Profile() {
     }
   };
 
+  // ---------------- منطق تغيير كلمة المرور ----------------
+
+  const openPasswordModal = () => {
+    setPasswordStep("request");
+    setPasswordForm({ resetCode: "", newPassword: "", confirmPassword: "" });
+    setShowPasswordModal(true);
+  };
+
+  const closePasswordModal = () => {
+    if (sendingCode || resettingPassword) return;
+    setShowPasswordModal(false);
+  };
+
+  const handlePasswordFormChange = (e) =>
+    setPasswordForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
+  // خطوة 1: إرسال رمز التحقق إلى بريد المستخدم الحالي
+  const requestResetCode = async () => {
+    if (!user?.email) {
+      showAlert({ title: "تعذر العثور على بريدك الإلكتروني", icon: "error" });
+      return;
+    }
+
+    setSendingCode(true);
+    try {
+      // ملاحظة: تأكد أن هذا المسار مطابق لمسار forgetPassword الفعلي لديك  forgot-password
+      await api.put("/users/forgot-password", { email: user.email });
+      showAlert({
+        title: "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+        icon: "success",
+      });
+      setPasswordStep("verify");
+    } catch (error) {
+      showAlert({
+        title: error.response?.data?.message || "حدث خطأ أثناء إرسال رمز التحقق",
+        icon: "error",
+      });
+    } finally {
+      setSendingCode(false);
+    }
+  };
+
+  // خطوة 2: تأكيد الرمز وتعيين كلمة المرور الجديدة
+  const submitNewPassword = async (e) => {
+    e.preventDefault();
+
+    if (!passwordForm.resetCode.trim()) {
+      showAlert({ title: "الرجاء إدخال رمز التحقق", icon: "warning" });
+      return;
+    }
+    if (passwordForm.newPassword.length < 6) {
+      showAlert({
+        title: "كلمة المرور يجب ألا تقل عن 6 أحرف",
+        icon: "warning",
+      });
+      return;
+    }
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      showAlert({ title: "كلمتا المرور غير متطابقتين", icon: "warning" });
+      return;
+    }
+
+    setResettingPassword(true);
+    try {
+      // ملاحظة: تأكد أن هذا المسار مطابق لمسار resetPassword الفعلي لديك
+      await api.put("/users/reset-password", {
+        email: user.email,
+        resetCode: passwordForm.resetCode.trim(),
+        newPassword: passwordForm.newPassword,
+      });
+
+      await showAlertConfirm({
+        title: "تم تغيير كلمة المرور بنجاح",
+        text: "سيتم تسجيل خروجك الآن، الرجاء تسجيل الدخول بكلمة المرور الجديدة.",
+        icon: "success",
+        confirmButtonText: "حسناً",
+        showCancelButton: false,
+      });
+
+      // نظرًا لأن الـ backend يُلغي refreshToken عند تغيير الباسورد
+      localStorage.clear();
+      window.location.href = "/login";
+    } catch (error) {
+      showAlert({
+        title: error.response?.data?.message || "حدث خطأ أثناء تغيير كلمة المرور",
+        icon: "error",
+      });
+    } finally {
+      setResettingPassword(false);
+    }
+  };
+
   const formatDate = (dateStr) => {
     if (!dateStr) return "غير متوفر";
     return new Date(dateStr).toLocaleDateString("ar-EG", {
@@ -200,7 +306,6 @@ function Profile() {
                   {user?.userName || "مستخدم"}
                 </h1>
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  
                   {formatRole(user?.role)}
                 </span>
               </div>
@@ -209,16 +314,27 @@ function Profile() {
               </p>
             </div>
 
-            {!isEditing && (
+            <div className="flex items-center gap-2 self-start sm:self-auto">
               <button
                 type="button"
-                onClick={() => setIsEditing(true)}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white text-xs font-bold transition-colors border border-blue-100 cursor-pointer self-start sm:self-auto"
+                onClick={openPasswordModal}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-50 text-slate-700 hover:bg-slate-900 hover:text-white text-xs font-bold transition-colors border border-slate-200 cursor-pointer"
               >
-                <Edit3 size={15} />
-                <span>تعديل البيانات</span>
+                <Lock size={15} />
+                <span>تغيير كلمة المرور</span>
               </button>
-            )}
+
+              {!isEditing && (
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white text-xs font-bold transition-colors border border-blue-100 cursor-pointer"
+                >
+                  <Edit3 size={15} />
+                  <span>تعديل البيانات</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -270,18 +386,6 @@ function Profile() {
                   <Clock size={14} className="text-blue-600" />
                   <span>آخر تسجيل دخول: <b>{formatDate(user?.lastLogin)}</b></span>
                 </div>
-              </div>
-
-              {/* منطقة الخطر - حذف الحساب */}
-              <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <h4 className="text-xs font-bold text-slate-800">حذف الحساب نهائياً</h4>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    سيتم مسح بياناتك نهائياً ولن تستطيع استرجاع بيانات الحساب بعد هذا الإجراء.
-                  </p>
-                </div>
-              
-                
               </div>
             </div>
           ) : (
@@ -375,6 +479,129 @@ function Profile() {
           )}
         </div>
       </div>
+
+      {/* نافذة تغيير كلمة المرور */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-slate-100 relative">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-5">
+              <div className="flex items-center gap-2 text-slate-900">
+                <KeyRound size={18} className="text-blue-600" />
+                <h3 className="font-black text-base">تغيير كلمة المرور</h3>
+              </div>
+              <button
+                type="button"
+                onClick={closePasswordModal}
+                disabled={sendingCode || resettingPassword}
+                className="text-slate-400 hover:text-slate-600 cursor-pointer disabled:opacity-50"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {passwordStep === "request" ? (
+              <div className="space-y-5">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  سيتم إرسال رمز تحقق مكوّن من 6 أرقام إلى بريدك الإلكتروني{" "}
+                  <span className="font-bold text-slate-900 font-mono">{user?.email}</span>{" "}
+                  لتأكيد تغيير كلمة المرور.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={requestResetCode}
+                  disabled={sendingCode}
+                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-all disabled:opacity-60 cursor-pointer"
+                >
+                  {sendingCode ? <Loader2 size={15} className="animate-spin" /> : <Mail size={15} />}
+                  <span>{sendingCode ? "جاري الإرسال..." : "إرسال رمز التحقق"}</span>
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={submitNewPassword} className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => setPasswordStep("request")}
+                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  <ArrowLeft size={13} />
+                  <span>تغيير البريد / إعادة الإرسال</span>
+                </button>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    رمز التحقق
+                  </label>
+                  <input
+                    type="text"
+                    name="resetCode"
+                    dir="ltr"
+                    maxLength={6}
+                    value={passwordForm.resetCode}
+                    onChange={handlePasswordFormChange}
+                    placeholder="••••••"
+                    className="w-full px-4 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-mono text-center tracking-[0.4em] text-slate-800 outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    كلمة المرور الجديدة
+                  </label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={passwordForm.newPassword}
+                    onChange={handlePasswordFormChange}
+                    placeholder="6 أحرف على الأقل"
+                    className="w-full px-4 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    تأكيد كلمة المرور الجديدة
+                  </label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={passwordForm.confirmPassword}
+                    onChange={handlePasswordFormChange}
+                    placeholder="أعد كتابة كلمة المرور"
+                    className="w-full px-4 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+                  <button
+                    type="submit"
+                    disabled={resettingPassword}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-all disabled:opacity-60 cursor-pointer"
+                  >
+                    {resettingPassword ? (
+                      <Loader2 size={15} className="animate-spin" />
+                    ) : (
+                      <Check size={15} />
+                    )}
+                    <span>{resettingPassword ? "جاري التأكيد..." : "تأكيد التغيير"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closePasswordModal}
+                    disabled={resettingPassword}
+                    className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

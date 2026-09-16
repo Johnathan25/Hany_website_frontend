@@ -126,7 +126,7 @@ const navigationSections = [
           },
           {
             to: "/admin_dashboard/inventions-invoices-records",
-            label: "سجل فواتير براءات الاختراع",
+            label: "سجل فواتير",
             icon: Receipt,
           },
         ],

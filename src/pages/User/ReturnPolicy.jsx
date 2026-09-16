@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { RefreshCw, ShieldAlert, CheckCircle2, Clock, HelpCircle } from 'lucide-react';
+import { RefreshCw, ShieldAlert, CheckCircle2, HelpCircle, MailWarning } from 'lucide-react';
 
 export default function ReturnPolicy() {
   const { isAr } = useLanguage();
@@ -25,7 +25,7 @@ export default function ReturnPolicy() {
         </div>
 
         {/* تنبيه مهم: استرجاع ثلثي المبلغ */}
-        <div className="mb-10 p-5 sm:p-6 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-4">
+        <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-4">
           <ShieldAlert className="w-7 h-7 text-amber-600 shrink-0 mt-0.5" />
           <div>
             <h2 className="text-lg font-bold text-amber-900 mb-1">
@@ -33,8 +33,23 @@ export default function ReturnPolicy() {
             </h2>
             <p className="text-amber-800 text-sm sm:text-base leading-relaxed">
               {isAr
-                ? 'وفقاً لسياسة الشركة، يحق للعميل في حال قبول طلب الاسترجاع استرداد ثلثي قيمة المبلغ المدفوع فقط (66.6%)، ويتم خصم الثلث المتبقي كرسوم إدارية، تشغيلية، وتكاليف حجز الموارد والخدمات غير القابلة للاسترداد.'
+                ? 'وفقاً لسياسة الشركة، يحق للعميل في حال قبول طلب الاسترجاع استرداد ثلثي قيمة المبلغ المدفوع فقط (70%)، ويتم خصم الثلث المتبقي كرسوم إدارية، تشغيلية، وتكاليف حجز الموارد والخدمات غير القابلة للاسترداد.'
                 : 'In accordance with our company policy, upon approval of a refund request, the client is entitled to receive only two-thirds (2/3 - 66.6%) of the total amount paid. The remaining one-third is retained to cover administrative, operational, and non-refundable service reservation costs.'}
+            </p>
+          </div>
+        </div>
+
+        {/* تنبيه خاص: عدم استرداد العربون بعد إرسال الصور على الإيميل */}
+        <div className="mb-10 p-5 sm:p-6 rounded-2xl bg-rose-50 border border-rose-200/80 flex items-start gap-4">
+          <MailWarning className="w-7 h-7 text-rose-600 shrink-0 mt-0.5" />
+          <div>
+            <h2 className="text-lg font-bold text-rose-900 mb-1">
+              {isAr ? 'حالات عدم استرداد العربون ' : 'Non-Refundable Deposit Policy (Email Deliverables)'}
+            </h2>
+            <p className="text-rose-800 text-sm sm:text-base leading-relaxed font-medium">
+              {isAr
+                ? 'في حالة تم إرسال صور العمل أو التصاميم أو النماذج إلى البريد الإلكتروني الخاص بالعميل، فإن مبلغ العربون المدفوع يُعد غير مسترد نهائياً ولا يحق للعميل المطالبة بأي جزء منه بعد الاستلام.'
+                : 'Once work photos, designs, or mockups have been delivered to the client’s registered email, the advance deposit becomes strictly non-refundable, and no portion of it can be recovered under any circumstances.'}
             </p>
           </div>
         </div>
@@ -51,8 +66,13 @@ export default function ReturnPolicy() {
             <ul className="list-disc list-inside space-y-2 text-sm sm:text-base text-slate-600 pr-2">
               <li>
                 {isAr
-                  ? 'أن يتم تقديم الطلب خلال المدة الزمنية المسموح بها (خلال  يوم من تاريخ الدفع أو بدء الطلب).'
+                  ? 'أن يتم تقديم الطلب خلال المدة الزمنية المسموح بها (خلال 7 أيام من تاريخ الدفع أو بدء الطلب).'
                   : 'The request must be submitted within the eligible time frame (within 7 days of payment or order initiation).'}
+              </li>
+              <li>
+                {isAr
+                  ? 'ألا تكون الصور أو النماذج قد تم إرسالها بالفعل إلى البريد الإلكتروني للعميل.'
+                  : 'Work previews or design images must not have already been dispatched to the client email.'}
               </li>
               <li>
                 {isAr
@@ -67,9 +87,7 @@ export default function ReturnPolicy() {
             </ul>
           </div>
 
-       
-
-          {/* 3. كيفية تقديم الطلب */}
+          {/* 2. كيفية تقديم الطلب */}
           <div>
             <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2">
               <HelpCircle className="w-5 h-5 text-blue-600" />

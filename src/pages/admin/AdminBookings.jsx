@@ -257,7 +257,7 @@ export default function AdminBookings() {
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-slate-900">
-                                {isAr ? 'جدول حجوزات المعاينة' : 'Inspection Bookings Schedule'}
+                                {isAr ? 'جدول حجوزات الخدمات' : 'Inspection Bookings Schedule'}
                             </h1>
                             <p className="text-xs text-slate-500 mt-0.5">
                                 {isAr

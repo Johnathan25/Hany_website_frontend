@@ -47,6 +47,9 @@ export default function AdminUsers() {
     const [adminToDelete, setAdminToDelete] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
+    // Toggle-active loading state (per-row, tracked by admin id)
+    const [loadingIds, setLoadingIds] = useState(new Set());
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -152,16 +155,35 @@ export default function AdminUsers() {
     };
 
     // 5. Toggle Active Status
+    // ملاحظة: كانت هذه الدالة تستدعي "toggleActiveRequest" وهي غير معرّفة/غير مستوردة
+    // فتم استبدالها بالدالة الصحيحة المستوردة "toggleAdminActive"، مع تحديث الحالة محليًا
     const handleToggleActive = async (id) => {
+        setLoadingIds((prev) => new Set(prev).add(id));
         try {
-            await toggleAdminActive(id);
+            const res = await toggleAdminActive(id);
+            // تحديث القائمة محليًا مباشرة بدل إعادة جلب كل البيانات
+            // إذا كان شكل استجابة الـ API مختلفًا، عدّل السطر التالي حسب الحاجة
             setAdmins((prev) =>
                 prev.map((item) =>
-                    item._id === id ? { ...item, isActive: !item.isActive } : item
+                    item._id === id
+                        ? { ...item, isActive: res?.isActive ?? !item.isActive }
+                        : item
                 )
             );
+            setSuccessMessage(isAr ? 'تم تغيير حالة الحساب بنجاح' : 'Account status updated successfully');
+            setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
-            alert(err.response?.data?.message || (isAr ? 'فشل تغيير حالة الحساب' : 'Failed to toggle status'));
+            console.error('Toggle Active Error:', err);
+            alert(
+                err.response?.data?.message ||
+                (isAr ? 'فشل تغيير حالة الحساب' : 'Failed to toggle account status')
+            );
+        } finally {
+            setLoadingIds((prev) => {
+                const next = new Set(prev);
+                next.delete(id);
+                return next;
+            });
         }
     };
 
@@ -379,36 +401,48 @@ export default function AdminUsers() {
                                         <td className="py-3.5 px-4 text-center">
                                             <button
                                                 onClick={() => handleToggleActive(item._id)}
-                                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-                                                    item.isActive !== false
-                                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
-                                                        : 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
+                                                disabled={loadingIds.has(item._id)}
+                                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-colors ${
+                                                    loadingIds.has(item._id)
+                                                        ? 'bg-gray-50 text-gray-500 border border-gray-200 cursor-wait'
+                                                        : item.isActive !== false
+                                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 cursor-pointer'
+                                                        : 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 cursor-pointer'
                                                 }`}
                                                 title={isAr ? 'اضغط لتغيير الحالة' : 'Click to toggle'}
                                             >
-                                                <Power className="w-3 h-3" />
-                                                <span>
-                                                    {item.isActive !== false
-                                                        ? isAr
-                                                            ? 'نشط'
-                                                            : 'Active'
-                                                        : isAr
-                                                        ? 'معطل'
-                                                        : 'Inactive'}
-                                                </span>
+                                                {loadingIds.has(item._id) ? (
+                                                    <>
+                                                        <Loader2 className="w-3 h-3 animate-spin" />
+                                                        <span>{isAr ? 'تحميل...' : 'Loading...'}</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Power className="w-3 h-3" />
+                                                        <span>
+                                                            {item.isActive !== false
+                                                                ? isAr
+                                                                    ? 'نشط'
+                                                                    : 'Active'
+                                                                : isAr
+                                                                ? 'معطل'
+                                                                : 'Inactive'}
+                                                        </span>
+                                                    </>
+                                                )}
                                             </button>
                                         </td>
 
                                         {/* Actions */}
                                         <td className="py-3.5 px-4 text-center">
                                             <div className="flex items-center justify-center gap-2">
-                                                <button
+                                                {/* <button
                                                     onClick={() => handleOpenModal(item)}
                                                     className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
                                                     title={isAr ? 'تعديل' : 'Edit'}
                                                 >
                                                     <Edit2 className="w-4 h-4" />
-                                                </button>
+                                                </button> */}
                                                 <button
                                                     onClick={() => handleOpenDeleteModal(item)}
                                                     className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
@@ -483,8 +517,6 @@ export default function AdminUsers() {
                                     className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-mono"
                                 />
                             </div>
-
-                           
 
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">

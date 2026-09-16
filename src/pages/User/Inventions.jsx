@@ -145,9 +145,7 @@ export default function Inventions() {
             {isAr ? "براءات الاختراع والحلول الهندسية" : "Patented Innovations & IP"}
           </h1>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            {isAr
-              ? "استكشف أحدث ابتكاراتنا وتقنياتنا المعمارية المسجلة رسمياً لحل أعقد المشكلات الإنشائية وتوفير أقصى درجات الأمان والفخامة."
-              : "Explore our patented structural technologies, offering robust field applications and flexible licensing models."}
+            بعد دفع العربون يتم ارسال الوصف التفصيلي و الرسومات التوضيحية علي الميل
           </p>
         </div>
 
