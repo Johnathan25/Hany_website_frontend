@@ -16,13 +16,12 @@ import {
   Building2,
 } from "lucide-react";
 
+const Image1 = "/public/image4.jpeg";
+const Image2 = "/public/image5.jpeg";
 // قائمة صور لمبانٍ معمارية فائقة الفخامة والحداثة (عالية الجودة وبأبعاد موحدة)
 const LUXURY_BUILDING_IMAGES = [
-
-  "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80", // عمارة سكنية فاخرة ومودرن
-  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80", // فيلا وفيو معماري فخم
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80", // مجمع إداري فخم
-  "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80", // تصميم معماري مستقبلي مع إضاءة
+  Image1,
+  Image2
 
 ];
 
@@ -366,7 +365,7 @@ export default function Inventions() {
                 <div className="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                   <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                     <FileText className="w-4 h-4 text-blue-600" />
-                    <span>{isAr ? "المواصفات الفنية وشروط التنفيذ" : "Technical Specifications"}</span>
+                    <span>{isAr ? "رقم الطلب " : "Technical Specifications"}</span>
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
                     {selectedInvention.details}

@@ -15,8 +15,8 @@ import {
   ChevronRight,
   ChevronLeft,
   Coins,
-  ImagePlus,
-  ImageOff,
+
+
 } from "lucide-react";
 
 const PRICING_TYPE_OPTIONS = [
@@ -34,32 +34,33 @@ const PRICING_TYPE_OPTIONS = [
   { value: "custom", labelAr: "مخصص / اتفاق خاص (Custom)", labelEn: "Custom" },
 ];
 
-// حدود مؤقتة لرفع الصور (قابلة للتعديل عند تجهيز الباك إند)
-const MAX_IMAGES = 6;
-const MAX_IMAGE_SIZE_MB = 5;
+
+
+
 
 const emptyForm = {
   title: "",
   shortDescription: "",
   description: "",
+  details: "",
   pricingOptions: [], // [{ name: "", type: "license", price: "", depositAmount: 0 }]
-  images: [], // [{ id, isExisting, url?, file?, preview }]
+
   isActive: true,
 };
 
-const generateId = () =>
-  typeof crypto !== "undefined" && crypto.randomUUID
-    ? crypto.randomUUID()
-    : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-// تحويل الملف إلى base64 كحل مؤقت لحين تجهيز endpoint مخصص لرفع الصور في الباك اند
-const fileToBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default function AdminInventionsManager() {
   const { isAr } = useLanguage();
@@ -85,7 +86,7 @@ export default function AdminInventionsManager() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
-  const [imageError, setImageError] = useState("");
+
 
   const [selectedForDelete, setSelectedForDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
@@ -136,19 +137,19 @@ export default function AdminInventionsManager() {
     return () => clearTimeout(timer);
   }, [search, isActiveFilter, fetchInventions]);
 
-  // تنظيف روابط المعاينة (object URLs) عند إغلاق النموذج لتفادي تسريب الذاكرة
-  const revokeFormPreviews = (images) => {
-    images.forEach((img) => {
-      if (!img.isExisting && img.preview) {
-        URL.revokeObjectURL(img.preview);
-      }
-    });
-  };
+
+
+
+
+
+
+
+
 
   const openCreateForm = () => {
     setEditingId(null);
     setForm(emptyForm);
-    setImageError("");
+
     setShowForm(true);
   };
 
@@ -158,6 +159,7 @@ export default function AdminInventionsManager() {
       title: item.title || "",
       shortDescription: item.shortDescription || "",
       description: item.description || "",
+      details: item.details || "",
       pricingOptions: Array.isArray(item.pricingOptions)
         ? item.pricingOptions.map((opt) => ({
           durationYears: opt.durationYears || 0,
@@ -168,92 +170,92 @@ export default function AdminInventionsManager() {
           isActive: opt.isActive !== false,
         }))
         : [],
-      // نفترض أن الحقل القادم من الـ API اسمه "images" ويحتوي روابط الصور الحالية
-      images: Array.isArray(item.images)
-        ? item.images.map((url) => ({
-          id: generateId(),
-          isExisting: true,
-          url,
-          preview: url,
-        }))
-        : [],
+
+
+
+
+
+
+
+
+
       isActive: item.isActive !== false,
     });
-    setImageError("");
+
     setShowForm(true);
   };
 
   const closeForm = () => {
     if (saving) return;
-    revokeFormPreviews(form.images);
+
     setShowForm(false);
     setEditingId(null);
     setForm(emptyForm);
-    setImageError("");
+
   };
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  // ---------------- إدارة الصور (حل عام مؤقت لحين تجهيز endpoint في الباك اند) ----------------
 
-  const handleImagesSelected = (e) => {
-    const files = Array.from(e.target.files || []);
-    e.target.value = ""; // للسماح باختيار نفس الملف مرة أخرى إذا لزم
-    if (files.length === 0) return;
 
-    setImageError("");
 
-    const remainingSlots = MAX_IMAGES - form.images.length;
-    if (remainingSlots <= 0) {
-      setImageError(
-        isAr
-          ? `الحد الأقصى ${MAX_IMAGES} صور لكل براءة اختراع`
-          : `Maximum ${MAX_IMAGES} images per invention`
-      );
-      return;
-    }
 
-    const accepted = [];
-    let rejectedForSize = false;
 
-    files.slice(0, remainingSlots).forEach((file) => {
-      if (!file.type.startsWith("image/")) return;
-      if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
-        rejectedForSize = true;
-        return;
-      }
-      accepted.push({
-        id: generateId(),
-        isExisting: false,
-        file,
-        preview: URL.createObjectURL(file),
-      });
-    });
 
-    if (rejectedForSize) {
-      setImageError(
-        isAr
-          ? `تم تجاهل بعض الصور لأن حجمها يتجاوز ${MAX_IMAGE_SIZE_MB}MB`
-          : `Some images were skipped for exceeding ${MAX_IMAGE_SIZE_MB}MB`
-      );
-    }
 
-    if (accepted.length > 0) {
-      setForm((prev) => ({ ...prev, images: [...prev.images, ...accepted] }));
-    }
-  };
 
-  const removeImage = (id) => {
-    setForm((prev) => {
-      const target = prev.images.find((img) => img.id === id);
-      if (target && !target.isExisting && target.preview) {
-        URL.revokeObjectURL(target.preview);
-      }
-      return { ...prev, images: prev.images.filter((img) => img.id !== id) };
-    });
-  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Add new tier with depositAmount initialized
   const addPricingOption = () => {
@@ -313,37 +315,57 @@ export default function AdminInventionsManager() {
     setSaving(true);
     setError("");
 
-    try {
-      // ---------------------------------------------------------------
-      // ملاحظة مهمة: هذا حل مؤقت وعام لحين تجهيز endpoint حقيقي لرفع
-      // الملفات في الباك اند (مثل Multer أو Cloudinary). حاليًا يتم تحويل
-      // أي صورة جديدة إلى base64 وإرسالها ضمن نفس الطلب. عند تجهيز
-      // الباك اند، استبدل هذا الجزء بإرسال FormData يحتوي الملفات الفعلية
-      // إلى endpoint الرفع المخصص، ثم استخدم الروابط الناتجة هنا.
-      // ---------------------------------------------------------------
-      const imagesPayload = await Promise.all(
-        form.images.map((img) =>
-          img.isExisting ? Promise.resolve(img.url) : fileToBase64(img.file)
-        )
-      );
+    // Ensure depositAmount is strictly present and converted to a number
+    const payload = {
+      ...form,
+      title: form.title.trim(),
+      shortDescription: form.shortDescription.trim(),
+      description: form.description.trim(),
+      details: form.details.trim(),
+      pricingOptions: form.pricingOptions.map((opt) => ({
 
-      const payload = {
-        ...form,
-        title: form.title.trim(),
-        shortDescription: form.shortDescription.trim(),
-        description: form.description.trim(),
-        images: imagesPayload,
-        pricingOptions: form.pricingOptions.map((opt) => ({
-          type: opt.type,
-          price: opt.price !== "" ? Number(opt.price) : 0,
-          depositAmount:
-            opt.depositAmount !== "" && opt.depositAmount !== undefined
-              ? Number(opt.depositAmount)
-              : 0,
-          durationYears: opt.durationYears,
-          isActive: opt.isActive !== false,
-        })),
-      };
+        type: opt.type,
+        price: opt.price !== "" ? Number(opt.price) : 0,
+        depositAmount:
+          opt.depositAmount !== "" && opt.depositAmount !== undefined
+            ? Number(opt.depositAmount)
+            : 0,
+        durationYears: opt.durationYears,
+        isActive: opt.isActive !== false,
+      })),
+    };
+
+    try {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       if (editingId) {
         await api.put(`/invention/${editingId}`, payload);
@@ -505,7 +527,7 @@ export default function AdminInventionsManager() {
             <table className="w-full text-xs text-start">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-medium">
                 <tr>
-                  <th className="py-3 px-4 text-start">{isAr ? "الصورة" : "Image"}</th>
+
                   <th className="py-3 px-4 text-start">{isAr ? "العنوان" : "Title"}</th>
                   <th className="py-3 px-4 text-start">{isAr ? "الوصف" : "Summary"}</th>
                   <th className="py-3 px-4 text-start">{isAr ? "الأسعار والعربون" : "Pricing & Deposit"}</th>
@@ -516,19 +538,19 @@ export default function AdminInventionsManager() {
               <tbody className="divide-y divide-slate-100">
                 {inventions.map((item) => (
                   <tr key={item._id} className="hover:bg-slate-50/75 transition-colors">
-                    <td className="py-3 px-4">
-                      {Array.isArray(item.images) && item.images.length > 0 ? (
-                        <img
-                          src={item.images[0]}
-                          alt={item.title}
-                          className="w-9 h-9 rounded-md object-cover border border-slate-200"
-                        />
-                      ) : (
-                        <div className="w-9 h-9 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-300">
-                          <ImageOff className="w-4 h-4" />
-                        </div>
-                      )}
-                    </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-2.5">
@@ -707,64 +729,16 @@ export default function AdminInventionsManager() {
                 />
               </div>
 
-              {/* Images Upload (حل عام مؤقت لحين تجهيز endpoint في الباك اند) */}
-              <div className="pt-1">
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-medium text-slate-700">
-                    {isAr ? "رسومات توضيحية / صور" : "Illustrative Images"}
-                  </label>
-                  <span className="text-[10px] text-slate-400">
-                    {form.images.length}/{MAX_IMAGES}
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap gap-2.5">
-                  {form.images.map((img) => (
-                    <div
-                      key={img.id}
-                      className="relative w-20 h-20 rounded-md overflow-hidden border border-slate-200 group"
-                    >
-                      <img
-                        src={img.preview}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(img.id)}
-                        className="absolute top-0.5 right-0.5 p-0.5 bg-slate-900/70 text-white rounded-full hover:bg-rose-600 cursor-pointer"
-                        title={isAr ? "إزالة الصورة" : "Remove image"}
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-
-                  {form.images.length < MAX_IMAGES && (
-                    <label className="w-20 h-20 rounded-md border border-dashed border-slate-300 flex flex-col items-center justify-center gap-1 text-slate-400 hover:border-slate-400 hover:text-slate-500 cursor-pointer transition-colors">
-                      <ImagePlus className="w-4 h-4" />
-                      <span className="text-[10px] font-medium">
-                        {isAr ? "إضافة" : "Add"}
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImagesSelected}
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-
-                {imageError && (
-                  <p className="text-[11px] text-rose-600 mt-1.5">{imageError}</p>
-                )}
-                <p className="text-[10px] text-slate-400 mt-1.5">
-                  {isAr
-                    ? `الحد الأقصى ${MAX_IMAGES} صور، وحجم كل صورة حتى ${MAX_IMAGE_SIZE_MB}MB.`
-                    : `Up to ${MAX_IMAGES} images, ${MAX_IMAGE_SIZE_MB}MB each.`}
-                </p>
+              <div>
+                <label className="block text-xs font-medium text-slate-700 mb-1">
+                  {isAr ? "رقم الطلب" : "Technical Specs"}
+                </label>
+                <textarea
+                  rows={2}
+                  value={form.details}
+                  onChange={(e) => updateField("details", e.target.value)}
+                  className="w-full px-3 py-1.5 border border-slate-300 rounded-md text-xs outline-none focus:border-slate-500 resize-none"
+                />
               </div>
 
               {/* Dynamic Pricing with required depositAmount */}
