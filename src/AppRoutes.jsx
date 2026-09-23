@@ -64,14 +64,14 @@ function AppRoutes() {
           {/* <Route path="/properties" element={<Properties />} /> */}
           <Route path="/services" element={<Services />} />
           {/* المسار الجديد لبراءات الاختراع والحلول */}
-          <Route path="/inventions" element={<Inventions />} />
+          {/* <Route path="/inventions" element={<Inventions />} /> */}
 
-          <Route path="/Invention" element={<ProtectedRoute><Inventions /> </ProtectedRoute>} /> {/* يدعم أيضاً حرف I كبير */}
+          <Route path="/Invention" element={<Inventions />} /> {/* يدعم أيضاً حرف I كبير */}
           <Route path="/inventions/request" element={<InventionRequest />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/my-orders" element={<MyOrders />} />
-       
-<Route path="/return-policy" element={<ReturnPolicy />} />
+
+          <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/booking-service" element={
             <ProtectedRoute>
               <BookingService />
