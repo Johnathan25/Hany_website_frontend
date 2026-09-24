@@ -16,8 +16,8 @@ import {
   Building2,
 } from "lucide-react";
 
-const Image1 = "/public/image4.jpeg";
-const Image2 = "/public/image5.jpeg";
+const Image1 = "/image4.jpeg";
+const Image2 = "/image5.jpeg";
 // قائمة صور لمبانٍ معمارية فائقة الفخامة والحداثة (عالية الجودة وبأبعاد موحدة)
 const LUXURY_BUILDING_IMAGES = [
   Image1,
