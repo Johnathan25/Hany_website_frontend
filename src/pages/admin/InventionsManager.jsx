@@ -582,7 +582,7 @@ export default function AdminInventionsManager() {
                             >
 
                               <span className="font-mono font-semibold text-slate-900">
-                                {opt.price} الجنيه المصري
+                                {opt.price} EUR
                               </span>
                               <span className="text-[10px] text-amber-600 font-medium">
                                 ({isAr ? "عربون:" : "Dep:"} {opt.depositAmount || 0})
@@ -871,7 +871,7 @@ export default function AdminInventionsManager() {
                                 className="w-full pl-16 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400 placeholder:text-[10px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               />
                               <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 pointer-events-none font-medium whitespace-nowrap">
-                                {isAr ? "الجنيه المصري" : "EGP"}
+                                {isAr ? "EUR" : "EGP"}
                               </span>
                             </div>
                           </div>
@@ -898,7 +898,7 @@ export default function AdminInventionsManager() {
       className="w-full pl-20 pr-2 py-1.5 bg-white border border-slate-300 rounded text-xs font-mono outline-none focus:border-slate-400 placeholder:text-[10px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
     />
     <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none font-medium whitespace-nowrap">
-      الجنيه المصري
+      EUR
     </span>
   </div>
 </div>

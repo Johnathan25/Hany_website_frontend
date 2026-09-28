@@ -18,10 +18,13 @@ import {
 
 const Image1 = "/image4.jpeg";
 const Image2 = "/image5.jpeg";
+
+const Image3 = "/image6.jpeg";
 // قائمة صور لمبانٍ معمارية فائقة الفخامة والحداثة (عالية الجودة وبأبعاد موحدة)
 const LUXURY_BUILDING_IMAGES = [
   Image1,
-  Image2
+  Image2,
+  Image3
 
 ];
 
@@ -213,15 +216,29 @@ export default function Inventions() {
                   <div>
                     {/* صورة المبنى الحديث الفخم في قمة الكارت */}
                     <div className="relative h-48 w-full overflow-hidden bg-slate-100">
-                      <img
-                        src={buildingImage}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
+                      {/* Flex container to hold both images side-by-side */}
+                      <div className="flex h-48 w-full gap-2 items-center justify-center">
+
+                        {/* First image (Patent Document) */}
+                        <img
+                          src={Image3}
+                          alt={`${item.title} - Document`}
+                          className="w-1/2 h-full object-contain group-hover:scale-[1.02] transition-transform duration-500"
+                          loading="lazy"
+                        />
+
+                        {/* Second image (Technical Drawing) */}
+                        <img
+                          src={Image1} // Make sure to define Image2 or replace this with the second image variable/source
+                          alt={`${item.title} - Drawing`}
+                          className="w-1/2 h-full object-contain group-hover:scale-[1.02] transition-transform duration-500"
+                          loading="lazy"
+                        />
+
+                      </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
 
-                      
+
 
                       {/* كود الابتكار فوق الصورة */}
                       <div className="absolute bottom-3 right-3 text-white text-xs font-mono font-medium drop--md">
@@ -258,7 +275,7 @@ export default function Inventions() {
                                 <span className="font-mono font-bold text-blue-600 whitespace-nowrap">
                                   {Number(opt.price || 0).toLocaleString()}{" "}
                                   <span className="text-[10px] text-slate-400 font-normal">
-                                    الجنيه المصري
+                                   EUR
                                   </span>
                                 </span>
                               </div>
@@ -324,29 +341,19 @@ export default function Inventions() {
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden -2xl border border-slate-100 max-h-[92vh] flex flex-col">
             {/* صورة المبنى في أعلى الـ Modal مع زر الإغلاق */}
-            <div className="relative h-44 w-full shrink-0 bg-slate-900">
-              <img
-                src={getBuildingImageForId(selectedInvention._id)}
-                alt={selectedInvention.title}
-                className="w-full h-full object-cover opacity-85"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-
-              <button
-                type="button"
-                onClick={() => setSelectedInvention(null)}
-                className="absolute top-3 left-3 p-1.5 bg-white/20 hover:bg-white/40 text-white rounded-full backdrop-blur-xs cursor-pointer transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              <div className="absolute bottom-3 right-4 left-4">
-                <span className="text-[10px] font-mono text-blue-300 uppercase tracking-widest font-semibold block">
-                  #{selectedInvention._id?.slice(-8)?.toUpperCase()}
-                </span>
-                <h2 className="text-lg sm:text-xl font-bold text-white mt-0.5 line-clamp-1">
-                  {selectedInvention.title}
-                </h2>
+            <div className="relative w-full shrink-0 bg-slate-900 p-2">
+              {/* Flex container placing both photos side-by-side with full visibility */}
+              <div className="flex w-full items-center justify-center gap-2">
+                <img
+                  src={Image2}
+                  alt={`${selectedInvention.title} - document`}
+                  className="max-h-72 w-1/2 object-contain"
+                />
+                <img
+                  src={Image3} // Point to the second image source here
+                  alt={`${selectedInvention.title} - drawing`}
+                  className="max-h-72 w-1/2 object-contain"
+                />
               </div>
             </div>
 
@@ -446,7 +453,7 @@ export default function Inventions() {
                                 </span>
                                 <div className="text-sm font-black font-mono text-blue-600">
                                   {Number(opt.price || 0).toLocaleString()}{" "}
-                                  <span className="text-[10px] font-normal text-slate-500">الجنيه المصري</span>
+                                  <span className="text-[10px] font-normal text-slate-500">EUR</span>
                                 </div>
                               </div>
 
@@ -457,7 +464,7 @@ export default function Inventions() {
                                 </span>
                                 <div className="text-sm font-bold font-mono text-emerald-600">
                                   {Number(opt.depositAmount || 0).toLocaleString()}{" "}
-                                  <span className="text-[10px] font-normal text-slate-500">الجنيه المصري</span>
+                                  <span className="text-[10px] font-normal text-slate-500">EUR</span>
                                 </div>
                               </div>
                             </div>
@@ -480,7 +487,7 @@ export default function Inventions() {
                   </div>
                 </div>
               )}
-              
+
             </div>
 
             {/* الأزرار السفلية */}

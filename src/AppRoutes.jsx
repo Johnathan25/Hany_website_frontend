@@ -67,7 +67,7 @@ function AppRoutes() {
           {/* <Route path="/inventions" element={<Inventions />} /> */}
 
           <Route path="/Invention" element={<Inventions />} /> {/* يدعم أيضاً حرف I كبير */}
-          <Route path="/inventions/request" element={<InventionRequest />} />
+          <Route path="/inventions/request" element={<ProtectedRoute><InventionRequest /></ProtectedRoute>} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/my-orders" element={<MyOrders />} />
 

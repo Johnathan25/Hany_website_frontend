@@ -100,7 +100,7 @@ const renderAcquisitionLabel = (type, duration) => {
 
 // دالة استخراج البيانات المالية
 const extractFinancials = (item) => {
-  if (!item) return { total: 0, deposit: 0, currency: "الجنيه المصري" };
+  if (!item) return { total: 0, deposit: 0, currency: "EUR" };
 
   const total = Number(item.finalPrice ?? item.totalPrice ?? item.price ?? 0) || 0;
   let deposit = Number(item.depositAmount ?? item.deposit ?? 0) || 0;
@@ -109,7 +109,7 @@ const extractFinancials = (item) => {
     deposit = total;
   }
 
-  const currency = item.currency || "الجنيه المصري";
+  const currency = item.currency || "EUR";
 
   return { total, deposit, currency };
 };
