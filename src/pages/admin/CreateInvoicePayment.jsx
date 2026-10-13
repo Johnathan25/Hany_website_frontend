@@ -28,6 +28,7 @@ export default function CreateInvoicePayment() {
         name: "",
         email: "",
         phone: "",
+        currency: "EGP",
     });
 
     const [loading, setLoading] = useState(false);
@@ -70,6 +71,7 @@ export default function CreateInvoicePayment() {
         try {
             const payload = {
                 amount: Number(formData.amount),
+                currency:formData.currency,
                 paymentType: formData.paymentType,
                 payableType: formData.payableType,
                 description: formData.description.trim(),
@@ -293,22 +295,37 @@ export default function CreateInvoicePayment() {
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                                المبلغ (الجنيه المصري) <span className="text-rose-500">*</span>
-                            </label>
-                            <input
-                                type="number"
-                                required
-                                min="1"
-                                step="any"
-                                name="amount"
-                                value={formData.amount}
-                                onChange={handleChange}
-                                placeholder="1000"
-                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold font-mono outline-none focus:bg-white focus:border-blue-500"
-                            />
-                        </div>
+                        
+<div>
+    <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+        المبلغ <span className="text-rose-500">*</span>
+    </label>
+
+    <div className="flex gap-2">
+        <input
+            type="number"
+            required
+            min="1"
+            step="any"
+            name="amount"
+            value={formData.amount}
+            onChange={handleChange}
+            placeholder="1000"
+            className="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold font-mono outline-none focus:bg-white focus:border-blue-500"
+        />
+
+        <select
+            name="currency"
+            value={formData.currency}
+            onChange={handleChange}
+            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none focus:bg-white focus:border-blue-500"
+        >
+            <option value="EGP">EGP - جنيه مصري</option>
+            <option value="EUR">EUR - يورو</option>
+        </select>
+    </div>
+</div>
+
 
                         <div>
                             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
